@@ -1,0 +1,8 @@
+N-body Simulations Tutorial
+http://www.artcompsci.org/vol_1/v1_web/node6.html
+http://www.artcompsci.org/vol_1/v1_web/node35.html
+
+
+Interesting Videos
+https://www.youtube.com/watch?v=Ej97699t-G0
+https://channel9.msdn.com/Events/Build/2013/4-329
