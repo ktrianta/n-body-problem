@@ -49,7 +49,7 @@ int main(int argc,char** argv)
     myfile.open ("output.dat");
 
     InitialPositions(r);
-    for (int i; i<N; i++)
+    for (int i = 0; i<N; i++)
     { 
         u[i][0]=0;
         u[i][1]=0;
