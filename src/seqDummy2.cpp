@@ -12,12 +12,10 @@ const float g = 1 ;     // gravitational constant
 const float epsilon = 0.001;
 const float epsilon2 = epsilon * epsilon;
 
-// min ksexaseis na arxikopoihseis mazes kai taxitites
-
 void InitialPositions(float (*r)[2])
 {
     srand(time(NULL));
-    for (int i=0; i<N; i++)
+    for (int i = 0; i < N; i++)
     {
         r[i][0] = ((double) rand()) / RAND_MAX;
         r[i][1] = ((double) rand()) / RAND_MAX;
@@ -26,7 +24,7 @@ void InitialPositions(float (*r)[2])
 
 void ComputeF(int j, float (*r)[2], float *m, float (*a)[2])
 {
-    for (int i=j+1; i<N; i++)
+    for (int i = j+1; i < N; i++)
     {
         float rij[2];
         rij[0] = r[i][0] - r[j][0];
@@ -49,49 +47,49 @@ int main(int argc,char** argv)
     myfile.open ("output.dat");
 
     InitialPositions(r);
-    for (int i = 0; i<N; i++)
+    for (int i = 0; i < N; i++)
     { 
-        u[i][0]=0;
-        u[i][1]=0;
-        a[i][0]=0;
-        a[i][1]=0;
-        m[i]=1;
+        u[i][0] = 0;
+        u[i][1] = 0;
+        a[i][0] = 0;
+        a[i][1] = 0;
+        m[i] = 1;
         myfile << r[i][0] << "   "
                << r[i][1] << "   "
                << u[i][0] << "   "
                << u[i][1] << "\n";
     }
 
-    const float T=10;
-    const float dt=0.00001; 
-    const int Ntimesteps=T/dt+1;
+    const float T = 10;
+    const float dt = 0.00001;
+    const int Ntimesteps = T/dt + 1;
 
-    for (int k=0; k<N; k++)
+    for (int k = 0; k < N; k++)
     {
-          ComputeF(k,r,m,a);
+          ComputeF(k, r, m, a);
     }
 
-    for (int t=0; t<Ntimesteps; t++)
+    for (int t = 0; t < Ntimesteps; t++)
     {
         cout << "time=" <<  t*dt << "\n";
-        for (int j=0; j<N; j++)
+        for (int j = 0; j < N; j++)
         {
-            u[j][0]+=0.5*a[j][0]*dt;
-            u[j][1]+=0.5*a[j][1]*dt;
-            r[j][0]+=u[j][0]*dt;
-            r[j][1]+=u[j][1]*dt;
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
+            r[j][0] += u[j][0] * dt;
+            r[j][1] += u[j][1] * dt;
         }
-        for (int j=0; j<N; j++)
+        for (int j = 0; j < N; j++)
         {
-            a[j][0]=0;
-            a[j][1]=0;
+            a[j][0] = 0;
+            a[j][1] = 0;
         }
-        for (int j=0; j<N; j++)
+        for (int j = 0; j < N; j++)
         {
-            ComputeF(j,r,m,a);
-            u[j][0]+=0.5*a[j][0]*dt;
-            u[j][1]+=0.5*a[j][1]*dt;
-            if(t%200==0)
+            ComputeF(j, r, m, a);
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
+            if (t % 200 == 0)
             {
                 myfile << r[j][0] << "   "
                        << r[j][1] << "   "
