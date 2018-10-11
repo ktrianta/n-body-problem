@@ -71,7 +71,6 @@ int main(int argc,char** argv)
 
     for (int t = 0; t < Ntimesteps; t++)
     {
-        cout << "time=" <<  t*dt << "\n";
         for (int j = 0; j < N; j++)
         {
             u[j][0] += 0.5 * a[j][0] * dt;
