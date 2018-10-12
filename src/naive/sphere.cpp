@@ -23,11 +23,10 @@ void initiliazeOnSphere(double r[][2],double u[][2],int N,double m[])
 		u[k][1] = 0;
 	}
 
-	double r = pow(randomNum(0,1),1.0/3.0);
-	double theta = randomNum(0,2*M_PI);
-
 	for (int k=0;k<N;k++)
-	{
+	{	
+		double r = pow(randomNum(0,1),1.0/3.0);
+		double theta = randomNum(0,2*M_PI);
 		r[k][0] = r * cos(theta);
 		r[k][1] = r * sin(theta);
 	}
