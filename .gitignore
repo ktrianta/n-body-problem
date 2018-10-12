@@ -1,0 +1,9 @@
+# default named executable
+a.out
+
+# resulting data
+output.dat
+*.gif
+
+# other
+.DS_Store
