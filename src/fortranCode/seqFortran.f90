@@ -12,7 +12,7 @@ numTimeSteps = INT(Time / DT + 1)
 ! Main program
 CALL InitialPositions()
 
-OPEN(UNIT=1,FILE="data.txt")
+OPEN(UNIT=1,FILE="output.dat")
 
 DO i=0,N-1
 	WRITE(1,*) x(i),achar(9),y(i),achar(9),ux(i),achar(9),uy(i)
@@ -62,11 +62,12 @@ SUBROUTINE InitialPositions()
 
 	INTEGER i;
 
-	DO i=0,N-1
-		x(i) = RAND(i)
-		y(i) = RAND(i)
-	END DO
-
+	!DO i=0,N-1
+	!	x(i) = SRAND(i)
+	!	y(i) = SRAND(i)
+	!END DO
+	CALL RANDOM_NUMBER(x)
+	CALL RANDOM_NUMBER(y)
 END SUBROUTINE InitialPositions
 
 SUBROUTINE computeF(j,x,y,ax,N)
