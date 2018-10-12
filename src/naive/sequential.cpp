@@ -4,6 +4,7 @@
 #include <time.h> //for seeding prng
 #include <iostream>
 #include <fstream>
+#include "initialization.h"
 
 using namespace std;
 
@@ -11,16 +12,6 @@ const int N = 5;      // the number of particles
 const float g = 1 ;     // gravitational constant
 const float epsilon = 0.001;
 const float epsilon2 = epsilon * epsilon;
-
-void InitialPositions(float (*r)[2])
-{
-    srand(time(NULL));
-    for (int i = 0; i < N; i++)
-    {
-        r[i][0] = ((double) rand()) / RAND_MAX;
-        r[i][1] = ((double) rand()) / RAND_MAX;
-    }
-}
 
 void ComputeF(int j, float (*r)[2], float *m, float (*a)[2])
 {
@@ -46,7 +37,7 @@ int main(int argc,char** argv)
     ofstream myfile;
     myfile.open ("output.dat");
 
-    InitialPositions(r);
+    initializeOnSphere(N, r, u, m);
     for (int i = 0; i < N; i++)
     { 
         u[i][0] = 0;
