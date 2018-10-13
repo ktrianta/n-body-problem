@@ -1,8 +1,9 @@
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
+#include "initialization.h"
 
-void initializePositionOnUnitSquare(int N, float r[][2])
+void initializePositionOnUnitSquare(int N, std::vector<std::vector<float>>& r)
 {
     std::srand(std::time(NULL));
 
@@ -20,7 +21,7 @@ float randomNum(float a, float b)
 }
 
 /* This codes initiliazes the particules in a circular shape */
-void initializePositionOnSphere(int N, float r[][2])
+void initializePositionOnSphere(int N, std::vector<std::vector<float>>& r)
 {
     std::srand(std::time(NULL));
 

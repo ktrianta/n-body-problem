@@ -4,7 +4,7 @@
 #include <time.h> //for seeding prng
 #include <iostream>
 #include <fstream>
-#include<algorithm> // for std::fill_n
+#include <vector>
 #include "initialization.h"
 
 
@@ -15,7 +15,7 @@ const float g = 1 ;     // gravitational constant
 const float epsilon = 0.001;
 const float epsilon2 = epsilon * epsilon;
 
-void ComputeF(int j, float (*r)[2], float *m, float (*a)[2])
+void ComputeF(int j, vector<vector<float>>& r, vector<float>& m, vector<vector<float>>& a)
 {
     for (int i = j+1; i < N; i++)
     {
@@ -35,16 +35,16 @@ void ComputeF(int j, float (*r)[2], float *m, float (*a)[2])
 
 int main(int argc,char** argv)
 {
-    float r[N][2], u[N][2], a[N][2], m[N]; /*Could have used std::fill_n(m,N,1/N)*/
+    vector<vector<float>> r(N, vector<float>(2));
+    vector<vector<float>> u(N, vector<float>(2, 0));
+    vector<vector<float>> a(N, vector<float>(2, 0));
+    vector<float> m(N, 1.0/N);
     ofstream myfile;
     myfile.open ("output.dat");
 
     initializePositionOnSphere(N, r);
     for (int i = 0; i < N; i++)
     { 
-        m[i] = 1;
-        a[i][0] = 0;
-        a[i][1] = 0;
         myfile << r[i][0] << "   "
                << r[i][1] << "   "
                << u[i][0] << "   "
