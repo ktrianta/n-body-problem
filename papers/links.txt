@@ -8,3 +8,10 @@ http://portillo.ca/nbody/
 Interesting Videos
 https://www.youtube.com/watch?v=Ej97699t-G0
 https://channel9.msdn.com/Events/Build/2013/4-329
+
+Possible Software for Benchmarks (according to stackexchange answer)
+https://wwwmpa.mpa-garching.mpg.de/gadget/
+http://www.boulder.swri.edu/~hal/swift.html
+https://www.ast.cam.ac.uk/~sverre/web/pages/nbody.htm
+
+
