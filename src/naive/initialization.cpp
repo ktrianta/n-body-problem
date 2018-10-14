@@ -3,14 +3,14 @@
 #include <cstdlib>
 #include "initialization.hpp"
 
-void initializePositionOnUnitSquare(int N, std::vector<std::vector<float>>& r)
+void initializePositionOnUnitSquare(int N, Array2D<float>& r)
 {
     std::srand(std::time(NULL));
 
     for (int i = 0; i < N; i++)
     {
-        r[i][0] = ((float) std::rand()) / RAND_MAX;
-        r[i][1] = ((float) std::rand()) / RAND_MAX;
+        r(i, 0) = ((float) std::rand()) / RAND_MAX;
+        r(i, 1) = ((float) std::rand()) / RAND_MAX;
     }
 }
 
@@ -21,7 +21,7 @@ float randomNum(float a, float b)
 }
 
 /* This codes initiliazes the particules in a circular shape */
-void initializePositionOnSphere(int N, std::vector<std::vector<float>>& r)
+void initializePositionOnSphere(int N, Array2D<float>& r)
 {
     std::srand(std::time(NULL));
 
@@ -29,7 +29,7 @@ void initializePositionOnSphere(int N, std::vector<std::vector<float>>& r)
     {
         float p = pow(randomNum(0, 1), 1.0 / 3.0);
         float theta = randomNum(0,2 * M_PI);
-        r[k][0] = p * cos(theta);
-        r[k][1] = p * sin(theta);
+        r(k, 0) = p * cos(theta);
+        r(k, 1) = p * sin(theta);
     }
 }
