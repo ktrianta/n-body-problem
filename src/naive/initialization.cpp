@@ -1,7 +1,7 @@
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
-#include "initialization.h"
+#include "initialization.hpp"
 
 void initializePositionOnUnitSquare(int N, std::vector<std::vector<float>>& r)
 {
