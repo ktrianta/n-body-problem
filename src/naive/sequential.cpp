@@ -19,6 +19,8 @@ void computeAcceleration(Array2D<float>& r, Array2D<float>& a, vector<float>& m)
 {
     for (int i = 0; i < N; i++)
     {
+        float a_i0 = 0;  // accumulate accelaration values for particle i and
+        float a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
         for (int j = i+1; j < N; j++)
         {
             float rji[2];
@@ -30,9 +32,11 @@ void computeAcceleration(Array2D<float>& r, Array2D<float>& a, vector<float>& m)
             float fj = -g * m[i] / denom;
             a(j, 0) += fi * rji[0];
             a(j, 1) += fi * rji[1];
-            a(i, 0) -= fj * rji[0];
-            a(i, 1) -= fj * rji[1];
+            a_i0 -= fj * rji[0];
+            a_i1 -= fj * rji[1];
         }
+        a(i, 0) += a_i0;  // a(i, 0) and a(i, 1) are accessed once here, avoiding
+        a(i, 1) += a_i1;  // repeated accesses in the inner loop of j
     }
 }
 
