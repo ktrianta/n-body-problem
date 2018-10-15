@@ -7,11 +7,12 @@
 #include <vector>
 #include "array2d.hpp"
 #include "initialization.hpp"
+#include <unistd.h>
 
 using namespace std;
 
-const int N = 5;      // the number of particles
-const float g = 1 ;     // gravitational constant
+int N = 5;      // the number of particles
+const float g = 1;     // gravitational constant
 const float epsilon = 0.001;
 const float epsilon2 = epsilon * epsilon;
 
@@ -51,8 +52,27 @@ void writeDataToFile(Array2D<float>& r, Array2D<float>& u, ofstream& file)
     }
 }
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
+    int c;
+    float T = 10;
+    float dt = 0.00001;
+    while ((c = getopt (argc, argv, "n:t:s:")) != -1)
+    {
+        switch (c)
+        {
+            case 'n':
+                N = atoi(optarg);
+                break;
+            case 't':
+                T = atof(optarg);
+                break;
+            case 's':
+                dt = atof(optarg);
+                break;
+        }
+    }
+
     Array2D<float> r(N, 2);
     Array2D<float> u(N, 2, 0);
     Array2D<float> a(N, 2, 0);
@@ -63,8 +83,6 @@ int main(int argc,char** argv)
     initializePositionOnSphere(N, r);
     writeDataToFile(r, u, file);
 
-    const float T = 10;
-    const float dt = 0.00001;
     const int Ntimesteps = T/dt + 1;
 
     computeAcceleration(r, a, m);
