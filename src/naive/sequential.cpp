@@ -5,9 +5,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "types.hpp"
-#include "array2d.hpp"
-#include "initialization.hpp"
+#include "../utils/types.hpp"
+#include "../utils/array2d.hpp"
+#include "../utils/initialization.hpp"
 #include <unistd.h>
 
 using namespace std;
