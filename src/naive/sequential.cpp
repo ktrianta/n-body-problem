@@ -36,8 +36,8 @@ void computeAcceleration(Array2D<sim_data_type>& r, Array2D<sim_data_type>& a, v
             rji[1] = r(j, 1) - r(i, 1);
             sim_data_type r2 = rji[0] * rji[0] + rji[1] * rji[1];
             sim_data_type denom = (r2+epsilon2) * sqrt(r2+epsilon2);
-            sim_data_type fi = -g * m[j] / denom;
-            sim_data_type fj = -g * m[i] / denom;
+            sim_data_type fi = -g * m[i] / denom;
+            sim_data_type fj = -g * m[j] / denom;
             a(j, 0) += fi * rji[0];
             a(j, 1) += fi * rji[1];
             a_i0 -= fj * rji[0];
