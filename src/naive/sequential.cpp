@@ -36,12 +36,12 @@ void computeAcceleration(Array2D<sim_data_type>& r, Array2D<sim_data_type>& a, v
             rji[1] = r(j, 1) - r(i, 1);
             sim_data_type r2 = rji[0] * rji[0] + rji[1] * rji[1];
             sim_data_type denom = (r2+epsilon2) * sqrt(r2+epsilon2);
-            sim_data_type fi = -g * m[i] / denom;
-            sim_data_type fj = -g * m[j] / denom;
-            a(j, 0) += fi * rji[0];
-            a(j, 1) += fi * rji[1];
-            a_i0 -= fj * rji[0];
-            a_i1 -= fj * rji[1];
+            sim_data_type a_j = -g * m[i] / denom;
+            sim_data_type a_i = -g * m[j] / denom;
+            a(j, 0) += a_j * rji[0];
+            a(j, 1) += a_j * rji[1];
+            a_i0 -= a_i * rji[0];
+            a_i1 -= a_i * rji[1];
         }
         a(i, 0) += a_i0;  // a(i, 0) and a(i, 1) are accessed once here, avoiding
         a(i, 1) += a_i1;  // repeated accesses in the inner loop of j
