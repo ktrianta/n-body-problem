@@ -19,6 +19,12 @@ const sim_data_type epsilon2 = epsilon * epsilon;
 
 void computeAcceleration(Array2D<sim_data_type>& r, Array2D<sim_data_type>& a, vector<sim_data_type>& m)
 {
+    for (int j = 0; j < N; j++)
+    {
+        a(j, 0) = 0;
+        a(j, 1) = 0;
+    }
+
     for (int i = 0; i < N; i++)
     {
         sim_data_type a_i0 = 0;  // accumulate accelaration values for particle i and
@@ -96,11 +102,6 @@ int main(int argc, char** argv)
             u(j, 1) += 0.5 * a(j, 1) * dt;
             r(j, 0) += u(j, 0) * dt;
             r(j, 1) += u(j, 1) * dt;
-        }
-        for (int j = 0; j < N; j++)
-        {
-            a(j, 0) = 0;
-            a(j, 1) = 0;
         }
 
         computeAcceleration(r, a, m);
