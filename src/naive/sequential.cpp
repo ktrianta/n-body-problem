@@ -64,7 +64,9 @@ int main(int argc, char** argv)
     int c;
     sim_data_type T = 10;
     sim_data_type dt = 0.00001;
-    while ((c = getopt (argc, argv, "n:t:s:")) != -1)
+    string filename;
+
+    while ((c = getopt (argc, argv, "n:t:s:i:")) != -1)
     {
         switch (c)
         {
@@ -77,6 +79,9 @@ int main(int argc, char** argv)
             case 's':
                 dt = atof(optarg);
                 break;
+            case 'i':
+                filename = optarg;
+                break;
         }
     }
 
@@ -84,15 +89,24 @@ int main(int argc, char** argv)
     Array2D<sim_data_type> u(N, 2, 0);
     Array2D<sim_data_type> a(N, 2, 0);
     vector<sim_data_type> m(N, 1.0/N);
+
+    if (!filename.empty()) {
+        ifstream ifile;
+        ifile.open(filename);
+
+        for (int i = 0; i < N; i++) {
+            ifile >> m[i] >> r(i, 0) >> r(i, 1) >> u(i, 0) >> u(i, 1);
+        }
+    } else {
+        initializePositionOnSphere(N, r);
+    }
+
     ofstream file;
     file.open("output.dat");
 
-    initializePositionOnSphere(N, r);
     writeDataToFile(r, u, file);
-
-    const int Ntimesteps = T/dt + 1;
-
     computeAcceleration(r, a, m);
+    const int Ntimesteps = T/dt + 1;
 
     for (int t = 0; t < Ntimesteps; t++)
     {
