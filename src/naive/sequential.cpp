@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "types.hpp"
 #include "array2d.hpp"
 #include "initialization.hpp"
 #include <unistd.h>
@@ -12,25 +13,25 @@
 using namespace std;
 
 int N = 5;      // the number of particles
-const float g = 1;     // gravitational constant
-const float epsilon = 0.001;
-const float epsilon2 = epsilon * epsilon;
+const sim_data_type g = 1;     // gravitational constant
+const sim_data_type epsilon = 0.001;
+const sim_data_type epsilon2 = epsilon * epsilon;
 
-void computeAcceleration(Array2D<float>& r, Array2D<float>& a, vector<float>& m)
+void computeAcceleration(Array2D<sim_data_type>& r, Array2D<sim_data_type>& a, vector<sim_data_type>& m)
 {
     for (int i = 0; i < N; i++)
     {
-        float a_i0 = 0;  // accumulate accelaration values for particle i and
-        float a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
+        sim_data_type a_i0 = 0;  // accumulate accelaration values for particle i and
+        sim_data_type a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
         for (int j = i+1; j < N; j++)
         {
-            float rji[2];
+            sim_data_type rji[2];
             rji[0] = r(j, 0) - r(i, 0);
             rji[1] = r(j, 1) - r(i, 1);
-            float r2 = rji[0] * rji[0] + rji[1] * rji[1];
-            float denom = (r2+epsilon2) * sqrt(r2+epsilon2);
-            float fi = -g * m[j] / denom;
-            float fj = -g * m[i] / denom;
+            sim_data_type r2 = rji[0] * rji[0] + rji[1] * rji[1];
+            sim_data_type denom = (r2+epsilon2) * sqrt(r2+epsilon2);
+            sim_data_type fi = -g * m[j] / denom;
+            sim_data_type fj = -g * m[i] / denom;
             a(j, 0) += fi * rji[0];
             a(j, 1) += fi * rji[1];
             a_i0 -= fj * rji[0];
@@ -41,7 +42,7 @@ void computeAcceleration(Array2D<float>& r, Array2D<float>& a, vector<float>& m)
     }
 }
 
-void writeDataToFile(Array2D<float>& r, Array2D<float>& u, ofstream& file)
+void writeDataToFile(Array2D<sim_data_type>& r, Array2D<sim_data_type>& u, ofstream& file)
 {
     for (int i = 0; i < N; i++)
     {
@@ -55,8 +56,8 @@ void writeDataToFile(Array2D<float>& r, Array2D<float>& u, ofstream& file)
 int main(int argc, char** argv)
 {
     int c;
-    float T = 10;
-    float dt = 0.00001;
+    sim_data_type T = 10;
+    sim_data_type dt = 0.00001;
     while ((c = getopt (argc, argv, "n:t:s:")) != -1)
     {
         switch (c)
@@ -73,10 +74,10 @@ int main(int argc, char** argv)
         }
     }
 
-    Array2D<float> r(N, 2);
-    Array2D<float> u(N, 2, 0);
-    Array2D<float> a(N, 2, 0);
-    vector<float> m(N, 1.0/N);
+    Array2D<sim_data_type> r(N, 2);
+    Array2D<sim_data_type> u(N, 2, 0);
+    Array2D<sim_data_type> a(N, 2, 0);
+    vector<sim_data_type> m(N, 1.0/N);
     ofstream file;
     file.open("output.dat");
 
