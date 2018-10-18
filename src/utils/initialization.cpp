@@ -3,14 +3,14 @@
 #include <cstdlib>
 #include "initialization.hpp"
 
-void initializePositionOnUnitSquare(int N, Array2D<sim_data_type>& r)
+void initializePositionOnUnitSquare(int N, sim_data_type (*r)[2])
 {
     std::srand(std::time(NULL));
 
     for (int i = 0; i < N; i++)
     {
-        r(i, 0) = ((sim_data_type) std::rand()) / RAND_MAX;
-        r(i, 1) = ((sim_data_type) std::rand()) / RAND_MAX;
+        r[i][0] = ((sim_data_type) std::rand()) / RAND_MAX;
+        r[i][1] = ((sim_data_type) std::rand()) / RAND_MAX;
     }
 }
 
@@ -21,15 +21,15 @@ sim_data_type randomNum(float a, float b)
 }
 
 /* This codes initiliazes the particules in a circular shape */
-void initializePositionOnSphere(int N, Array2D<sim_data_type>& r)
+void initializePositionOnSphere(int N, sim_data_type (*r)[2])
 {
     std::srand(std::time(NULL));
 
-    for (int k = 0; k < N ; k++)
+    for (int i = 0; i < N ; i++)
     {
         sim_data_type p = pow(randomNum(0, 1), 1.0 / 3.0);
         sim_data_type theta = randomNum(0,2 * M_PI);
-        r(k, 0) = p * cos(theta);
-        r(k, 1) = p * sin(theta);
+        r[i][0] = p * cos(theta);
+        r[i][1] = p * sin(theta);
     }
 }

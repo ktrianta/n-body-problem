@@ -6,7 +6,6 @@
 #include <fstream>
 #include <vector>
 #include "../utils/types.hpp"
-#include "../utils/array2d.hpp"
 #include "../utils/initialization.hpp"
 #include <unistd.h>
 
@@ -17,12 +16,12 @@ const sim_data_type g = 1;     // gravitational constant
 const sim_data_type epsilon = 0.001;
 const sim_data_type epsilon2 = epsilon * epsilon;
 
-void computeAcceleration(Array2D<sim_data_type>& r, Array2D<sim_data_type>& a, vector<sim_data_type>& m)
+void computeAcceleration(sim_data_type (*r)[2], sim_data_type (*a)[2], vector<sim_data_type>& m)
 {
-    for (int j = 0; j < N; j++)
+    for (int i = 0; i < N; i++)
     {
-        a(j, 0) = 0;
-        a(j, 1) = 0;
+        a[i][0] = 0;
+        a[i][1] = 0;
     }
 
     for (int i = 0; i < N; i++)
@@ -32,30 +31,30 @@ void computeAcceleration(Array2D<sim_data_type>& r, Array2D<sim_data_type>& a, v
         for (int j = i+1; j < N; j++)
         {
             sim_data_type rji[2];
-            rji[0] = r(j, 0) - r(i, 0);
-            rji[1] = r(j, 1) - r(i, 1);
+            rji[0] = r[j][0] - r[i][0];
+            rji[1] = r[j][1] - r[i][1];
             sim_data_type r2 = rji[0] * rji[0] + rji[1] * rji[1];
             sim_data_type denom = (r2+epsilon2) * sqrt(r2+epsilon2);
             sim_data_type a_j = -g * m[i] / denom;
             sim_data_type a_i = -g * m[j] / denom;
-            a(j, 0) += a_j * rji[0];
-            a(j, 1) += a_j * rji[1];
+            a[j][0] += a_j * rji[0];
+            a[j][1] += a_j * rji[1];
             a_i0 -= a_i * rji[0];
             a_i1 -= a_i * rji[1];
         }
-        a(i, 0) += a_i0;  // a(i, 0) and a(i, 1) are accessed once here, avoiding
-        a(i, 1) += a_i1;  // repeated accesses in the inner loop of j
+        a[i][0] += a_i0;  // a(i, 0) and a(i, 1) are accessed once here, avoiding
+        a[i][1] += a_i1;  // repeated accesses in the inner loop of j
     }
 }
 
-void writeDataToFile(Array2D<sim_data_type>& r, Array2D<sim_data_type>& u, ofstream& file)
+void writeDataToFile(sim_data_type (*r)[2], sim_data_type (*u)[2], ofstream& file)
 {
     for (int i = 0; i < N; i++)
     {
-        file << r(i, 0) << "   "
-             << r(i, 1) << "   "
-             << u(i, 0) << "   "
-             << u(i, 1) << "\n";
+        file << r[i][0] << "   "
+             << r[i][1] << "   "
+             << u[i][0] << "   "
+             << u[i][1] << "\n";
     }
 }
 
@@ -85,9 +84,12 @@ int main(int argc, char** argv)
         }
     }
 
-    Array2D<sim_data_type> r(N, 2);
-    Array2D<sim_data_type> u(N, 2, 0);
-    Array2D<sim_data_type> a(N, 2, 0);
+    sim_data_type (*r)[2] = new sim_data_type[N][2];
+    sim_data_type (*u)[2] = new sim_data_type[N][2];
+    sim_data_type (*a)[2] = new sim_data_type[N][2];
+    std::fill(&u[0][0], &u[0][0] + N*2, 0);
+    std::fill(&a[0][0], &a[0][0] + N*2, 0);
+
     vector<sim_data_type> m(N, 1.0/N);
 
     if (!filename.empty()) {
@@ -95,7 +97,7 @@ int main(int argc, char** argv)
         ifile.open(filename);
 
         for (int i = 0; i < N; i++) {
-            ifile >> m[i] >> r(i, 0) >> r(i, 1) >> u(i, 0) >> u(i, 1);
+            ifile >> m[i] >> r[i][0] >> r[i][1] >> u[i][0] >> u[i][0];
         }
     } else {
         initializePositionOnSphere(N, r);
@@ -112,18 +114,18 @@ int main(int argc, char** argv)
     {
         for (int j = 0; j < N; j++)
         {
-            u(j, 0) += 0.5 * a(j, 0) * dt;
-            u(j, 1) += 0.5 * a(j, 1) * dt;
-            r(j, 0) += u(j, 0) * dt;
-            r(j, 1) += u(j, 1) * dt;
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
+            r[j][0] += u[j][0] * dt;
+            r[j][1] += u[j][1] * dt;
         }
 
         computeAcceleration(r, a, m);
 
         for (int j = 0; j < N; j++)
         {
-            u(j, 0) += 0.5 * a(j, 0) * dt;
-            u(j, 1) += 0.5 * a(j, 1) * dt;
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
         }
 
         if (t % 200 == 0)
