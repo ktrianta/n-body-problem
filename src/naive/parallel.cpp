@@ -12,7 +12,7 @@
 
 using namespace std;
 
-int N = 5;      // the number of particles
+int N = 6;      // the number of particles
 const sim_data_type g = 1;     // gravitational constant
 const sim_data_type epsilon = 0.001;
 const sim_data_type epsilon2 = epsilon * epsilon;
@@ -62,11 +62,11 @@ void writeDataToFile(sim_data_type (*r)[2], sim_data_type (*u)[2], ofstream& fil
 int main(int argc, char** argv)
 {
 
-      // *** MPI *** // 
+    // *** MPI *** // 
     int size,rank;
-    MPI_Init(&argc,&argv)
-    MPI_COMM_size(MPI_COMM_WORLD,&size);
-    MPI_COMM_rank(MPI_COMM_WORLD,&rank);
+    MPI_Init(&argc,&argv);
+    MPI_Comm_size(MPI_COMM_WORLD,&size);
+    MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     // *** MPI *** // 
 
 
@@ -127,13 +127,13 @@ int main(int argc, char** argv)
     {
         for (int j = rank*local_N; j < (rank+1)*local_N ; j++)
         {
-            u(j, 0) += 0.5 * a(j, 0) * dt;
-            u(j, 1) += 0.5 * a(j, 1) * dt;
-            r(j, 0) += u(j, 0) * dt;
-            r(j, 1) += u(j, 1) * dt;
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
+            r[j][0] += u[j][0] * dt;
+            r[j][1] += u[j][1] * dt;
         }
 
-        MPI_AllGather(&(u[rank*local_N*2][0]),local_N,MPI_FLOAT,&u[0][0],local_N,MPI_FLOAT,MPI_COMM_WORLD);
+        MPI_Allgather(&(u[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
 
         computeAcceleration(r, a, m);
 
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
             u[j][1] += 0.5 * a[j][1] * dt;
         }
 
-        MPI_AllGather(&(u[rank*local_N*2][0]),local_N,MPI_FLOAT,&u[0][0],local_N,MPI_FLOAT,0,MPI_COMM_WORLD);
+        MPI_Allgather(&(u[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
         if (rank==0)
         {
             if (t % 200 == 0)
@@ -153,5 +153,6 @@ int main(int argc, char** argv)
          }
 
     }
+    MPI_Finalize();
     return 0;
 }
