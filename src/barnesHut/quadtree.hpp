@@ -1,7 +1,6 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
-#include"../utils/array2d.hpp"
 
 class Rectangle{
     public:
@@ -13,18 +12,20 @@ class Rectangle{
 };
 
 
+using namespace std;
+
 class QuadTree{
 
     static const int capacity = 1;
     static const int dimension = 2;
-    double centerMass[dimension];
+    double centerMass[2];
    
 
     Rectangle boundary;
-    int index[capacity];
+    int index[1];
     double (*data)[2];
     
-// Parent node
+//   Parent node
     QuadTree* parent;
     bool leaf;
     int size;
@@ -45,6 +46,7 @@ public:
     ~QuadTree();
     bool insert(int new_index);
     void subdivide();
+    void print();
 
 private:
     void initialization(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_w, double inp_h);
@@ -53,6 +55,5 @@ private:
 
 
 
-// daclare functions
 
 #endif  // QUADTREE_H

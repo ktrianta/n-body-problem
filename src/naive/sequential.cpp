@@ -97,7 +97,7 @@ int main(int argc, char** argv)
         ifile.open(filename);
 
         for (int i = 0; i < N; i++) {
-            ifile >> m[i] >> r[i][0] >> r[i][1] >> u[i][0] >> u[i][0];
+            ifile >> m[i] >> r[i][0] >> r[i][1] >> u[i][0] >> u[i][1];
         }
     } else {
         initializePositionOnSphere(N, r);
