@@ -24,7 +24,7 @@ bool Rectangle::containPoint(double point[])
 QuadTree::QuadTree(double (*r)[2], int N, double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
     initialization(NULL, r, inp_x, inp_y, inp_hw, inp_hh);
-  fill(N);
+    fill(N);
 }
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
@@ -44,7 +44,7 @@ QuadTree::QuadTree(double (*r)[2], double inp_x, double inp_y, double inp_hw, do
 // Constructor for quadtree with particular size and parent (do not fill the tree)
 QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
-    initialization(inp_parent, data, inp_x, inp_y, inp_hw, inp_hh);
+    initialization(inp_parent, r, inp_x, inp_y, inp_hw, inp_hh);
 }
 
 QuadTree::~QuadTree()
@@ -144,8 +144,8 @@ void QuadTree::print()
         printf("Leaf node; data = [");
         for(int i = 0; i < size; i++) {
             double point[2];
-            point[0] = data[i][0];
-            point[1] = data[i][1];
+            point[0] = data[index[i]][0];
+            point[1] = data[index[i]][1];
 
             for(int d = 0; d < dimension; d++) printf("%f, ", point[d]);
             if(i < size - 1) printf("\n");
