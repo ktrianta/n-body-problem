@@ -68,9 +68,7 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD,&size);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     // *** MPI *** // 
-
-
-
+    
     int c;
     sim_data_type T = 10;
     sim_data_type dt = 0.00001;
@@ -103,47 +101,75 @@ int main(int argc, char** argv)
 
     vector<sim_data_type> m(N, 1.0/N);
 
-    if (!filename.empty()) {
-        ifstream ifile;
-        ifile.open(filename);
+	// PROCESS 0 initialize position vector r.
+	if (rank == 0)
+	{
+	    if (!filename.empty()) {
+	        ifstream ifile;
+	        ifile.open(filename);
+	
+	        for (int i = 0; i < N; i++) {
+	            ifile >> m[i] >> r[i][0] >> r[i][1] >> u[i][0] >> u[i][1];
+	        }
+	    } else {
+	        initializePositionOnSphere(N, r);
+	    }
+	}
 
-        for (int i = 0; i < N; i++) {
-            ifile >> m[i] >> r[i][0] >> r[i][1] >> u[i][0] >> u[i][0];
-        }
-    } else {
-        initializePositionOnSphere(N, r);
-    }
-
-    ofstream file;
-    file.open("output.dat");
-
-    writeDataToFile(r, u, file);
-    computeAcceleration(r, a, m);
+	// SEND the position vector r from Process 0 to all processes.
+	MPI_Bcast(&r[0][0],N*2, MPI_DOUBLE,0, MPI_COMM_WORLD);
+	
+	
+	ofstream file;
+	if (rank ==0)
+	{
+		file.open("output.dat");
+		writeDataToFile(r, u, file);
+	}
+    
+    //if (rank == 0)
+    //{
+		computeAcceleration(r, a, m); // NEEDS TO BE PARALLELIZED
+	//}
+    
+    // SEND the acceleration vector to all processes.
+	// ---- NEED TO BI FILLED -----
+	
+	
     const int Ntimesteps = T/dt + 1;
 
+	// Local Declarations
     int local_N = N / size; // Asuming size divides N
-
+    sim_data_type (*u_local)[2] = new sim_data_type[local_N][2];
+	sim_data_type (*r_local)[2] = new sim_data_type[local_N][2];
+	
     for (int t = 0; t < Ntimesteps; t++)
     {
-        for (int j = rank*local_N; j < (rank+1)*local_N ; j++)
+        for (int j = 0; j < local_N ; j++)
         {
-            u[j][0] += 0.5 * a[j][0] * dt;
-            u[j][1] += 0.5 * a[j][1] * dt;
-            r[j][0] += u[j][0] * dt;
-            r[j][1] += u[j][1] * dt;
+			int indeX = rank*(local_N) + j;
+            u_local[j][0] += 0.5 * a[indeX][0] * dt;
+            u_local[j][1] += 0.5 * a[indeX][1] * dt;
+            r_local[j][0] += u_local[j][0] * dt;
+            r_local[j][1] += u_local[j][1] * dt;
         }
-
-        MPI_Allgather(&(u[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
-
+        
+		MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+		MPI_Allgather(&(r_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&r[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+		
         computeAcceleration(r, a, m);
-
-        for (int j = rank*local_N; j < (rank+1)*local_N ; j++)
+		// SEND the acceleration vector to all processes.
+		// ---- NEED TO BE FILLED -----
+		
+        for (int j = 0 ; j < local_N ; j++)
         {
-            u[j][0] += 0.5 * a[j][0] * dt;
-            u[j][1] += 0.5 * a[j][1] * dt;
+			int indeX = rank*(local_N) + j;
+            u_local[j][0] += 0.5 * a[indeX][0] * dt;
+            u_local[j][1] += 0.5 * a[indeX][1] * dt;
         }
 
-        MPI_Allgather(&(u[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+        MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+        
         if (rank==0)
         {
             if (t % 200 == 0)
