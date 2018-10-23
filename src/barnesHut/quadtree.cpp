@@ -1,8 +1,8 @@
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
-#include "../utils/array2d.hpp"
 #include "quadtree.hpp"
+#include <stdio.h> //for printf
 
 
 
@@ -24,7 +24,7 @@ bool Rectangle::containPoint(double point[])
 QuadTree::QuadTree(double (*r)[2], int N, double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
     initialization(NULL, r, inp_x, inp_y, inp_hw, inp_hh);
-    fill(N);
+  fill(N);
 }
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
@@ -41,14 +41,19 @@ QuadTree::QuadTree(double (*r)[2], double inp_x, double inp_y, double inp_hw, do
     initialization(NULL, data, inp_x, inp_y, inp_hw, inp_hh);
 }
 */
-
 // Constructor for quadtree with particular size and parent (do not fill the tree)
 QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
     initialization(inp_parent, data, inp_x, inp_y, inp_hw, inp_hh);
 }
 
-
+QuadTree::~QuadTree()
+{
+    delete northWest;
+    delete northEast;
+    delete southWest;
+    delete southEast;
+}
 
 void QuadTree::initialization(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_w, double inp_h){
 
@@ -126,3 +131,35 @@ void QuadTree::fill(int N)
 {
     for (int i = 0; i < N; i++) insert(i);
 }
+
+// Print out tree
+void QuadTree::print() 
+{
+    if(cum_size == 0) {
+        printf("Empty node\n");
+        return;
+    }
+
+    if(leaf) {
+        printf("Leaf node; data = [");
+        for(int i = 0; i < size; i++) {
+            double point[2];
+            point[0] = data[i][0];
+            point[1] = data[i][1];
+
+            for(int d = 0; d < dimension; d++) printf("%f, ", point[d]);
+            if(i < size - 1) printf("\n");
+            else printf("]\n");
+        }        
+    }
+    else {
+        printf("Intersection node with center-of-mass = [");
+        for(int d = 0; d < dimension; d++) printf("%f, ", centerMass[d]);
+        printf("]; children are:\n");
+        northEast->print();
+        northWest->print();
+        southEast->print();
+        southWest->print();
+    }
+}
+
