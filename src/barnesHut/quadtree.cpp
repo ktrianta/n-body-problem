@@ -5,7 +5,6 @@
 #include <stdio.h> //for printf
 
 
-
 bool Rectangle::containPoint(double point[])
 {
     if (x - w > point[0]) return false;
@@ -160,6 +159,34 @@ void QuadTree::print()
         northWest->print();
         southEast->print();
         southWest->print();
+    }
+}
+
+
+void QuadTree::computeAcceleration(int idx, double (*r)[2], double (*a)[2], vector<double>& m, double g) {
+    if (cum_size == 0 || (leaf == true && size == 1 && index[0] == idx)) {
+        return;
+    }
+
+    if (leaf == true) {
+        for(int i = 0; i < size; i++) {
+            int idx_i = index[i];
+            if (idx == idx_i) continue;
+
+            double rji[2];
+            rji[0] = r[idx_i][0] - r[idx][0];
+            rji[1] = r[idx_i][1] - r[idx][1];
+            double r2 = rji[0] * rji[0] + rji[1] * rji[1];
+            double denom = r2 * sqrt(r2);
+            double a_i = -g * m[idx_i] / denom;
+            a[idx][0] -= a_i * rji[0];
+            a[idx][1] -= a_i * rji[1];
+        }
+    } else {
+        northWest->computeAcceleration(idx, r, a, m, g);
+        northEast->computeAcceleration(idx, r, a, m, g);
+        southWest->computeAcceleration(idx, r, a, m, g);
+        southEast->computeAcceleration(idx, r, a, m, g);
     }
 }
 

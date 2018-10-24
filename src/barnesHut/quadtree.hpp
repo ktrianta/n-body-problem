@@ -1,6 +1,7 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
+#include <vector>
 
 class Rectangle{
     public:
@@ -47,7 +48,7 @@ public:
     bool insert(int new_index);
     void subdivide();
     void print();
-
+    void computeAcceleration(int idx, double (*)[2], double (*)[2], vector<double>&, double g);
 private:
     void initialization(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_w, double inp_h);
     void fill(int N);
