@@ -86,39 +86,39 @@ int main(int argc, char** argv)
     file.open("output.dat");
 
     writeDataToFile(r, u, file);
-//  computeAcceleration(r, a, m);
+    
+    QuadTree tree = QuadTree(r,N,xc,yc,w2,h2);
+    for (int j = 0; j < N; j++)
+    {
+        tree.computeAcceleration(j, r, a, m, g);
+    }
     const int Ntimesteps = T/dt + 1;
 
-//  for (int t = 0; t < Ntimesteps; t++)                                                         
-//  {                                                                                          
-//      for (int j = 0; j < N; j++)                                                              
-//      {                                                                                    
-//          u[j][0] += 0.5 * a[j][0] * dt;                                                  
-//          u[j][1] += 0.5 * a[j][1] * dt;                                                        
-//          r[j][0] += u[j][0] * dt;                                                              
-//          r[j][1] += u[j][1] * dt;                                                      
-//      }                                                                                         
-//                                                                                                
-//      
-        QuadTree tree = QuadTree(r,N,xc,yc,w2,h2);
-//      computeAcceleration(r, a, m);                                                             
+    for (int t = 0; t < Ntimesteps; t++)                                                         
+    {                                                                                          
+        for (int j = 0; j < N; j++)                                                              
+        {                                                                                    
+            u[j][0] += 0.5 * a[j][0] * dt;                                                  
+            u[j][1] += 0.5 * a[j][1] * dt;                                                        
+            r[j][0] += u[j][0] * dt;                                                              
+            r[j][1] += u[j][1] * dt;                                                      
+                                                                                                 
+            tree.computeAcceleration(j,r, a, m,g);                                                             
 
-//                                                                                       
-//      for (int j = 0; j < N; j++)                                                              
-//      {                                                                     
-//          u[j][0] += 0.5 * a[j][0] * dt;                           
-//          u[j][1] += 0.5 * a[j][1] * dt;                       
-//      }                                                                                         
-//                                                                                                
-//      if (t % 200 == 0)                                                                         
-//      {                                                       
-//          writeDataToFile(r, u, file);                       
-//      }                                                                                         
-//  }       
+                                                                                         
+            u[j][0] += 0.5 * a[j][0] * dt;                           
+            u[j][1] += 0.5 * a[j][1] * dt;                       
+        }                                                                                         
+        QuadTree tree = QuadTree(r,N,xc,yc,w2,h2);
+                                                                                                  
+        if (t % 200 == 0)                                                                         
+        {                                                       
+            writeDataToFile(r, u, file);                       
+        }                                                                                         
+    }       
 
 
 //  tree.print();
-    delete []r;
 
     return 0;
 }
