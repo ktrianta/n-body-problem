@@ -100,9 +100,10 @@ int main(int argc, char** argv)
     sim_data_type (*a)[2] = new sim_data_type[N][2];
     std::fill(&u[0][0], &u[0][0] + N*2, 0);
     std::fill(&a[0][0], &a[0][0] + N*2, 0);
-
     vector<sim_data_type> m(N, 1.0/N);
-
+    
+    if (rank==0)
+    {
         if (!filename.empty()) {
         ifstream ifile;
         ifile.open(filename);
@@ -113,17 +114,20 @@ int main(int argc, char** argv)
         } else {
             initializePositionOnSphere(N, r);
         }
-    
-        ofstream file;
-        file.open("output.dat");
+    }
+    MPI_Bcast (&r[0][0], 2*N, MPI_DOUBLE, 0, MPI_COMM_WORLD);    
+    MPI_Bcast (&u[0][0], 2*N, MPI_DOUBLE, 0, MPI_COMM_WORLD);    
+    MPI_Bcast (&m[0], N, MPI_DOUBLE, 0, MPI_COMM_WORLD);    
+
+    ofstream file;
+    file.open("output.dat");
     int local_N = N / size; // Asuming size divides N
 
     if( rank == 0)
     {
     	local_N += N-(size)*local_N;
+        writeDataToFile(r, u, file);
     }
-
-    writeDataToFile(r, u, file);
     computeAcceleration(r, a, m, rank, local_N);
     const int Ntimesteps = T/dt + 1;
 
