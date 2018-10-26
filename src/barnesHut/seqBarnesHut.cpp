@@ -13,6 +13,7 @@
 using namespace std;
 
 int N = 5;      // the number of particles
+double theta = 0.5;      // the number of particles
 const sim_data_type g = 1;     // gravitational constant
 const sim_data_type epsilon = 0.001;
 const sim_data_type epsilon2 = epsilon * epsilon;
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
     sim_data_type dt = 0.00001;
     string filename;
 
-    while ((c = getopt (argc, argv, "n:t:s:i:")) != -1)
+    while ((c = getopt (argc, argv, "n:t:s:i:h:")) != -1)
     {
         switch (c)
         {
@@ -59,6 +60,9 @@ int main(int argc, char** argv)
                 break;
             case 'i':
                 filename = optarg;
+                break;
+            case 'h':
+                theta = atof(optarg);
                 break;
         }
     }
@@ -87,10 +91,10 @@ int main(int argc, char** argv)
 
     writeDataToFile(r, u, file);
     
-    QuadTree tree = QuadTree(r,N,xc,yc,w2,h2);
+    QuadTree tree = QuadTree(r, m, N, xc, yc, w2, h2);
     for (int j = 0; j < N; j++)
     {
-        tree.computeAcceleration(j, r, a, m, g);
+        tree.computeAcceleration(j, r, a, g, theta);
     }
     const int Ntimesteps = T/dt + 1;
 
@@ -103,15 +107,17 @@ int main(int argc, char** argv)
             r[j][0] += u[j][0] * dt;                                                              
             r[j][1] += u[j][1] * dt;                                                      
                                                                                                  
-            tree.computeAcceleration(j,r, a, m,g);                                                             
+        a[j][0] = 0;
+        a[j][1] = 0;
+            tree.computeAcceleration(j, r, a, g, theta);                                                             
 
                                                                                          
             u[j][0] += 0.5 * a[j][0] * dt;                           
             u[j][1] += 0.5 * a[j][1] * dt;                       
         }                                                                                         
-        QuadTree tree = QuadTree(r,N,xc,yc,w2,h2);
+        QuadTree tree = QuadTree(r, m, N, xc, yc, w2, h2);
                                                                                                   
-        if (t % 200 == 0)                                                                         
+        if (t % 600 == 0)                                                                         
         {                                                       
             writeDataToFile(r, u, file);                       
         }                                                                                         

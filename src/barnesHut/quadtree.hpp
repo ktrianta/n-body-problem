@@ -20,11 +20,13 @@ class QuadTree{
     static const int capacity = 1;
     static const int dimension = 2;
     double centerMass[2];
+    double cum_Mass;
    
 
     Rectangle boundary;
     int index[1];
     double (*data)[2];
+    vector<double>  mass;
     
 //   Parent node
     QuadTree* parent;
@@ -41,16 +43,16 @@ class QuadTree{
 
 // private functions
 public:
-    QuadTree(double (*r)[2], int N, double inp_x, double inp_y, double inp_hw, double inp_hh);
-    QuadTree(QuadTree* inp_parent, double (*r)[2], int N, double inp_x, double inp_y, double inp_hw, double inp_hh);
-    QuadTree(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_hw, double inp_hh);
+    QuadTree(double (*r)[2], vector<double>& m, int N, double inp_x, double inp_y, double inp_hw, double inp_hh);
+    QuadTree(QuadTree* inp_parent, double (*r)[2], vector<double>& m, int N, double inp_x, double inp_y, double inp_hw, double inp_hh);
+    QuadTree(QuadTree* inp_parent, double (*r)[2], vector<double>& m,  double inp_x, double inp_y, double inp_hw, double inp_hh);
     ~QuadTree();
     bool insert(int new_index);
     void subdivide();
     void print();
-    void computeAcceleration(int idx, double (*)[2], double (*)[2], vector<double>&, double g);
+    void computeAcceleration(int idx, double (*)[2], double (*)[2], double g, double theta);
 private:
-    void initialization(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_w, double inp_h);
+    void initialization(QuadTree* inp_parent, double (*r)[2], vector<double>& m, double inp_x, double inp_y, double inp_w, double inp_h);
     void fill(int N);
 };
 

@@ -20,16 +20,16 @@ bool Rectangle::containPoint(double point[])
 
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
-QuadTree::QuadTree(double (*r)[2], int N, double inp_x, double inp_y, double inp_hw, double inp_hh)
+QuadTree::QuadTree(double (*r)[2], vector<double>& m, int N, double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
-    initialization(NULL, r, inp_x, inp_y, inp_hw, inp_hh);
+    initialization(NULL, r, m, inp_x, inp_y, inp_hw, inp_hh);
     fill(N);
 }
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
-QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[2], int N, double inp_x, double inp_y, double inp_hw, double inp_hh)
+QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[2], vector<double>& m, int N, double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
-    initialization(inp_parent, r, inp_x, inp_y, inp_hw, inp_hh);
+    initialization(inp_parent, r, m, inp_x, inp_y, inp_hw, inp_hh);
     fill(N);
 }
 
@@ -41,9 +41,9 @@ QuadTree::QuadTree(double (*r)[2], double inp_x, double inp_y, double inp_hw, do
 }
 */
 // Constructor for quadtree with particular size and parent (do not fill the tree)
-QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_hw, double inp_hh)
+QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[2], vector<double>& m, double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
-    initialization(inp_parent, r, inp_x, inp_y, inp_hw, inp_hh);
+    initialization(inp_parent, r, m, inp_x, inp_y, inp_hw, inp_hh);
 }
 
 QuadTree::~QuadTree()
@@ -54,10 +54,11 @@ QuadTree::~QuadTree()
     delete southEast;
 }
 
-void QuadTree::initialization(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_w, double inp_h){
+void QuadTree::initialization(QuadTree* inp_parent, double (*r)[2], vector<double>& m, double inp_x, double inp_y, double inp_w, double inp_h){
 
     parent = inp_parent;
     data = r;
+    mass = m;
     leaf = true;
     size = 0;
     cum_size = 0;
@@ -71,6 +72,7 @@ void QuadTree::initialization(QuadTree* inp_parent, double (*r)[2], double inp_x
     southEast = NULL;
     centerMass[0] = 0.;
     centerMass[1] = 0.;
+    cum_Mass = 0;
 }
 
 bool QuadTree::insert(int new_index){
@@ -85,7 +87,7 @@ bool QuadTree::insert(int new_index){
     double mult2 = 1.0 / (double) cum_size;
     for (int d = 0; d < dimension; d++) centerMass[d] *= mult1;
     for (int d = 0; d < dimension; d++) centerMass[d] += mult2 * point[d];
-    
+    for (int k = 0; k < cum_size;  k++) cum_Mass += mass[k];
     
     if (leaf && size<capacity){
         index[size]=new_index;
@@ -105,10 +107,10 @@ bool QuadTree::insert(int new_index){
 
 void QuadTree::subdivide(){
 
-    northWest = new QuadTree(this, data, boundary.x - .5 * boundary.w, boundary.y - .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
-    northEast = new QuadTree(this, data, boundary.x + .5 * boundary.w, boundary.y - .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
-    southWest = new QuadTree(this, data, boundary.x - .5 * boundary.w, boundary.y + .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
-    southEast = new QuadTree(this, data, boundary.x + .5 * boundary.w, boundary.y + .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
+    northWest = new QuadTree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y - .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
+    northEast = new QuadTree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y - .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
+    southWest = new QuadTree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y + .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
+    southEast = new QuadTree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y + .5 * boundary.h, .5 * boundary.w, .5 * boundary.h);
     
     // Move existing points to correct children
     for(int i = 0; i < size; i++) {
@@ -163,11 +165,26 @@ void QuadTree::print()
 }
 
 
-void QuadTree::computeAcceleration(int idx, double (*r)[2], double (*a)[2], vector<double>& m, double g) {
+void QuadTree::computeAcceleration(int idx, double (*r)[2], double (*a)[2], double g, double theta) {
     if (cum_size == 0 || (leaf == true && size == 1 && index[0] == idx)) {
         return;
     }
 
+    
+    double d = sqrt((centerMass[0]-r[idx][0])*(centerMass[0]-r[idx][0])+(centerMass[1]-r[idx][1])*(centerMass[1]-r[idx][1]));
+
+    if (2.*boundary.w/d <= theta) {
+        
+        double rji[2];
+        rji[0] = centerMass[0] - r[idx][0];
+        rji[1] = centerMass[1] - r[idx][1];
+        double r2 = rji[0] * rji[0] + rji[1] * rji[1];
+        double denom = r2 * sqrt(r2);
+        double a_i = -g * cum_Mass / denom;
+        a[idx][0] -= a_i * rji[0];
+        a[idx][1] -= a_i * rji[1];
+        return;
+    }
     if (leaf == true) {
         for(int i = 0; i < size; i++) {
             int idx_i = index[i];
@@ -178,15 +195,15 @@ void QuadTree::computeAcceleration(int idx, double (*r)[2], double (*a)[2], vect
             rji[1] = r[idx_i][1] - r[idx][1];
             double r2 = rji[0] * rji[0] + rji[1] * rji[1];
             double denom = r2 * sqrt(r2);
-            double a_i = -g * m[idx_i] / denom;
+            double a_i = -g * mass[idx_i] / denom;
             a[idx][0] -= a_i * rji[0];
             a[idx][1] -= a_i * rji[1];
         }
     } else {
-        northWest->computeAcceleration(idx, r, a, m, g);
-        northEast->computeAcceleration(idx, r, a, m, g);
-        southWest->computeAcceleration(idx, r, a, m, g);
-        southEast->computeAcceleration(idx, r, a, m, g);
+        northWest->computeAcceleration(idx, r, a, g, theta);
+        northEast->computeAcceleration(idx, r, a, g, theta);
+        southWest->computeAcceleration(idx, r, a, g, theta);
+        southEast->computeAcceleration(idx, r, a, g, theta);
     }
 }
 
