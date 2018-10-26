@@ -1,5 +1,21 @@
 # N Body Problem
 
+## Building The Project
+
+```bash
+cd build
+cmake ..
+make && make install
+cd ..
+
+# Run the tests:
+!TODO
+
+# Run some binary (e.g. naive sequential):
+cd bin/naive-sequential
+./prog
+```
+
 ## Execution Options
 
 * -n: number of particles
