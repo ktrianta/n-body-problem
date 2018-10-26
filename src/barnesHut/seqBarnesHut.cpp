@@ -5,36 +5,120 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "../utils/types.hpp"
+#include "../utils/initialization.hpp"
 #include "quadtree.hpp"
 #include <unistd.h>
 
 using namespace std;
 
-int N =5;      // the number of particles
+int N = 5;      // the number of particles
+const sim_data_type g = 1;     // gravitational constant
+const sim_data_type epsilon = 0.001;
+const sim_data_type epsilon2 = epsilon * epsilon;
 
 
+void writeDataToFile(sim_data_type (*r)[2], sim_data_type (*u)[2], ofstream& file)
+{
+    for (int i = 0; i < N; i++)
+    {
+        file << r[i][0] << "   "
+             << r[i][1] << "   "
+             << u[i][0] << "   "
+             << u[i][1] << "\n";
+    }
+}
 int main(int argc, char** argv)
 {
+
+
+//  the center of the parent node and the half width and height
     double xc,yc,h2,w2;
     xc=0.;
     yc=0.;
     w2=1.;
     h2=1.;
-    double (*r)[2] = new double[N][2];
-    r[0][0]=0.8;
-    r[0][1]=0.8;
-    r[1][0]=0.8;
-    r[1][1]=-0.8;
-    r[2][0]=-0.8;
-    r[2][1]=-0.8;
-    r[3][0]=-0.8;
-    r[3][1]=0.8;
-    r[4][0]=-0.4;
-    r[4][1]=0.5;
-    r[5][0]=-0.6;
-    r[5][1]=0.1;
+
+    int c;
+    sim_data_type T = 10;
+    sim_data_type dt = 0.00001;
+    string filename;
+
+    while ((c = getopt (argc, argv, "n:t:s:i:")) != -1)
+    {
+        switch (c)
+        {
+            case 'n':
+                N = atoi(optarg);
+                break;
+            case 't':
+                T = atof(optarg);
+                break;
+            case 's':
+                dt = atof(optarg);
+                break;
+            case 'i':
+                filename = optarg;
+                break;
+        }
+    }
+
+    sim_data_type (*r)[2] = new sim_data_type[N][2];
+    sim_data_type (*u)[2] = new sim_data_type[N][2];
+    sim_data_type (*a)[2] = new sim_data_type[N][2];
+    std::fill(&u[0][0], &u[0][0] + N*2, 0);
+    std::fill(&a[0][0], &a[0][0] + N*2, 0);
+
+    vector<sim_data_type> m(N, 1.0/N);
+
+    if (!filename.empty()) {
+        ifstream ifile;
+        ifile.open(filename);
+
+        for (int i = 0; i < N; i++) {
+            ifile >> m[i] >> r[i][0] >> r[i][1] >> u[i][0] >> u[i][1];
+        }
+    } else {
+        initializePositionOnSphere(N, r);
+    }
+
+    ofstream file;
+    file.open("output.dat");
+
+    writeDataToFile(r, u, file);
+    
     QuadTree tree = QuadTree(r,N,xc,yc,w2,h2);
-    printf("tasos");
+    for (int j = 0; j < N; j++)
+    {
+        tree.computeAcceleration(j, r, a, m, g);
+    }
+    const int Ntimesteps = T/dt + 1;
+
+    for (int t = 0; t < Ntimesteps; t++)                                                         
+    {                                                                                          
+        for (int j = 0; j < N; j++)                                                              
+        {                                                                                    
+            u[j][0] += 0.5 * a[j][0] * dt;                                                  
+            u[j][1] += 0.5 * a[j][1] * dt;                                                        
+            r[j][0] += u[j][0] * dt;                                                              
+            r[j][1] += u[j][1] * dt;                                                      
+                                                                                                 
+            tree.computeAcceleration(j,r, a, m,g);                                                             
+
+                                                                                         
+            u[j][0] += 0.5 * a[j][0] * dt;                           
+            u[j][1] += 0.5 * a[j][1] * dt;                       
+        }                                                                                         
+        QuadTree tree = QuadTree(r,N,xc,yc,w2,h2);
+                                                                                                  
+        if (t % 200 == 0)                                                                         
+        {                                                       
+            writeDataToFile(r, u, file);                       
+        }                                                                                         
+    }       
+
+
+//  tree.print();
 
     return 0;
 }

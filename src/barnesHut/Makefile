@@ -1,18 +1,19 @@
-objects = sequential.o initialization.o
+objects = seqBarnesHut.o initialization.o quadtree.o
  
 CXX = g++
 CXXFLAGS = -std=c++11
 CXXFLAGS += -Wall -Wextra -Wpedantic
 CXXFLAGS += -O3
  
-sequential: ${objects}
+seqBarnesHut: ${objects}
 	${CXX} ${CXXFLAGS} -o $@ $^
+quadtree.o: quadtree.cpp
 initialization.o: ../utils/initialization.cpp
 	${CXX} ${CXXFLAGS} -c $<
-sequential.o: sequential.cpp
+seqBarnesHut.o: seqBarnesHut.cpp
 	${CXX} ${CXXFLAGS} -c $<
  
 clean:
-	rm *.o sequential
+	rm *.o seqBarnesHut 
 clean-all:
-	rm *.o sequential *.gif *.dat
+	rm *.o seqBarnesHut *.gif *.dat

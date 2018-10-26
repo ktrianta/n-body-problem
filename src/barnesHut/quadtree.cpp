@@ -5,7 +5,6 @@
 #include <stdio.h> //for printf
 
 
-
 bool Rectangle::containPoint(double point[])
 {
     if (x - w > point[0]) return false;
@@ -24,7 +23,7 @@ bool Rectangle::containPoint(double point[])
 QuadTree::QuadTree(double (*r)[2], int N, double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
     initialization(NULL, r, inp_x, inp_y, inp_hw, inp_hh);
-  fill(N);
+    fill(N);
 }
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
@@ -44,7 +43,7 @@ QuadTree::QuadTree(double (*r)[2], double inp_x, double inp_y, double inp_hw, do
 // Constructor for quadtree with particular size and parent (do not fill the tree)
 QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[2], double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
-    initialization(inp_parent, data, inp_x, inp_y, inp_hw, inp_hh);
+    initialization(inp_parent, r, inp_x, inp_y, inp_hw, inp_hh);
 }
 
 QuadTree::~QuadTree()
@@ -144,8 +143,8 @@ void QuadTree::print()
         printf("Leaf node; data = [");
         for(int i = 0; i < size; i++) {
             double point[2];
-            point[0] = data[i][0];
-            point[1] = data[i][1];
+            point[0] = data[index[i]][0];
+            point[1] = data[index[i]][1];
 
             for(int d = 0; d < dimension; d++) printf("%f, ", point[d]);
             if(i < size - 1) printf("\n");
@@ -160,6 +159,34 @@ void QuadTree::print()
         northWest->print();
         southEast->print();
         southWest->print();
+    }
+}
+
+
+void QuadTree::computeAcceleration(int idx, double (*r)[2], double (*a)[2], vector<double>& m, double g) {
+    if (cum_size == 0 || (leaf == true && size == 1 && index[0] == idx)) {
+        return;
+    }
+
+    if (leaf == true) {
+        for(int i = 0; i < size; i++) {
+            int idx_i = index[i];
+            if (idx == idx_i) continue;
+
+            double rji[2];
+            rji[0] = r[idx_i][0] - r[idx][0];
+            rji[1] = r[idx_i][1] - r[idx][1];
+            double r2 = rji[0] * rji[0] + rji[1] * rji[1];
+            double denom = r2 * sqrt(r2);
+            double a_i = -g * m[idx_i] / denom;
+            a[idx][0] -= a_i * rji[0];
+            a[idx][1] -= a_i * rji[1];
+        }
+    } else {
+        northWest->computeAcceleration(idx, r, a, m, g);
+        northEast->computeAcceleration(idx, r, a, m, g);
+        southWest->computeAcceleration(idx, r, a, m, g);
+        southEast->computeAcceleration(idx, r, a, m, g);
     }
 }
 
