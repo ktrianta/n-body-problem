@@ -1,5 +1,6 @@
-# default named executable
+# common executable names
 a.out
+prog
 
 # resulting data
 output.dat
@@ -7,3 +8,21 @@ output.dat
 
 # other
 .DS_Store
+
+# cmake generated files
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# ctest generated files
+CTestTestfile.cmake
+DartConfiguration.tcl
+
+# build directory contents except README
+build/*
+!build/README.md
+
+# bin directory contents except README
+bin/*
+!bin/README.md
