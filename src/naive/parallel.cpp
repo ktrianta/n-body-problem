@@ -141,6 +141,7 @@ int main(int argc, char** argv)
 
     // Local Declarations
     int local_N[size];
+    int local_Nx2[size];
     int local_N_int = N/size;
     int rem = N - local_N_int * size;
     int counter = 0;
@@ -152,31 +153,36 @@ int main(int argc, char** argv)
                 local_N[i] += 1;
                 counter ++;
         }
+        local_Nx2[i] = local_N[i]*2;
     }
     
     sim_data_type (*u_local)[2] = new sim_data_type[local_N[rank]][2];
     sim_data_type (*r_local)[2] = new sim_data_type[local_N[rank]][2];	
     sim_data_type (*a_local)[2] = new sim_data_type[local_N[rank]][2];	
     
-    int offset = 0;
+    int offset[size];
+    offset[0] = 0;
+    int offset_x2[size];
+    offset_x2[0] = 0;
+    
 
-    computeAcceleration(r, a_local, m, local_N[rank], offset); // NEEDS TO BE PARALLELIZED
-
-    for (int i=0; i < rank; i++)
+    for (int i=1; i < size; i++)
     {
-        offset += local_N[i];
+        offset[i] = offset[i-1] + local_N[i-1];
+        offset_x2[i] = offset_x2[i-1] + local_Nx2[i-1];
     }
     
     for (int i=0; i < local_N[rank]; i++)
     { 
-        u_local[i][0] = u[offset+i][0];
-        u_local[i][1] = u[offset+i][1];
-        r_local[i][0] = r[offset+i][0];
-        r_local[i][1] = r[offset+i][1];
-        a_local[i][0] = a[offset+i][0];
-        a_local[i][1] = a[offset+i][1];
+        u_local[i][0] = u[offset[rank]+i][0];
+        u_local[i][1] = u[offset[rank]+i][1];
+        r_local[i][0] = r[offset[rank]+i][0];
+        r_local[i][1] = r[offset[rank]+i][1];
+        a_local[i][0] = a[offset[rank]+i][0];
+        a_local[i][1] = a[offset[rank]+i][1];
     }
-
+    
+    computeAcceleration(r, a_local, m, local_N[rank], offset[rank]); // NEEDS TO BE PARALLELIZED
     for (int t = 0; t < Ntimesteps; t++)
     {
         for (int j = 0; j < local_N[rank] ; j++)
@@ -188,20 +194,20 @@ int main(int argc, char** argv)
         }
         
 		//MPI_Allgather(&(u_local[offset*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
-	MPI_Allgather(&(r_local[0][0]),local_N[rank]*2,MPI_DOUBLE,&(r[0][0]),local_N[rank]*2,MPI_DOUBLE,MPI_COMM_WORLD);
+	MPI_Allgatherv(&(r_local[0][0]),local_N[rank]*2,MPI_DOUBLE,&(r[0][0]),local_Nx2, offset_x2, MPI_DOUBLE,MPI_COMM_WORLD);
 
 	//MPI_Allgather(&(r_local[0][0]),local_N*2,MPI_DOUBLE,&(r[0][0]),local_N[rank]*2,MPI_DOUBLE,MPI_COMM_WORLD);
 
-        computeAcceleration(r, a_local, m, local_N[rank], offset);
+        computeAcceleration(r, a_local, m, local_N[rank], offset[rank]);
 		// SEND the acceleration vector to all processes.
 		// ---- NEED TO BE FILLED -----
 		
 
         for (int j = 0 ; j < local_N[rank] ; j++)
         {
-			int indeX = rank*(local_N[rank]) + j;
-            u_local[j][0] += 0.5 * a[indeX][0] * dt;
-            u_local[j][1] += 0.5 * a[indeX][1] * dt;
+		
+            u_local[j][0] += 0.5 * a_local[j][0] * dt;
+            u_local[j][1] += 0.5 * a_local[j][1] * dt;
 	}
         //for (int j = 0 ; j < N ; j++)
         //{
