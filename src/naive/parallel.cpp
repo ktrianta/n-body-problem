@@ -102,8 +102,8 @@ int main(int argc, char** argv)
     vector<sim_data_type> m(N, 1.0/N);
 
 	// PROCESS 0 initialize position vector r.
-	//if (rank == 0)
-	//{
+	if (rank == 0)
+	{
 	    if (!filename.empty()) {
 	        ifstream ifile;
 	        ifile.open(filename);
@@ -114,18 +114,18 @@ int main(int argc, char** argv)
 	    } else {
 	        initializePositionOnSphere(N, r);
 	    }
-	//}
+	}
 
 	// SEND the position vector r from Process 0 to all processes.
 	//MPI_Bcast(&r[0][0],N*2, MPI_DOUBLE,0, MPI_COMM_WORLD);
 	
 	
 	ofstream file;
-	//if (rank ==0)
-	//{
+	if (rank ==0)
+	{
 		file.open("output.dat");
 		writeDataToFile(r, u, file);
-	//}
+	}
     
     //if (rank == 0)
     //{
