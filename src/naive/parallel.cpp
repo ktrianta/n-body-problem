@@ -102,8 +102,8 @@ int main(int argc, char** argv)
     vector<sim_data_type> m(N, 1.0/N);
 
 	// PROCESS 0 initialize position vector r.
-	if (rank == 0)
-	{
+	//if (rank == 0)
+	//{
 	    if (!filename.empty()) {
 	        ifstream ifile;
 	        ifile.open(filename);
@@ -114,18 +114,18 @@ int main(int argc, char** argv)
 	    } else {
 	        initializePositionOnSphere(N, r);
 	    }
-	}
+	//}
 
 	// SEND the position vector r from Process 0 to all processes.
-	MPI_Bcast(&r[0][0],N*2, MPI_DOUBLE,0, MPI_COMM_WORLD);
+	//MPI_Bcast(&r[0][0],N*2, MPI_DOUBLE,0, MPI_COMM_WORLD);
 	
 	
 	ofstream file;
-	if (rank ==0)
-	{
+	//if (rank ==0)
+	//{
 		file.open("output.dat");
 		writeDataToFile(r, u, file);
-	}
+	//}
     
     //if (rank == 0)
     //{
@@ -147,28 +147,28 @@ int main(int argc, char** argv)
     {
         for (int j = 0; j < local_N ; j++)
         {
-			int indeX = rank*(local_N) + j;
+	    int indeX = rank*(local_N) + j;
             u_local[j][0] += 0.5 * a[indeX][0] * dt;
             u_local[j][1] += 0.5 * a[indeX][1] * dt;
             r_local[j][0] += u_local[j][0] * dt;
             r_local[j][1] += u_local[j][1] * dt;
         }
         
-		MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
-		MPI_Allgather(&(r_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&r[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+		//MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+	MPI_Allgather(&(r_local[0][0]),local_N*2,MPI_DOUBLE,&(r[0][0]),rank*local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
 		
         computeAcceleration(r, a, m);
 		// SEND the acceleration vector to all processes.
 		// ---- NEED TO BE FILLED -----
 		
-        for (int j = 0 ; j < local_N ; j++)
+        for (int j = 0 ; j < N ; j++)
         {
-			int indeX = rank*(local_N) + j;
-            u_local[j][0] += 0.5 * a[indeX][0] * dt;
-            u_local[j][1] += 0.5 * a[indeX][1] * dt;
+	    int indeX = rank*(local_N) + j;
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
         }
 
-        MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+        //MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
         
         if (rank==0)
         {
