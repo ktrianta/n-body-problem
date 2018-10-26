@@ -98,33 +98,27 @@ int main(int argc, char** argv)
     }
     const int Ntimesteps = T/dt + 1;
 
-    for (int t = 0; t < Ntimesteps; t++)                                                         
-    {                                                                                          
-        for (int j = 0; j < N; j++)                                                              
-        {                                                                                    
-            u[j][0] += 0.5 * a[j][0] * dt;                                                  
-            u[j][1] += 0.5 * a[j][1] * dt;                                                        
-            r[j][0] += u[j][0] * dt;                                                              
-            r[j][1] += u[j][1] * dt;                                                      
-                                                                                                 
-        a[j][0] = 0;
-        a[j][1] = 0;
-            tree.computeAcceleration(j, r, a, g, theta);                                                             
+    for (int t = 0; t < Ntimesteps; t++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
+            r[j][0] += u[j][0] * dt;
+            r[j][1] += u[j][1] * dt;
 
-                                                                                         
-            u[j][0] += 0.5 * a[j][0] * dt;                           
-            u[j][1] += 0.5 * a[j][1] * dt;                       
-        }                                                                                         
+            tree.computeAcceleration(j,r, a, m,g);
+
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
+        }
         QuadTree tree = QuadTree(r, m, N, xc, yc, w2, h2);
-                                                                                                  
-        if (t % 600 == 0)                                                                         
-        {                                                       
-            writeDataToFile(r, u, file);                       
-        }                                                                                         
-    }       
 
-
-//  tree.print();
+        if (t % 600 == 0)
+        {
+            writeDataToFile(r, u, file);
+        }
+    }
 
     return 0;
 }
