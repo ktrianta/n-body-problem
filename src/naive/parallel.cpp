@@ -12,7 +12,7 @@
 
 using namespace std;
 
-int N = 6;      // the number of particles
+int N = 5;      // the number of particles
 const sim_data_type g = 1;     // gravitational constant
 const sim_data_type epsilon = 0.001;
 const sim_data_type epsilon2 = epsilon * epsilon;
@@ -139,36 +139,49 @@ int main(int argc, char** argv)
     const int Ntimesteps = T/dt + 1;
 
 	// Local Declarations
-    int local_N = N / size; // Asuming size divides N
-    sim_data_type (*u_local)[2] = new sim_data_type[local_N][2];
-	sim_data_type (*r_local)[2] = new sim_data_type[local_N][2];
+    int local_N[size];
+    int local_N_int = N/size;
+    int rem = N - local_N_int * size;
+    int counter = 0;
+    for (int i=0;i<size;i++)
+    {
+			local_N[i] = local_N_int;
+			if (counter < rem) {
+				local_N[i] += 1;
+				counter ++;
+			}
+	}
+    
+    sim_data_type (*u_local)[2] = new sim_data_type[local_N[rank]][2];
+	sim_data_type (*r_local)[2] = new sim_data_type[local_N[rank]][2];
 	
     for (int t = 0; t < Ntimesteps; t++)
     {
-        for (int j = 0; j < local_N ; j++)
+        for (int j = 0; j < local_N[rank] ; j++)
         {
-			int indeX = rank*(local_N) + j;
+			int indeX = rank*(local_N[rank]) + j;
             u_local[j][0] += 0.5 * a[indeX][0] * dt;
             u_local[j][1] += 0.5 * a[indeX][1] * dt;
             r_local[j][0] += u_local[j][0] * dt;
             r_local[j][1] += u_local[j][1] * dt;
         }
         
-		MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
-		MPI_Allgather(&(r_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&r[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+		//MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+		MPI_Allgather(&(r_local[0][0]),local_N[rank]*2,MPI_DOUBLE,&(r[0][0]),local_N[rank]*2,MPI_DOUBLE,MPI_COMM_WORLD);
 		
         computeAcceleration(r, a, m);
 		// SEND the acceleration vector to all processes.
 		// ---- NEED TO BE FILLED -----
 		
-        for (int j = 0 ; j < local_N ; j++)
+		double sum 
+        for (int j = 0 ; j < local_N[rank] ; j++)
         {
-			int indeX = rank*(local_N) + j;
+			int indeX =  + j;
             u_local[j][0] += 0.5 * a[indeX][0] * dt;
             u_local[j][1] += 0.5 * a[indeX][1] * dt;
         }
 
-        MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
+        //MPI_Allgather(&(u_local[rank*local_N*2][0]),local_N*2,MPI_DOUBLE,&u[0][0],local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
         
         if (rank==0)
         {
