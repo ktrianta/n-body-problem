@@ -5,8 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../utils/types.hpp"
-#include "../utils/initialization.hpp"
+#include "types.hpp"
+#include "initialization.hpp"
 #include <unistd.h>
 
 using namespace std;
