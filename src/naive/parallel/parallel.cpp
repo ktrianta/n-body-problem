@@ -5,8 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../utils/types.hpp"
-#include "../utils/initialization.hpp"
+#include "../../utils/types.hpp"
+#include "../../utils/initialization.hpp"
 #include <unistd.h>
 #include <mpi.h>
 
