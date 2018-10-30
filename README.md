@@ -3,6 +3,7 @@
 ## Building The Project
 
 ```bash
+rm -rf build/*
 cd build
 cmake ..
 make && make install
