@@ -10,3 +10,4 @@ set(UTILS_HEADERS ${UTILS_DIR}/initialiaztion.hpp ${UTILS_DIR}/types.hpp)
 include_directories(${UTILS_DIR})
 
 add_subdirectory(naive/sequential)
+add_subdirectory(naive/parallel)

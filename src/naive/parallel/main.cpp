@@ -1,12 +1,9 @@
 #include <math.h> //for sqrt function
-#include <stdio.h> //for printf
-#include <stdlib.h> //for srand/rand prng
-#include <time.h> //for seeding prng
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../../utils/types.hpp"
-#include "../../utils/initialization.hpp"
+#include "types.hpp"
+#include "initialization.hpp"
 #include <unistd.h>
 #include <mpi.h>
 

@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.10)
 # Includes
 include(CTest)
 
+# MPI
+find_package(MPI REQUIRED)
+
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
@@ -40,6 +43,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 
 # Binary directories
 set(NAIVE_SEQUENTIAL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-sequential)
+set(NAIVE_PARALLEL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-parallel)
 
 # Project subdirectories
 add_subdirectory(src)
