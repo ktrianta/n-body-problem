@@ -44,6 +44,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 # Binary directories
 set(NAIVE_SEQUENTIAL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-sequential)
 set(NAIVE_PARALLEL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-parallel)
+set(NAIVE_PARALLEL_INPLACE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-parallel-inplace)
 
 # Project subdirectories
 add_subdirectory(src)

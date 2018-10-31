@@ -11,3 +11,4 @@ include_directories(${UTILS_DIR})
 
 add_subdirectory(naive/sequential)
 add_subdirectory(naive/parallel)
+add_subdirectory(naive/parallel_inplace)
