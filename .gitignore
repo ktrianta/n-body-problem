@@ -19,10 +19,6 @@ Makefile
 CTestTestfile.cmake
 DartConfiguration.tcl
 
-# build directory contents except README
-build/*
-!build/README.md
-
-# bin directory contents except README
-bin/*
-!bin/README.md
+# build and bin directories
+build/
+bin/
