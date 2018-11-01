@@ -2,3 +2,5 @@ add_executable(naive-sequential main.cpp ${UTILS_SOURCES})
 set_target_properties(naive-sequential PROPERTIES OUTPUT_NAME prog)
 
 install(TARGETS naive-sequential DESTINATION ${NAIVE_SEQUENTIAL_INSTALL_BIN_DIR})
+install(DIRECTORY ${RESOURCES_DIR} DESTINATION ${NAIVE_SEQUENTIAL_INSTALL_BIN_DIR})
+install(DIRECTORY DESTINATION ${NAIVE_SEQUENTIAL_INSTALL_BIN_DIR}/results)

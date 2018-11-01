@@ -7,3 +7,5 @@ target_link_libraries(naive-parallel-inplace ${MPI_LIBRARIES})
 set_target_properties(naive-parallel-inplace PROPERTIES OUTPUT_NAME prog)
 
 install(TARGETS naive-parallel-inplace DESTINATION ${NAIVE_PARALLEL_INPLACE_INSTALL_BIN_DIR})
+install(DIRECTORY ${RESOURCES_DIR} DESTINATION ${NAIVE_PARALLEL_INPLACE_INSTALL_BIN_DIR})
+install(DIRECTORY DESTINATION ${NAIVE_PARALLEL_INPLACE_INSTALL_BIN_DIR}/results)

@@ -7,3 +7,5 @@ target_link_libraries(naive-parallel ${MPI_LIBRARIES})
 set_target_properties(naive-parallel PROPERTIES OUTPUT_NAME prog)
 
 install(TARGETS naive-parallel DESTINATION ${NAIVE_PARALLEL_INSTALL_BIN_DIR})
+install(DIRECTORY ${RESOURCES_DIR} DESTINATION ${NAIVE_PARALLEL_INSTALL_BIN_DIR})
+install(DIRECTORY DESTINATION ${NAIVE_PARALLEL_INSTALL_BIN_DIR}/results)
