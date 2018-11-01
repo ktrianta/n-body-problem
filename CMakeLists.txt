@@ -39,12 +39,22 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 
+# Variables
+## C++ Compiler Flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 
-# Binary directories
-set(NAIVE_SEQUENTIAL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-sequential)
-set(NAIVE_PARALLEL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-parallel)
-set(NAIVE_PARALLEL_INPLACE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive-parallel-inplace)
+## Source Directory
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 
-# Project subdirectories
-add_subdirectory(src)
+## Tests and Resources
+set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
+set(RESOURCES_DIR ${TEST_DIR}/resources)
+
+## Binary Directories
+set(NAIVE_SEQUENTIAL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive/sequential)
+set(NAIVE_PARALLEL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive/parallel)
+set(NAIVE_PARALLEL_INPLACE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive/parallel_inplace)
+
+
+# Project Subdirectories
+add_subdirectory(${SRC_DIR})
