@@ -3,9 +3,11 @@
 ## Building The Project
 
 ```bash
-rm -rf build/*
-cd build
+# Build out of source in build dir
+mkdir build && cd build
 cmake ..
+
+# Run makefiles and install binaries in bin dir
 make && make install
 cd ..
 
@@ -15,6 +17,10 @@ cd ..
 # Run some binary (e.g. naive sequential):
 cd bin/naive-sequential
 ./prog
+
+# If you encounter any problem detele dirs and try again
+rm -rf build
+rm -rf bin
 ```
 
 ## Execution Options
