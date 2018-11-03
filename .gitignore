@@ -1,6 +1,10 @@
 # common executable names
 a.out
 prog
+test
+
+# object files
+*.o
 
 # resulting data
 output.dat
