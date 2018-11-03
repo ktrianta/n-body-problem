@@ -9,12 +9,7 @@
 
 using namespace std;
 
-int N = 6;      // the number of particles
-const sim_data_type g = 1;     // gravitational constant
-const sim_data_type epsilon = 0.001;
-const sim_data_type epsilon2 = epsilon * epsilon;
-
-void computeAcceleration(sim_data_type (*r)[3], sim_data_type (*a)[3], vector<sim_data_type>& m, int rank, int local_N)
+void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a)[3], vector<sim::data_type>& m, int rank, int local_N)
 {
     for (int i = 0; i < N; i++)
     {
@@ -25,19 +20,19 @@ void computeAcceleration(sim_data_type (*r)[3], sim_data_type (*a)[3], vector<si
 
     for (int i = rank*local_N; i < (rank+1)*local_N; i++)
     {
-        sim_data_type a_i0 = 0;  // accumulate accelaration values for particle i and
-        sim_data_type a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
+        sim::data_type a_i0 = 0;  // accumulate accelaration values for particle i and
+        sim::data_type a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
         for (int j = 0; j < N; j++)
         {
             if (i==j) continue;
 	
-            sim_data_type rji[3];
+            sim::data_type rji[3];
             rji[0] = r[j][0] - r[i][0];
             rji[1] = r[j][1] - r[i][1];
             rji[2] = r[j][2] - r[i][2];
-            sim_data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-            sim_data_type denom = (r2+epsilon2) * sqrt(r2+epsilon2);
-            sim_data_type a_i = -g * m[j] / denom;
+            sim::data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
+            sim::data_type denom = (r2+sim::e2) * sqrt(r2+sim::e2);
+            sim::data_type a_i = - sim::g * m[j] / denom;
             a_i0 -= a_i * rji[0];
             a_i1 -= a_i * rji[1];
             a_i1 -= a_i * rji[2];
@@ -49,7 +44,7 @@ void computeAcceleration(sim_data_type (*r)[3], sim_data_type (*a)[3], vector<si
     }
 }
 
-void writeDataToFile(sim_data_type (*r)[3], sim_data_type (*u)[3], ofstream& file)
+void writeDataToFile(int N, sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
 {
     for (int i = 0; i < N; i++)
     {
@@ -75,8 +70,9 @@ int main(int argc, char** argv)
 
 
     int c;
-    sim_data_type T = 10;
-    sim_data_type dt = 0.00001;
+    int N = 6;
+    sim::data_type T = 10;
+    sim::data_type dt = 0.00001;
     string filename;
 
     while ((c = getopt (argc, argv, "n:t:s:i:")) != -1)
@@ -98,12 +94,12 @@ int main(int argc, char** argv)
         }
     }
 
-    sim_data_type (*r)[3] = new sim_data_type[N][3];
-    sim_data_type (*u)[3] = new sim_data_type[N][3];
-    sim_data_type (*a)[3] = new sim_data_type[N][3];
+    sim::data_type (*r)[3] = new sim::data_type[N][3];
+    sim::data_type (*u)[3] = new sim::data_type[N][3];
+    sim::data_type (*a)[3] = new sim::data_type[N][3];
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
-    vector<sim_data_type> m(N, 1.0/N);
+    vector<sim::data_type> m(N, 1.0/N);
     
     if (rank==0)
     {
@@ -129,9 +125,9 @@ int main(int argc, char** argv)
     if( rank == 0)
     {
     	local_N += N-(size)*local_N;
-        writeDataToFile(r, u, file);
+        writeDataToFile(N, r, u, file);
     }
-    computeAcceleration(r, a, m, rank, local_N);
+    computeAcceleration(N, r, a, m, rank, local_N);
     const int Ntimesteps = T/dt + 1;
 
 
@@ -151,7 +147,7 @@ int main(int argc, char** argv)
 
         MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,&(r[0][0]),local_N*3,MPI_DOUBLE,MPI_COMM_WORLD);
 
-        computeAcceleration(r, a, m, rank, local_N);
+        computeAcceleration(N, r, a, m, rank, local_N);
 
         for (int j = rank*local_N; j < (rank+1)*local_N ; j++)
         {
@@ -165,7 +161,7 @@ int main(int argc, char** argv)
         {
             if (t % 200 == 0)
              {
-                writeDataToFile(r, u, file);
+                writeDataToFile(N, r, u, file);
              }   
          }
 

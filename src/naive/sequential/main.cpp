@@ -1,7 +1,4 @@
 #include <math.h> //for sqrt function
-#include <stdio.h> //for printf
-#include <stdlib.h> //for srand/rand prng
-#include <time.h> //for seeding prng
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -11,12 +8,7 @@
 
 using namespace std;
 
-int N = 5;      // the number of particles
-const sim_data_type g = 1;     // gravitational constant
-const sim_data_type epsilon = 0.001;
-const sim_data_type epsilon2 = epsilon * epsilon;
-
-void computeAcceleration(sim_data_type (*r)[3], sim_data_type (*a)[3], vector<sim_data_type>& m)
+void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a)[3], vector<sim::data_type>& m)
 {
     for (int i = 0; i < N; i++)
     {
@@ -27,19 +19,20 @@ void computeAcceleration(sim_data_type (*r)[3], sim_data_type (*a)[3], vector<si
 
     for (int i = 0; i < N; i++)
     {
-        sim_data_type a_i0 = 0;  // accumulate accelaration values for particle i and
-        sim_data_type a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
-        sim_data_type a_i2 = 0;  
+        sim::data_type a_i0 = 0;  // accumulate accelaration values for particle i and
+        sim::data_type a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
+        sim::data_type a_i2 = 0;
+
         for (int j = i+1; j < N; j++)
         {
-            sim_data_type rji[3];
+            sim::data_type rji[3];
             rji[0] = r[j][0] - r[i][0];
             rji[1] = r[j][1] - r[i][1];
             rji[2] = r[j][2] - r[i][2];
-            sim_data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-            sim_data_type denom = (r2+epsilon2) * sqrt(r2+epsilon2);
-            sim_data_type a_j = -g * m[i] / denom;
-            sim_data_type a_i = -g * m[j] / denom;
+            sim::data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
+            sim::data_type denom = (r2+sim::e2) * sqrt(r2+sim::e2);
+            sim::data_type a_j = - sim::g * m[i] / denom;
+            sim::data_type a_i = - sim::g * m[j] / denom;
             a[j][0] += a_j * rji[0];
             a[j][1] += a_j * rji[1];
             a[j][2] += a_j * rji[2];
@@ -53,7 +46,7 @@ void computeAcceleration(sim_data_type (*r)[3], sim_data_type (*a)[3], vector<si
     }
 }
 
-void writeDataToFile(sim_data_type (*r)[3], sim_data_type (*u)[3], ofstream& file)
+void writeDataToFile(int N, sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
 {
     for (int i = 0; i < N; i++)
     {
@@ -69,8 +62,9 @@ void writeDataToFile(sim_data_type (*r)[3], sim_data_type (*u)[3], ofstream& fil
 int main(int argc, char** argv)
 {
     int c;
-    sim_data_type T = 10;
-    sim_data_type dt = 0.00001;
+    int N = 5;                                              // the number of particles
+    sim::data_type T = 10;
+    sim::data_type dt = 0.00001;
     string filename;
 
     while ((c = getopt (argc, argv, "n:t:s:i:")) != -1)
@@ -92,13 +86,13 @@ int main(int argc, char** argv)
         }
     }
 
-    sim_data_type (*r)[3] = new sim_data_type[N][3];
-    sim_data_type (*u)[3] = new sim_data_type[N][3];
-    sim_data_type (*a)[3] = new sim_data_type[N][3];
+    sim::data_type (*r)[3] = new sim::data_type[N][3];
+    sim::data_type (*u)[3] = new sim::data_type[N][3];
+    sim::data_type (*a)[3] = new sim::data_type[N][3];
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-    vector<sim_data_type> m(N, 1.0/N);
+    vector<sim::data_type> m(N, 1.0/N);
 
     if (!filename.empty()) {
         ifstream ifile;
@@ -114,8 +108,8 @@ int main(int argc, char** argv)
     ofstream file;
     file.open("output.dat");
 
-    writeDataToFile(r, u, file);
-    computeAcceleration(r, a, m);
+    writeDataToFile(N, r, u, file);
+    computeAcceleration(N, r, a, m);
     const int Ntimesteps = T/dt + 1;
 
     for (int t = 0; t < Ntimesteps; t++)
@@ -130,7 +124,7 @@ int main(int argc, char** argv)
             r[j][2] += u[j][2] * dt;
         }
 
-        computeAcceleration(r, a, m);
+        computeAcceleration(N, r, a, m);
 
         for (int j = 0; j < N; j++)
         {
@@ -141,7 +135,7 @@ int main(int argc, char** argv)
 
         if (t % 200 == 0)
         {
-            writeDataToFile(r, u, file);
+            writeDataToFile(N, r, u, file);
         }
     }
     return 0;
