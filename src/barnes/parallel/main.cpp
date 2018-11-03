@@ -3,7 +3,7 @@
 #include <vector>
 #include "../../utils/types.hpp"
 #include "../../utils/initialization.hpp"
-#include "quadtree.hpp"
+#include "octree.hpp"
 #include <unistd.h>
 #include <mpi.h>
 
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
         writeDataToFile(N, r, u, file);
     }
 
-    QuadTree tree = QuadTree(r, m, N, xc, yc, zc, w2, h2, t2);
+    Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
 
     const int Ntimesteps = T/dt + 1;
     // Local Declarations
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
             a_local[jLocal][2] = 0;
         }
 
-        QuadTree tree = QuadTree(r, m, N, xc, yc, zc, w2, h2, t2);
+        Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
         if (t % 200 == 0 && rank == 0)
         {
             writeDataToFile(N, r, u, file);

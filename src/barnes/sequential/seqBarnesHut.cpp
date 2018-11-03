@@ -3,7 +3,7 @@
 #include <vector>
 #include "../utils/types.hpp"
 #include "../utils/initialization.hpp"
-#include "quadtree.hpp"
+#include "octree.hpp"
 #include <unistd.h>
 
 using namespace std;
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 
     writeDataToFile(N, r, u, file);
 
-    QuadTree tree = QuadTree(r, m, N, xc, yc, zc, w2, h2, t2);
+    Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
 
     for (int j = 0; j < N; j++)
     {
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
             a[j][2] = 0;
         }
 
-        QuadTree tree = QuadTree(r, m, N, xc, yc, zc, w2, h2, t2);
+        Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
 
         if (t % 200 == 0)
         {

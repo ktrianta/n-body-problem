@@ -1,7 +1,7 @@
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
-#include "quadtree.hpp"
+#include "octree.hpp"
 #include <stdio.h> //for printf
 
 
@@ -22,14 +22,14 @@ bool Rectangle::containPoint(double point[])
 
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
-QuadTree::QuadTree(double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
+Octree::Octree(double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
 {
     initialization(NULL, r, m, inp_x, inp_y, inp_z, inp_hw, inp_hh, inp_ht);
     fill(N);
 }
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
-QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
+Octree::Octree(Octree* inp_parent, double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
 {
     initialization(inp_parent, r, m, inp_x, inp_y, inp_z, inp_hw, inp_hh, inp_ht);
     fill(N);
@@ -37,18 +37,18 @@ QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[3], vector<double>& m, int 
 
 /* we dont need these two constructors
 // Constructor for quadtree with particular size (do not fill the tree)
-QuadTree::QuadTree(double (*r)[2], double inp_x, double inp_y, double inp_hw, double inp_hh)
+Octree::Octree(double (*r)[2], double inp_x, double inp_y, double inp_hw, double inp_hh)
 {
     initialization(NULL, data, inp_x, inp_y, inp_hw, inp_hh);
 }
 */
 // Constructor for quadtree with particular size and parent (do not fill the tree)
-QuadTree::QuadTree(QuadTree* inp_parent, double (*r)[3], vector<double>& m, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
+Octree::Octree(Octree* inp_parent, double (*r)[3], vector<double>& m, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
 {
     initialization(inp_parent, r, m, inp_x, inp_y, inp_z, inp_hw, inp_hh, inp_ht);
 }
 
-QuadTree::~QuadTree()
+Octree::~Octree()
 {
     delete fnorthWest;
     delete fnorthEast;
@@ -60,7 +60,7 @@ QuadTree::~QuadTree()
     delete bsouthEast;
 }
 
-void QuadTree::initialization(QuadTree* inp_parent, double (*r)[3], vector<double>& m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t){
+void Octree::initialization(Octree* inp_parent, double (*r)[3], vector<double>& m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t){
 
     parent = inp_parent;
     data = r;
@@ -88,7 +88,7 @@ void QuadTree::initialization(QuadTree* inp_parent, double (*r)[3], vector<doubl
     cum_Mass = 0;
 }
 
-bool QuadTree::insert(int new_index){
+bool Octree::insert(int new_index){
 
     double point[3];
     point[0] = data[new_index][0];
@@ -123,16 +123,16 @@ bool QuadTree::insert(int new_index){
     return false;
 }
 
-void QuadTree::subdivide(){
+void Octree::subdivide(){
 
-    fnorthWest = new QuadTree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
-    fnorthEast = new QuadTree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
-    fsouthWest = new QuadTree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
-    fsouthEast = new QuadTree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
-    bnorthWest = new QuadTree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
-    bnorthEast = new QuadTree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
-    bsouthWest = new QuadTree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
-    bsouthEast = new QuadTree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    fnorthWest = new Octree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    fnorthEast = new Octree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    fsouthWest = new Octree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    fsouthEast = new Octree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z + .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    bnorthWest = new Octree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    bnorthEast = new Octree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y - .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    bsouthWest = new Octree(this, data, mass, boundary.x - .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
+    bsouthEast = new Octree(this, data, mass, boundary.x + .5 * boundary.w, boundary.y + .5 * boundary.h, boundary.z - .5 * boundary.t, .5 * boundary.w, .5 * boundary.h, .5 * boundary.t);
     
     // Move existing points to correct children
 //    for(int i = 0; i < size; i++) {
@@ -154,13 +154,13 @@ void QuadTree::subdivide(){
 
 }
 
-void QuadTree::fill(int N)
+void Octree::fill(int N)
 {
     for (int i = 0; i < N; i++) insert(i);
 }
 
 // Print out tree
-void QuadTree::print() 
+void Octree::print() 
 {
     if(cum_size == 0) {
         printf("Empty node\n");
@@ -196,7 +196,7 @@ void QuadTree::print()
 }
 
 
-void QuadTree::computeAcceleration(int idxGlobal, int idxLocal, double (*r)[3], double (*a)[3], double g, double theta) {
+void Octree::computeAcceleration(int idxGlobal, int idxLocal, double (*r)[3], double (*a)[3], double g, double theta) {
     if (cum_size == 0 || (leaf == true && size == 1 && index == idxGlobal)) {
         return;
     }
