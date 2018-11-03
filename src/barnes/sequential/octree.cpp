@@ -241,7 +241,7 @@ void Octree::computeAcceleration(int idx, double (*r)[3], double (*a)[3], double
         fnorthEast->computeAcceleration(idx, r, a, g, theta);
         fsouthWest->computeAcceleration(idx, r, a, g, theta);
         fsouthEast->computeAcceleration(idx, r, a, g, theta);
-        fnorthWest->computeAcceleration(idx, r, a, g, theta);
+        bnorthWest->computeAcceleration(idx, r, a, g, theta);
         bnorthEast->computeAcceleration(idx, r, a, g, theta);
         bsouthWest->computeAcceleration(idx, r, a, g, theta);
         bsouthEast->computeAcceleration(idx, r, a, g, theta);
