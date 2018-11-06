@@ -54,7 +54,7 @@ void computeAcceleration(sim::data_type (*r)[3], sim::data_type (*a)[3], vector<
     }
 }
 
-void0writeDataToFile(sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
+void writeDataToFile(sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
 {
     for (int i = 0; i < N; i++)
     {
@@ -179,19 +179,20 @@ int main(int argc, char** argv)
             //printf("%lf %lf %d \n", r[j][0], r[j][1], rank);
 		
         }
+        
+        MPI_Win_fence(MPI_MODE_NOPUT | MPI_MODE_NOPRECEDE,win);
         //MPI_Barrier(MPI_COMM_WORLD);
         //MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,&(r[0][0]),local_N[rank]*2,MPI_DOUBLE,MPI_COMM_WORLD);
         for (int i = 0; i < size; i++)
         {
             //if( i==rank ) continue;
             //MPI_Win_lock (MPI_LOCK_EXCLUSIVE, i, 0, win);
-            MPI_Win_fence(0,win);
             MPI_Get(&(r1[offset[i]][0]), local_Nx2[i], MPI_DOUBLE, i, offset_x2[i], local_Nx2[i], MPI_DOUBLE, win);
-            MPI_Win_fence(0,win);
             //MPI_Win_unlock (i, win);
             
         }
 
+        MPI_Win_fence(MPI_MODE_NOSTORE | MPI_MODE_NOPUT | MPI_MODE_NOSUCCEED,win);
         computeAcceleration(r1, a, m, rank, local_N[rank], offset[rank]);
 
         for (int j = offset[rank]; j < offset[rank]+local_N[rank] ; j++)
@@ -205,9 +206,9 @@ int main(int argc, char** argv)
         if (rank==0)
         {
             if (t % 200 == 0)
-             {
+            {
                 writeDataToFile(r1, u, file);
-             }   
+            }   
          }
 
     }
