@@ -54,7 +54,7 @@ void computeAcceleration(sim::data_type (*r)[3], sim::data_type (*a)[3], vector<
     }
 }
 
-void writeDataToFile(sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
+void0writeDataToFile(sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
 {
     for (int i = 0; i < N; i++)
     {
@@ -202,7 +202,7 @@ int main(int argc, char** argv)
         }
 	//Needed for correct u in output.dat
         //MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,&(u[0][0]),local_N*2,MPI_DOUBLE,MPI_COMM_WORLD);
-        if (rank==1)
+        if (rank==0)
         {
             if (t % 200 == 0)
              {
