@@ -57,6 +57,7 @@ set(NAIVE_PARALLEL_ONE_SIDED_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive/par
 set(NAIVE_PARALLEL_INPLACE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/naive/parallel_inplace)
 set(BARNES_SEQUENTIAL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/sequential)
 set(BARNES_PARALLEL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/parallel)
+set(BARNES_PARALLEL_ONE_SIDED_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/parallel_one_sided)
 
 # Project Subdirectories
 add_subdirectory(${SRC_DIR})
