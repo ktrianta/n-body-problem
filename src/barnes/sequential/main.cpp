@@ -9,19 +9,6 @@
 
 using namespace std;
 
-void writeDataToFile(int N, sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
-{
-    for (int i = 0; i < N; i++)
-    {
-        file << r[i][0] << "   "
-             << r[i][1] << "   "
-             << r[i][2] << "   "
-             << u[i][0] << "   "
-             << u[i][1] << "   "
-             << u[i][2] << "\n";
-    }
-}
-
 int main(int argc, char** argv)
 {
 //  the center of the parent node and the half width and height
