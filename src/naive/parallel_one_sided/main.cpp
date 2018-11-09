@@ -1,10 +1,7 @@
-#include <math.h> //for sqrt function
-#include <stdio.h> //for printf
-#include <stdlib.h> //for srand/rand prng
-#include <time.h> //for seeding prng
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <cmath>
+#include "io.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
 #include <unistd.h>
@@ -17,7 +14,7 @@ const sim::data_type g = 1;     // gravitational constant
 const sim::data_type epsilon = 0.001;
 const sim::data_type epsilon2 = epsilon * epsilon;
 
-void computeAcceleration(sim::data_type (*r)[3], sim::data_type (*a)[3], vector<sim::data_type>& m, int rank, int local_N, int offset)
+void computeAcceleration(sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type* m, int rank, int local_N, int offset)
 {
     for (int i = 0; i < N; i++)
     {
@@ -104,23 +101,22 @@ int main(int argc, char** argv)
         }
     }
 
+    sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*r1)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
     sim::data_type (*a)[3] = new sim::data_type[N][3];
+    std::fill(m, m+N, 1.0/N);
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&r1[0][0], &r1[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
-    vector<sim::data_type> m(N, 1.0/N);
     
     if (rank==0)
     {
         if (!filename.empty()) {
-        ifstream ifile;
-        ifile.open(filename);
-
-            for (int i = 0; i < N; i++) {
-                ifile >> m[i] >> r[i][0] >> r[i][1] >> r[i][2] >> u[i][0] >> u[i][1] >> u[i][2];
+            if (readDataFromFile(filename, N, m, r, u) == -1) {
+                std::cerr << "File " << filename << " not found!" << std::endl;
+                return -1;
             }
         } else {
             initializePositionOnSphere(N, r);

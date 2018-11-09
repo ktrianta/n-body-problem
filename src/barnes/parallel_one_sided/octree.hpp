@@ -1,8 +1,6 @@
 #ifndef OCTREE_H
 #define OCTREE_H
 
-#include <vector>
-
 class Rectangle{
     public:
         double x; // the x-center of the rectangle
@@ -27,7 +25,7 @@ class Octree{
     Rectangle boundary;
     int index;
     double (*data)[3];
-    vector<double>  mass;
+    double*  mass;
     
 //   Parent node
     Octree* parent;
@@ -48,16 +46,16 @@ class Octree{
 
 // private functions
 public:
-    Octree(double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
-    Octree(Octree* inp_parent, double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
-    Octree(Octree* inp_parent, double (*r)[3], vector<double>& m,  double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
+    Octree(double (*r)[3], double* m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
+    Octree(Octree* inp_parent, double (*r)[3], double* m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
+    Octree(Octree* inp_parent, double (*r)[3], double* m,  double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
     ~Octree();
     bool insert(int new_index);
     void subdivide();
     void print();
     void computeAcceleration(int idxGlobal, int idxLocal, double (*)[3], double (*)[3], double g, double theta);
 private:
-    void initialization(Octree* inp_parent, double (*r)[3], vector<double>& m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t);
+    void initialization(Octree* inp_parent, double (*r)[3], double* m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t);
     void fill(int N);
 };
 
