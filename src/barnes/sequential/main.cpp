@@ -1,25 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../utils/types.hpp"
-#include "../utils/initialization.hpp"
+#include "io.hpp"
+#include "types.hpp"
+#include "initialization.hpp"
 #include "octree.hpp"
 #include <unistd.h>
 
 using namespace std;
-
-void writeDataToFile(int N, sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
-{
-    for (int i = 0; i < N; i++)
-    {
-        file << r[i][0] << "   "
-             << r[i][1] << "   "
-             << r[i][2] << "   "
-             << u[i][0] << "   "
-             << u[i][1] << "   "
-             << u[i][2] << "\n";
-    }
-}
 
 int main(int argc, char** argv)
 {
@@ -61,20 +49,17 @@ int main(int argc, char** argv)
         }
     }
 
+    sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
     sim::data_type (*a)[3] = new sim::data_type[N][3];
+    std::fill(m, m+N, 1.0/N);
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-    vector<sim::data_type> m(N, 1.0/N);
-
     if (!filename.empty()) {
-        ifstream ifile;
-        ifile.open(filename);
-
-        for (int i = 0; i < N; i++) {
-            ifile >> m[i] >> r[i][0] >> r[i][1] >> r[i][2] >> u[i][0] >> u[i][1] >> u[i][2];
+        if (readDataFromFile(filename, N, m, r, u) == -1) {
+            std::cerr << "File " << filename << " not found!" << std::endl;
         }
     } else {
           initializePositionOnSphere(N, r);
@@ -105,14 +90,14 @@ int main(int argc, char** argv)
             r[j][1] += u[j][1] * dt;
             r[j][2] += u[j][2] * dt;
 
+            a[j][0] = 0;
+            a[j][1] = 0;
+            a[j][2] = 0;
             tree.computeAcceleration(j, r, a, sim::g, theta);
 
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
-            a[j][0] = 0;
-            a[j][1] = 0;
-            a[j][2] = 0;
         }
 
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);

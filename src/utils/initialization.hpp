@@ -1,7 +1,6 @@
 #ifndef INITIALIZATION_H
 #define INITIALIZATION_H
 
-#include <vector>
 #include "types.hpp"
 
 void initializePositionOnUnitSquare(int N, sim::data_type (*r)[3]);

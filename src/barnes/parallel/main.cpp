@@ -1,26 +1,13 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include "../../utils/types.hpp"
-#include "../../utils/initialization.hpp"
+#include "io.hpp"
+#include "types.hpp"
+#include "initialization.hpp"
 #include "octree.hpp"
 #include <unistd.h>
 #include <mpi.h>
 
 using namespace std;
-
-void writeDataToFile(int N, sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
-{
-    for (int i = 0; i < N; i++)
-    {
-        file << r[i][0] << "   "
-             << r[i][1] << "   "
-             << r[i][2] << "   "
-             << u[i][0] << "   "
-             << u[i][1] << "   "
-             << u[i][2] << "\n";
-    }
-}
 
 int main(int argc, char** argv)
 {
@@ -43,7 +30,7 @@ int main(int argc, char** argv)
     int c;
     int N = 5;      // the number of particles
     double theta = 0.0;      // the number of particles
-    sim::data_type T = 1;
+    sim::data_type T = 10;
     sim::data_type dt = 0.00001;
     string filename;
 
@@ -69,21 +56,20 @@ int main(int argc, char** argv)
         }
     }
 
+    sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
     sim::data_type (*a)[3] = new sim::data_type[N][3];
+    std::fill(m, m+N, 1.0/N);
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
-    vector<sim::data_type> m(N, 1.0/N);
 
     if (rank == 0)
     {
         if (!filename.empty()) {
-            ifstream ifile;
-            ifile.open(filename);
-
-            for (int i = 0; i < N; i++) {
-                ifile >> m[i] >> r[i][0] >> r[i][1] >> r[i][2] >> u[i][0] >> u[i][1] >> u[i][2];
+            if (readDataFromFile(filename, N, m, r, u) == -1) {
+                std::cerr << "File " << filename << " not found!" << std::endl;
+                return -1;
             }
         } else {
               initializePositionOnSphere(N, r);
@@ -172,6 +158,9 @@ int main(int argc, char** argv)
             r_local[jLocal][0] += u_local[jLocal][0] * dt;
             r_local[jLocal][1] += u_local[jLocal][1] * dt;
             r_local[jLocal][2] += u_local[jLocal][2] * dt;
+            a_local[jLocal][0] = 0;
+            a_local[jLocal][1] = 0;
+            a_local[jLocal][2] = 0;
         }
 
         MPI_Allgatherv(&(r_local[0][0]),local_N[rank]*3,MPI_DOUBLE,&(r[0][0]),local_Nx3, offset_x3, MPI_DOUBLE,MPI_COMM_WORLD);
@@ -187,9 +176,6 @@ int main(int argc, char** argv)
             u_local[jLocal][0] += 0.5 * a_local[jLocal][0] * dt;
             u_local[jLocal][1] += 0.5 * a_local[jLocal][1] * dt;
             u_local[jLocal][2] += 0.5 * a_local[jLocal][2] * dt;
-            a_local[jLocal][0] = 0;
-            a_local[jLocal][1] = 0;
-            a_local[jLocal][2] = 0;
         }
 
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "io.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
 #include <unistd.h>
@@ -9,7 +10,7 @@
 
 using namespace std;
 
-void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a_local)[3], vector<sim::data_type>& m, int local_N, int offset)
+void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a_local)[3], sim::data_type *m, int local_N, int offset)
 {
     for (int i = 0; i < local_N; i++)
     {
@@ -41,20 +42,6 @@ void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a_local
         a_local[i][2] += a_i2;  // repeated accesses in the inner loop of j
     }
 }
-
-void writeDataToFile(int N, sim::data_type (*r)[3], sim::data_type (*u)[3], ofstream& file)
-{
-    for (int i = 0; i < N; i++)
-    {
-        file << r[i][0] << "   "
-             << r[i][1] << "   "
-             << r[i][2] << "   "
-             << u[i][0] << "   "
-             << u[i][1] << "   "
-             << u[i][2] << "\n";
-    }
-}
-
 
 int main(int argc, char** argv)
 {
@@ -92,22 +79,21 @@ int main(int argc, char** argv)
     }
 
 
+    sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
     sim::data_type (*a)[3] = new sim::data_type[N][3];
+    std::fill(m, m+N, 1.0/N);
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
-    vector<sim::data_type> m(N, 1.0/N);
 
     // PROCESS 0 initialize position vector r.
     if (rank == 0)
     {
         if (!filename.empty()) {
-            ifstream ifile;
-            ifile.open(filename);
-
-            for (int i = 0; i < N; i++) {
-                ifile >> m[i] >> r[i][0] >> r[i][1] >> r[i][2] >> u[i][0] >> u[i][1] >> u[i][2];
+            if (readDataFromFile(filename, N, m, r, u) == -1) {
+                std::cerr << "File " << filename << " not found!" << std::endl;
+                return -1;
             }
         } else {
             initializePositionOnSphere(N, r);

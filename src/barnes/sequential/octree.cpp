@@ -22,14 +22,14 @@ bool Rectangle::containPoint(double point[])
 
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
-Octree::Octree(double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
+Octree::Octree(double (*r)[3], double* m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
 {
     initialization(NULL, r, m, inp_x, inp_y, inp_z, inp_hw, inp_hh, inp_ht);
     fill(N);
 }
 
 // Constructor for quadtree with particular size and parent -- build the tree, too!
-Octree::Octree(Octree* inp_parent, double (*r)[3], vector<double>& m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
+Octree::Octree(Octree* inp_parent, double (*r)[3], double* m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
 {
     initialization(inp_parent, r, m, inp_x, inp_y, inp_z, inp_hw, inp_hh, inp_ht);
     fill(N);
@@ -43,7 +43,7 @@ Octree::Octree(double (*r)[2], double inp_x, double inp_y, double inp_hw, double
 }
 */
 // Constructor for quadtree with particular size and parent (do not fill the tree)
-Octree::Octree(Octree* inp_parent, double (*r)[3], vector<double>& m, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
+Octree::Octree(Octree* inp_parent, double (*r)[3], double* m, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht)
 {
     initialization(inp_parent, r, m, inp_x, inp_y, inp_z, inp_hw, inp_hh, inp_ht);
 }
@@ -60,7 +60,7 @@ Octree::~Octree()
     delete bsouthEast;
 }
 
-void Octree::initialization(Octree* inp_parent, double (*r)[3], vector<double>& m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t){
+void Octree::initialization(Octree* inp_parent, double (*r)[3], double* m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t){
 
     parent = inp_parent;
     data = r;
