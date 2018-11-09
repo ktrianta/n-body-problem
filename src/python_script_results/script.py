@@ -6,6 +6,7 @@ from matplotlib import rc
 import sys
 import argparse
 
+
 filename1 = sys.argv[1]
 filename2 = sys.argv[2]
 num_of_columns = int(sys.argv[3])
@@ -34,3 +35,30 @@ if ( L2_error_r > theta ) :
     print("No convergence")
 else:
     print("The solution is accurate")
+
+# -- Plotting Part -- 
+
+# --------------------Font properties------------------------
+# -----------------------------------------------------------
+rc('font',size=11)
+rc('font',family='sans serif')
+#font = {'family':'serif', 'serif': ['computer modern roman']}
+#rc('font',**font)
+rc('axes',labelsize=14)
+plt.rcParams["mathtext.fontset"] = "cm"
+plt.rcParams['mathtext.rm'] = 'cm'
+# -----------------------------------------------------------
+# -----------------------------------------------------------
+
+plt.plot(time,status,color='red',linewidth=0.6)
+plt.xlabel(r'$\mathrm{time}(s)$')
+plt.ylabel(r'$\mathrm{Status}$')
+plt.xticks(np.arange(0,175,25), np.arange(0,175,25), color='k', size=14)
+#plt.xticks((0,25,50,75,100,125,150), (r'$0$',r'$25$',r'$50$',r'$75$',r'$100$',r'$125$', r'$150$'), color='k', size=14)
+plt.yticks((1,2,3), (r'$1$',r'$2$',r'$3$'), color='k', size=14)
+plt.title(r'$\mathrm{The  \ status \ of \ the\  storage \ tank, \ function \ of \ time.}$')
+#plt.grid(True)
+plt.tight_layout()
+#plt.savefig("sol.pdf")
+
+plt.show()
