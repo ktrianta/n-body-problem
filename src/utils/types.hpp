@@ -33,7 +33,7 @@ namespace sim {
 
         Parameters()
             : n(def_n), t(def_t), dt(def_dt), out_filename(def_out_filename),
-              out_dirname(default_out_dirname)
+              out_dirname(def_out_dirname)
         {}
 
     };
