@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     int c;
     int N = 5;      // the number of particles
     double theta = 0.0;      // the number of particles
-    sim::data_type T = 1;
+    sim::data_type T = 10;
     sim::data_type dt = 0.00001;
     string filename;
 
