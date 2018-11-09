@@ -51,12 +51,12 @@ plt.rcParams['mathtext.rm'] = 'cm'
 # -----------------------------------------------------------
 
 plt.plot(time,status,color='red',linewidth=0.6)
-plt.xlabel(r'$\mathrm{time}(s)$')
-plt.ylabel(r'$\mathrm{Status}$')
-plt.xticks(np.arange(0,175,25), np.arange(0,175,25), color='k', size=14)
+plt.xlabel(r'$\mathrm{------}(s)$')
+plt.ylabel(r'$\mathrm{------}$')
+#plt.xticks(np.arange(0,175,25), np.arange(0,175,25), color='k', size=14)
 #plt.xticks((0,25,50,75,100,125,150), (r'$0$',r'$25$',r'$50$',r'$75$',r'$100$',r'$125$', r'$150$'), color='k', size=14)
-plt.yticks((1,2,3), (r'$1$',r'$2$',r'$3$'), color='k', size=14)
-plt.title(r'$\mathrm{The  \ status \ of \ the\  storage \ tank, \ function \ of \ time.}$')
+#plt.yticks((1,2,3), (r'$1$',r'$2$',r'$3$'), color='k', size=14)
+plt.title(r'$----------------$')
 #plt.grid(True)
 plt.tight_layout()
 #plt.savefig("sol.pdf")
