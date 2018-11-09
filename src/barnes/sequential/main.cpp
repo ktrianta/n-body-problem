@@ -105,14 +105,14 @@ int main(int argc, char** argv)
             r[j][1] += u[j][1] * dt;
             r[j][2] += u[j][2] * dt;
 
+            a[j][0] = 0;
+            a[j][1] = 0;
+            a[j][2] = 0;
             tree.computeAcceleration(j, r, a, sim::g, theta);
 
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
-            a[j][0] = 0;
-            a[j][1] = 0;
-            a[j][2] = 0;
         }
 
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);

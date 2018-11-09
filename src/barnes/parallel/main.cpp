@@ -172,6 +172,9 @@ int main(int argc, char** argv)
             r_local[jLocal][0] += u_local[jLocal][0] * dt;
             r_local[jLocal][1] += u_local[jLocal][1] * dt;
             r_local[jLocal][2] += u_local[jLocal][2] * dt;
+            a_local[jLocal][0] = 0;
+            a_local[jLocal][1] = 0;
+            a_local[jLocal][2] = 0;
         }
 
         MPI_Allgatherv(&(r_local[0][0]),local_N[rank]*3,MPI_DOUBLE,&(r[0][0]),local_Nx3, offset_x3, MPI_DOUBLE,MPI_COMM_WORLD);
@@ -187,9 +190,6 @@ int main(int argc, char** argv)
             u_local[jLocal][0] += 0.5 * a_local[jLocal][0] * dt;
             u_local[jLocal][1] += 0.5 * a_local[jLocal][1] * dt;
             u_local[jLocal][2] += 0.5 * a_local[jLocal][2] * dt;
-            a_local[jLocal][0] = 0;
-            a_local[jLocal][1] = 0;
-            a_local[jLocal][2] = 0;
         }
 
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
