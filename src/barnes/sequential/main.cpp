@@ -11,14 +11,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-//  the center of the parent node and the half width and height
-    double xc, yc, zc, h2, w2, t2;
-    xc=0.;
-    yc=0.;
-    zc=0.;
-    w2=4.;
-    h2=4.;
-    t2=4.;
 
     int c;
     int N = 5;
@@ -56,7 +48,7 @@ int main(int argc, char** argv)
     std::fill(m, m+N, 1.0/N);
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
-
+ 
     if (!filename.empty()) {
         if (readDataFromFile(filename, N, m, r, u) == -1) {
             std::cerr << "File " << filename << " not found!" << std::endl;
@@ -64,6 +56,39 @@ int main(int argc, char** argv)
     } else {
           initializePositionOnSphere(N, r);
     }
+
+//  the center of the parent node and the half width and height
+    double xc, yc, zc, h2, w2, t2;
+// coordinates for tab8096
+    double maxX, minX, maxY, minY, maxZ, minZ;
+    
+    maxX = r[0][0];
+    minX = r[0][0];
+    maxY = r[0][1];
+    minY = r[0][1];
+    maxZ = r[0][2];
+    minZ = r[0][2];
+    for (int i = 1; i < N; i++) 
+    {
+        if (r[i][0] > r[i-1][0])
+            maxX = r[i][0];
+        if (r[i][0] < r[i-1][0])
+            minX = r[i][0];
+        if (r[i][1] > r[i-1][1])
+            maxY = r[i][1];
+        if (r[i][1] < r[i-1][1])
+            minY = r[i][1];
+        if (r[i][2] > r[i-1][2])
+            maxZ = r[i][2];
+        if (r[i][2] < r[i-1][2])
+            minZ = r[i][2];
+    }
+    w2 = (maxX-minX+0.05)/2.;
+    xc = (maxX+minX)/2.;
+    h2 = (maxY-minY+0.05)/2.;
+    yc = (maxY+minY)/2.;
+    t2 = (maxZ-minZ+0.05)/2.;
+    zc = (maxZ+minZ)/2.;
 
     ofstream file;
     file.open("output.dat");
