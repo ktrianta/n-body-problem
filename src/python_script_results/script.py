@@ -4,25 +4,26 @@ import matplotlib.pyplot as plt
 from numpy import linalg as LA
 from matplotlib import rc
 import sys
+import argparse
 
 filename1 = sys.argv[1]
 filename2 = sys.argv[2]
 num_of_columns = int(sys.argv[3])
-epsilon = float(sys.argv[4])
+theta  = float(sys.argv[4])
 
-X,Y = genfromtxt(filename1,unpack=True,delimiter=' ',skip_header=0,skip_footer=0)
-#X,Y = genfromtxt(filename2,unpack=True,delimiter=' ',skip_header=0,skip_footer=0)
-
-print(X[0],Y[0])
-print(X[1],Y[1])
+if num_of_columns == 3: 
+    rx_me,ry_me,rz_me = genfromtxt(filename1,unpack=True,delimiter=' ',skip_header=0,skip_footer=0)
+    rx_other,ry_other,rz_other = genfromtxt(filename2,unpack=True,delimiter=' ',skip_header=0,skip_footer=0)
+else if num_of_colums == 6:
+    rx_me,ry_me,rz_me,vx_me,vy_me,vz_me = genfromtxt(filename1,unpack=True,delimiter=' ',skip_header=0,skip_footer=0)
+    rx_other,ry_other,rz_other,vx_other,vy_other,vz_other = genfromtxt(filename2,unpack=True,delimiter=' ',skip_header=0,skip_footer=0)
 
 error = abs(X-Y)
 
-print(error)
+L2_error = LA.norm(error,2)     # sqrt(sum(e_i),1<=i<=num_particules)
+LInf_error = LA.norm(error,Inf) # max [e_i], 1<=i<=num_particules
 
-print(LA.norm(error,2))
-print(LA.norm(error,inf))
-
-
-if ( LA.norm(error,2) > epsilon) :
+if ( L2_error > theta ) :
     print("No convergence")
+else:
+    print("The solution is accurate")
