@@ -10,12 +10,7 @@ using namespace std;
 
 void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m)
 {
-    for (int i = 0; i < N; i++)
-    {
-        a[i][0] = 0;
-        a[i][1] = 0;
-        a[i][2] = 0;
-    }
+    std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
     for (int i = 0; i < N; i++)
     {
