@@ -1,14 +1,14 @@
 #include <math.h> //for sqrt function
 #include <iostream>
 #include <fstream>
-#include <unistd.h>
 #include "io.hpp"
+#include "args.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
 
 using namespace std;
 
-void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m)
+void computeAcceleration(const int N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m)
 {
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
@@ -43,31 +43,10 @@ void computeAcceleration(int N, sim::data_type (*r)[3], sim::data_type (*a)[3], 
 
 int main(int argc, char** argv)
 {
-    int c;
-    int N = 5;                                              // the number of particles
-    sim::data_type T = 10;
-    sim::data_type dt = 0.00001;
-    string filename;
+    sim::Parameters params;
+    readArgs(argc, argv, params);
 
-    while ((c = getopt (argc, argv, "n:t:s:i:")) != -1)
-    {
-        switch (c)
-        {
-            case 'n':
-                N = atoi(optarg);
-                break;
-            case 't':
-                T = atof(optarg);
-                break;
-            case 's':
-                dt = atof(optarg);
-                break;
-            case 'i':
-                filename = optarg;
-                break;
-        }
-    }
-
+    const int N = params.n;
     sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
@@ -77,22 +56,22 @@ int main(int argc, char** argv)
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
 
-    if (!filename.empty()) {
-        if (readDataFromFile(filename, N, m, r, u) == -1) {
-            std::cerr << "File " << filename << " not found!" << std::endl;
+    if (!params.in_filename.empty()) {
+        if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
+            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
             return -1;
         }
+        params.out_filename = params.in_filename;
     } else {
         initializePositionOnSphere(N, r);
     }
 
-    ofstream file;
-    file.open("output.dat");
+    ofstream out_file = openFileToWrite(params.out_filename, params.out_dirname);
+    writeDataToFile(params.n, r, u, out_file);
 
-    std::cout << N << std::endl;
-    writeDataToFile(N, r, u, file);
-    computeAcceleration(N, r, a, m);
-    const int Ntimesteps = T/dt + 1;
+    computeAcceleration(params.n, r, a, m);
+    const int Ntimesteps = params.t / params.dt + 1;
+    const sim::data_type dt = params.dt;
 
     for (int t = 0; t < Ntimesteps; t++)
     {
@@ -117,7 +96,7 @@ int main(int argc, char** argv)
 
         if (t % 200 == 0)
         {
-            writeDataToFile(N, r, u, file);
+            writeDataToFile(N, r, u, out_file);
         }
     }
     return 0;

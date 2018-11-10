@@ -4,8 +4,13 @@ project(nbody)
 
 
 set(UTILS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/utils)
-set(UTILS_SOURCES ${UTILS_DIR}/initialization.cpp ${UTILS_DIR}/io.cpp)
-set(UTILS_HEADERS ${UTILS_DIR}/initialiaztion.hpp ${UTILS_DIR}/types.hpp ${UTILS_DIR}/io.hpp)
+set(UTILS_SOURCES ${UTILS_DIR}/initialization.cpp
+                  ${UTILS_DIR}/io.cpp
+                  ${UTILS_DIR}/args.cpp)
+set(UTILS_HEADERS ${UTILS_DIR}/initialiaztion.hpp
+                  ${UTILS_DIR}/types.hpp
+                  ${UTILS_DIR}/io.hpp
+                  ${UTILS_DIR}/args.hpp)
 
 include_directories(${UTILS_DIR})
 
