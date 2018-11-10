@@ -1,7 +1,6 @@
 # common executable names
 a.out
 prog
-test
 
 # object files
 *.o
@@ -15,7 +14,7 @@ output.dat
 
 # cmake generated files
 CMakeFiles
-CMakeCache.txt
+#CMakeCache.txt
 cmake_install.cmake
 Makefile
 
