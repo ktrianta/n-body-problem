@@ -1,24 +1,21 @@
-#include <math.h> //for sqrt function
-#include <iostream>
+#include <math.h>
 #include <fstream>
+#include <iostream>
 #include "io.hpp"
 #include "args.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
 
 
-void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m)
-{
+void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m) {
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-    for (size_t i = 0; i < N; i++)
-    {
+    for (size_t i = 0; i < N; i++) {
         sim::data_type a_i0 = 0;  // accumulate accelaration values for particle i and
         sim::data_type a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
         sim::data_type a_i2 = 0;
 
-        for (size_t j = i+1; j < N; j++)
-        {
+        for (size_t j = i+1; j < N; j++) {
             sim::data_type rji[3];
             rji[0] = r[j][0] - r[i][0];
             rji[1] = r[j][1] - r[i][1];
@@ -40,8 +37,7 @@ void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type 
     }
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     sim::Parameters params;
     readArgs(argc, argv, params);
 
@@ -69,13 +65,12 @@ int main(int argc, char** argv)
     writeDataToFile(params.n, r, u, out_file);
 
     computeAcceleration(params.n, r, a, m);
+
     const size_t Ntimesteps = params.t / params.dt + 1;
     const sim::data_type dt = params.dt;
 
-    for (size_t t = 0; t < Ntimesteps; t++)
-    {
-        for (size_t j = 0; j < N; j++)
-        {
+    for (size_t t = 0; t < Ntimesteps; t++) {
+        for (size_t j = 0; j < N; j++) {
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
@@ -86,15 +81,13 @@ int main(int argc, char** argv)
 
         computeAcceleration(N, r, a, m);
 
-        for (size_t j = 0; j < N; j++)
-        {
+        for (size_t j = 0; j < N; j++) {
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
         }
 
-        if (t % 200 == 0)
-        {
+        if (t % 200 == 0) {
             writeDataToFile(N, r, u, out_file);
         }
     }
