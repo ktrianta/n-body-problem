@@ -14,7 +14,7 @@ std::ofstream openFileToWrite(std::string filename, std::string dirname) {
 }
 
 
-int readDataFromFile(std::string filename, int& N, dtype *m, dtype (*r)[3], dtype (*u)[3]) {
+int readDataFromFile(std::string filename, int N, dtype *m, dtype (*r)[3], dtype (*u)[3]) {
     std::ifstream fs;
 
     fs.open(filename);
@@ -22,7 +22,6 @@ int readDataFromFile(std::string filename, int& N, dtype *m, dtype (*r)[3], dtyp
         return -1;
     }
 
-    fs >> N;
     for (size_t i = 0; i < N; i++) {
         fs >> m[i]
            >> r[i][0] >> r[i][1] >> r[i][2]
