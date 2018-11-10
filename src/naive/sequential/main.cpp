@@ -6,19 +6,18 @@
 #include "types.hpp"
 #include "initialization.hpp"
 
-using namespace std;
 
-void computeAcceleration(const int N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m)
+void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m)
 {
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-    for (int i = 0; i < N; i++)
+    for (size_t i = 0; i < N; i++)
     {
         sim::data_type a_i0 = 0;  // accumulate accelaration values for particle i and
         sim::data_type a_i1 = 0;  // store them at the end of the loop iteration in a(i,x)
         sim::data_type a_i2 = 0;
 
-        for (int j = i+1; j < N; j++)
+        for (size_t j = i+1; j < N; j++)
         {
             sim::data_type rji[3];
             rji[0] = r[j][0] - r[i][0];
@@ -46,7 +45,7 @@ int main(int argc, char** argv)
     sim::Parameters params;
     readArgs(argc, argv, params);
 
-    const int N = params.n;
+    const size_t N = params.n;
     sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
@@ -66,16 +65,16 @@ int main(int argc, char** argv)
         initializePositionOnSphere(N, r);
     }
 
-    ofstream out_file = openFileToWrite(params.out_filename, params.out_dirname);
+    std::ofstream out_file = openFileToWrite(params.out_filename, params.out_dirname);
     writeDataToFile(params.n, r, u, out_file);
 
     computeAcceleration(params.n, r, a, m);
-    const int Ntimesteps = params.t / params.dt + 1;
+    const size_t Ntimesteps = params.t / params.dt + 1;
     const sim::data_type dt = params.dt;
 
-    for (int t = 0; t < Ntimesteps; t++)
+    for (size_t t = 0; t < Ntimesteps; t++)
     {
-        for (int j = 0; j < N; j++)
+        for (size_t j = 0; j < N; j++)
         {
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
@@ -87,7 +86,7 @@ int main(int argc, char** argv)
 
         computeAcceleration(N, r, a, m);
 
-        for (int j = 0; j < N; j++)
+        for (size_t j = 0; j < N; j++)
         {
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
