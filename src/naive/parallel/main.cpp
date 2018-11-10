@@ -1,11 +1,10 @@
 #include <math.h> //for sqrt function
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include "io.hpp"
+#include "args.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
-#include <unistd.h>
 #include <mpi.h>
 
 using namespace std;
@@ -53,32 +52,10 @@ int main(int argc, char** argv)
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     // *** MPI *** // 
     
-    int c;
-    int N = 5;
-    sim::data_type T = 10;
-    sim::data_type dt = 0.00001;
-    string filename;
+    sim::Parameters params;
+    readArgs(argc, argv, params);
 
-    while ((c = getopt (argc, argv, "n:t:s:i:")) != -1)
-    {
-        switch (c)
-        {
-            case 'n':
-                N = atoi(optarg);
-                break;
-            case 't':
-                T = atof(optarg);
-                break;
-            case 's':
-                dt = atof(optarg);
-                break;
-            case 'i':
-                filename = optarg;
-                break;
-        }
-    }
-
-
+    const int N = params.n;
     sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
@@ -90,11 +67,12 @@ int main(int argc, char** argv)
     // PROCESS 0 initialize position vector r.
     if (rank == 0)
     {
-        if (!filename.empty()) {
-            if (readDataFromFile(filename, N, m, r, u) == -1) {
-                std::cerr << "File " << filename << " not found!" << std::endl;
+        if (!params.in_filename.empty()) {
+            if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
+                std::cerr << "File " << params.in_filename << " not found!" << std::endl;
                 return -1;
             }
+            params.out_filename = params.in_filename;
         } else {
             initializePositionOnSphere(N, r);
         }
@@ -106,11 +84,11 @@ int main(int argc, char** argv)
     MPI_Bcast(&m[0],N, MPI_DOUBLE,0, MPI_COMM_WORLD);
 
 
-    ofstream file;
+    std::ofstream out_file;
     if (rank ==0)
     {
-        file.open("output.dat");
-        writeDataToFile(N, r, u, file);
+        out_file = openFileToWrite(params.out_filename, params.out_dirname);
+        writeDataToFile(params.n, r, u, out_file);
     }
 
     //if (rank == 0)
@@ -121,8 +99,8 @@ int main(int argc, char** argv)
     // ---- NEED TO BI FILLED -----
 
 
-    const int Ntimesteps = T/dt + 1;
-
+    const sim::data_type dt = params.dt;
+    const int Ntimesteps = params.t/dt + 1;
 
 
     // Local Declarations
@@ -212,7 +190,7 @@ int main(int argc, char** argv)
         {
             if (t % 200 == 0)
              {
-                writeDataToFile(N, r, u, file);
+                writeDataToFile(N, r, u, out_file);
              }   
          }
 
