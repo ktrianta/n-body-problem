@@ -24,6 +24,6 @@ plt.xlabel(r'$\#(\mathrm{Processors}) \ p$')
 plt.ylabel(r'$S(p) = \frac{T_1}{T_p}$')
 plt.tight_layout()
 save_results_to = '../python_script_results/plots/'
-plt.savefig(save_results_to + 'speedup.pdf')
+plt.savefig(save_results_to + 'speedup.eps')
 
 

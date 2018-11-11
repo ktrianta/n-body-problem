@@ -23,4 +23,4 @@ plt.xlabel(r'$\#(\mathrm{Processors}) \ p$')
 plt.ylabel(r'$\mathrm{Execution \ Time}(s)$')
 plt.tight_layout()
 save_results_to = '../python_script_results/plots/'
-plt.savefig(save_results_to + "exectime.pdf")
+plt.savefig(save_results_to + "exectime.eps")
