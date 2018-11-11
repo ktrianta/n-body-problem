@@ -101,7 +101,7 @@ bool Octree::insert(int new_index){
     double mult2 = 1.0 / (double) cum_size;
     for (int d = 0; d < dimension; d++) centerMass[d] *= mult1;
     for (int d = 0; d < dimension; d++) centerMass[d] += mult2 * point[d];
-    for (int k = 0; k < cum_size;  k++) cum_Mass += mass[k];
+    cum_Mass += mass[new_index];
     
     if (leaf && size==0){
         index=new_index;
