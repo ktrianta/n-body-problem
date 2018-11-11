@@ -18,6 +18,8 @@ void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type 
         sim::data_type a_i2 = 0;
 
         for (size_t j = 0; j < N; j++) {
+            if (i == j) continue;
+
             sim::data_type rji[3];
             rji[0] = r[j][0] - r[i][0];
             rji[1] = r[j][1] - r[i][1];
