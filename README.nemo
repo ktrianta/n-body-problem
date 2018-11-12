@@ -1,0 +1,65 @@
+Ubuntu install instuctions for NEMO - "A Stellar Dynamics Toolbox"
+
+Dependencies: 
+	
+	(On mac hopefully similar with brew)
+	sudo apt install git gfortran libx11-dev libxt-dev libxext-dev libcairo2-dev build-essential cmake csh
+
+
+Basic Installation
+
+	wget https://teuben.github.io/nemo/install_nemo
+
+	chmod +x install_nemo
+
+
+	(Run the following two commands again if you switch graphics cards because of pgplot)
+		./install_nemo nemo=$HOME/opt/nemo
+
+	(Run again if you start a new session)
+		source $HOME/opt/nemo/nemo_start.sh
+
+
+[Optional] Here are some commands you can run to get familiar with the commands
+	
+	(Make one Galaxy in RMS-units (G=1, M=1, E=-1/2))
+		mkommod in=$NEMODAT/k7isot.dat out=tmp1 nbody=100 seed=280158
+
+	(convert to virial units (preferred but optional))
+		snapscale in=tmp1 out=tmp1s rscale=2 "vscale=1/sqrt(2.0)"
+
+	(Make second galaxy in same manner)
+		mkommod in=$NEMODAT/k7isot.dat out=tmp2 nbody=100 seed=130159
+		snapscale in=tmp2 out=tmp2s rscale=2 "vscale=1/sqrt(2.0)"
+
+	(Combine galaxy clusters)
+		snapstack in1=tmp1s in2=tmp2s out=i001.dat deltar=4,0,0 deltav=-1,0,0
+
+	(Visualize clusters, needs to be run in ~/opt/nemo because of pgplot)
+		cd $HOME/opt/nemo
+		snapplot ~/i001.dat xrange=-5:5 yrange=-5:5
+	
+	(Run N-body integrator based on Barnes & Hut algorithm)
+		hackcode1 in=i001.dat out=r001.dat tstop=20 freqout=2 freq=40 eps=0.05 tol=0.7 options=mass,phase,phi > r001.log
+
+	(Visualize conservation of energy and center-of-mass motion)
+		cd $HOME/opt/nemo
+		snapdiagplot in=~/r001.dat	
+		snapplot in=r001.dat
+	
+Convert our data format (table) to nemos data format (snapshot, binary)
+
+	cd <our_repo>/src/utils/
+	./data_conversion <init_table_file> <init_snapshot_file>
+	
+
+Simulate with converted data
+
+	hackcode1 in=<init_snapshot_file> out=<result_snapshot_file> tstop=20 freqout=2 freq=40 eps=0.05 tol=0.7 options=mass,phase,phi > r001.log
+
+
+Convert result (snapshot) to table
+
+	snapprint <result_snapshot_file> options=m,x,y,z,vx,vy,vz > <result_table_file>
+
+
