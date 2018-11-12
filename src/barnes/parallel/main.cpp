@@ -17,15 +17,6 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD,&size);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 
-//  the center of the parent node and the half width and height
-    double xc, yc, zc, h2, w2, t2;
-// coordinates for tab8096
-    xc = -2.5;
-    yc = -2.5;
-    zc = -2.5;
-    w2 = 22.5;
-    h2 = 17.5;
-    t2 = 22.5;
 
     int c;
     int N = 5;      // the number of particles
@@ -80,6 +71,39 @@ int main(int argc, char** argv)
     MPI_Bcast(&r[0][0],N*3, MPI_DOUBLE,0, MPI_COMM_WORLD);
     MPI_Bcast(&u[0][0],N*3, MPI_DOUBLE,0, MPI_COMM_WORLD);
     MPI_Bcast(&m[0],N, MPI_DOUBLE,0, MPI_COMM_WORLD);
+
+//  the center of the parent node and the half width and height
+    double xc, yc, zc, h2, w2, t2;
+// coordinates for tab8096
+    double maxX, minX, maxY, minY, maxZ, minZ;
+    
+    maxX = r[0][0];
+    minX = r[0][0];
+    maxY = r[0][1];
+    minY = r[0][1];
+    maxZ = r[0][2];
+    minZ = r[0][2];
+    for (int i = 1; i < N; i++) 
+    {
+        if (r[i][0] > maxX)
+            maxX = r[i][0];
+        if (r[i][0] < minX)
+            minX = r[i][0];
+        if (r[i][1] > maxY)
+            maxY = r[i][1];
+        if (r[i][1] < minY)
+            minY = r[i][1];
+        if (r[i][2] > maxZ)
+            maxZ = r[i][2];
+        if (r[i][2] < minZ)
+            minZ = r[i][2];
+    }
+    w2 = (maxX-minX+0.05)/2.;
+    xc = (maxX+minX)/2.;
+    h2 = (maxY-minY+0.05)/2.;
+    yc = (maxY+minY)/2.;
+    t2 = (maxZ-minZ+0.05)/2.;
+    zc = (maxZ+minZ)/2.;
 
     ofstream file;
     if (rank == 0)

@@ -4,7 +4,7 @@
 #include "io.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
-#include "octree.hpp"
+#include "serialization.hpp"
 #include <unistd.h>
 
 using namespace std;
@@ -59,6 +59,7 @@ int main(int argc, char** argv)
 
 //  the center of the parent node and the half width and height
     double xc, yc, zc, h2, w2, t2;
+// coordinates for tab8096
     double maxX, minX, maxY, minY, maxZ, minZ;
     
     maxX = r[0][0];
@@ -94,11 +95,17 @@ int main(int argc, char** argv)
 
     writeDataToFile(N, r, u, file);
 
-    Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
+
+    Serialization tree = Serialization(xc, yc, zc, w2, h2, t2);
+
+    for (int i = 0; i < N; i++)
+    {
+        tree.insert(i, r[i][0], r[i][1], r[i][2], m[i]);
+    }
 
     for (int j = 0; j < N; j++)
     {
-        tree.computeAcceleration(j, r, a, sim::g, theta);
+        tree.computeAcceleration(0, j, r, a, sim::g, theta);
     }
 
     const int Ntimesteps = T/dt + 1;
@@ -117,14 +124,15 @@ int main(int argc, char** argv)
             a[j][0] = 0;
             a[j][1] = 0;
             a[j][2] = 0;
-            tree.computeAcceleration(j, r, a, sim::g, theta);
+         
+            tree.computeAcceleration(0, j, r, a, sim::g, theta);
 
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
         }
 
-        Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
+        Serialization tree = Serialization(xc, yc, zc, w2, h2, t2);
 
         if (t % 200 == 0)
         {
