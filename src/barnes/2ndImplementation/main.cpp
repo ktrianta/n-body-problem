@@ -96,16 +96,16 @@ int main(int argc, char** argv)
     writeDataToFile(N, r, u, file);
 
 
-    Serialization tree = Serialization(xc, yc, zc, w2, h2, t2);
+    Serialization* tree = new Serialization(xc, yc, zc, w2, h2, t2);
 
     for (int i = 0; i < N; i++)
     {
-        tree.insert(i, r[i][0], r[i][1], r[i][2], m[i]);
+        tree->insert(i, r[i][0], r[i][1], r[i][2], m[i]);
     }
 
     for (int j = 0; j < N; j++)
     {
-        tree.computeAcceleration(0, j, r, a, sim::g, theta);
+        tree->computeAcceleration(0, j, r, a, sim::g, theta);
     }
 
     const int Ntimesteps = T/dt + 1;
@@ -125,14 +125,18 @@ int main(int argc, char** argv)
             a[j][1] = 0;
             a[j][2] = 0;
          
-            tree.computeAcceleration(0, j, r, a, sim::g, theta);
+            tree->computeAcceleration(0, j, r, a, sim::g, theta);
 
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
         }
 
-        Serialization tree = Serialization(xc, yc, zc, w2, h2, t2);
+        delete tree;
+        tree = new Serialization(xc, yc, zc, w2, h2, t2);
+        for (int i = 0; i < N; i++) {
+            tree->insert(i, r[i][0], r[i][1], r[i][2], m[i]);
+        }
 
         if (t % 200 == 0)
         {

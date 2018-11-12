@@ -36,6 +36,7 @@ public:
     ~Serialization();
 
     void insert(int j, double rx, double ry, double rz, double m);
+    bool insertInLeaf(int i, int j, double rx, double ry, double rz, double m);
     void subdivide(int current);
     void computeAcceleration(int current, int idx, double (*r)[3], double (*a)[3], double g, double theta);
 };
