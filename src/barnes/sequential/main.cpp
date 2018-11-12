@@ -59,7 +59,6 @@ int main(int argc, char** argv)
 
 //  the center of the parent node and the half width and height
     double xc, yc, zc, h2, w2, t2;
-// coordinates for tab8096
     double maxX, minX, maxY, minY, maxZ, minZ;
     
     maxX = r[0][0];
@@ -70,17 +69,17 @@ int main(int argc, char** argv)
     minZ = r[0][2];
     for (int i = 1; i < N; i++) 
     {
-        if (r[i][0] > r[i-1][0])
+        if (r[i][0] > maxX)
             maxX = r[i][0];
-        if (r[i][0] < r[i-1][0])
+        if (r[i][0] < minX)
             minX = r[i][0];
-        if (r[i][1] > r[i-1][1])
+        if (r[i][1] > maxY)
             maxY = r[i][1];
-        if (r[i][1] < r[i-1][1])
+        if (r[i][1] < minY)
             minY = r[i][1];
-        if (r[i][2] > r[i-1][2])
+        if (r[i][2] > maxZ)
             maxZ = r[i][2];
-        if (r[i][2] < r[i-1][2])
+        if (r[i][2] < minZ)
             minZ = r[i][2];
     }
     w2 = (maxX-minX+0.05)/2.;
