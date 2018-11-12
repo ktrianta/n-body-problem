@@ -28,22 +28,16 @@ void set(double px, double py, double pz, double pw, double ph, double pt);
 
 class Serialization{
 public: 
-     
-    Treenode *treeArray;
     size_t size;
     size_t position;
-    size_t current;
-    
-// private functions
-public:
-Serialization(double px, double py, double pz, double pw, double ph, double pt);
-bool insert(int j, double rx, double ry, double rz, double m);
-void subdivide(int current);
-void computeAcceleration(int current, int idx, double (*r)[3], double (*a)[3], double g, double theta);
+    Treenode *treeArray;
 
+    Serialization(double px, double py, double pz, double pw, double ph, double pt);
+    ~Serialization();
+
+    void insert(int j, double rx, double ry, double rz, double m);
+    void subdivide(int current);
+    void computeAcceleration(int current, int idx, double (*r)[3], double (*a)[3], double g, double theta);
 };
-
-
-
 
 #endif  // SERIALIZATION_H

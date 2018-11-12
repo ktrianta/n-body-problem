@@ -10,7 +10,7 @@ Treenode::Treenode()
     {}
 
     
-void Treenode::set(double px, double py, double pz, double pw, double ph, double pt){
+void Treenode::set(double px, double py, double pz, double pw, double ph, double pt) {
      x = px;
      y = py;
      z = pz;
@@ -21,12 +21,12 @@ void Treenode::set(double px, double py, double pz, double pw, double ph, double
      leaf = true;
      cum_size = 0;
      child = 0;
-     }
+}
 
 
 Serialization::Serialization(double px, double py, double pz, double pw, double ph, double pt)
-    : treeArray(new Treenode[64])
-    {
+    : size(64), treeArray(new Treenode[size])
+{
     treeArray[0].x = px;
     treeArray[0].y = py;
     treeArray[0].z = pz;
@@ -34,56 +34,53 @@ Serialization::Serialization(double px, double py, double pz, double pw, double 
     treeArray[0].h = ph;
     treeArray[0].t = pt;
     position = 0;
-    current = 1;
-    }
- 
-//functions
+}
 
-bool Serialization::insert(int j, double rx, double ry, double rz, double m){
+Serialization::~Serialization() {
+    delete[] treeArray;
+}
 
-    queue<int> list;
-    list.push (0);
+void Serialization::insert(int j, double rx, double ry, double rz, double m) {
+    queue<size_t> list;
+    list.push(0);
 
-    while(!list.empty())
-    {
-        int f = list.front();
+    while (!list.empty()) {
+        size_t f = list.front();
         list.pop();
+
         const double x = treeArray[f].x;
         const double y = treeArray[f].y;
         const double z = treeArray[f].z;
         const double w = treeArray[f].w;
         const double h = treeArray[f].h;
         const double t = treeArray[f].t;
-        
 
-
-        if (x - w > rx) return false;
-        if (x + w < rx) return false;
-        if (y - h > ry) return false;
-        if (y + h < ry) return false;
-        if (z - t > rz) return false;
-        if (z + t < rz) return false;
+        if (x - w > rx) continue;
+        if (x + w < rx) continue;
+        if (y - h > ry) continue;
+        if (y + h < ry) continue;
+        if (z - t > rz) continue;
+        if (z + t < rz) continue;
 
         size_t cum_size = ++treeArray[f].cum_size;
-        double mult1 = (double) (cum_size - 1) / (double) treeArray[f].cum_size;                                   
-        double mult2 = 1.0 / (double) cum_size;                                                       
-        for (int d = 0; d < 3; d++) treeArray[f].massCenter[d] *= mult1;                                   
+        double mult1 = (double) (cum_size - 1) / (double) cum_size;
+        double mult2 = 1.0 / (double) cum_size;
+        for (int d = 0; d < 3; d++) treeArray[f].massCenter[d] *= mult1;
         treeArray[f].massCenter[0] += mult2 * x;
         treeArray[f].massCenter[1] += mult2 * y;
         treeArray[f].massCenter[2] += mult2 * z;
-        treeArray[f].mass += m; 
+        treeArray[f].mass += m;
 
-        if (treeArray[f].leaf && treeArray[f].cum_size == 1)
-        {
+        if (treeArray[f].leaf && treeArray[f].cum_size == 1) {
             treeArray[f].index = j;
-            return true;
+            return;
         }
 
-        if (treeArray[f].leaf)
-        { 
+        if (treeArray[f].leaf) {
            subdivide(f);
            treeArray[f].child = position+1;
         }
+
         list.push(treeArray[f].child);
         list.push(treeArray[f].child+1);
         list.push(treeArray[f].child+2);
@@ -93,18 +90,17 @@ bool Serialization::insert(int j, double rx, double ry, double rz, double m){
         list.push(treeArray[f].child+6);
         list.push(treeArray[f].child+7);
     }
-    return true;
 }
 
-void Serialization::subdivide(int current){
-
-    if(position + 8 > size){
+void Serialization::subdivide(int current) {
+    if (position + 8 > size) {
       size *= 2;
       Treenode *temp = new Treenode[size];
-      std::copy(treeArray, treeArray +size/2, temp);
+      std::copy(treeArray, treeArray + size/2, temp);
       delete[] treeArray;
       treeArray = temp;
     }
+
     const double x = treeArray[current].x;
     const double y = treeArray[current].y;
     const double z = treeArray[current].z;
