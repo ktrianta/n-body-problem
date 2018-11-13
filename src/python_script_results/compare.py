@@ -34,6 +34,9 @@ difference_error_r = 2 * abs(r_me - r_other) / ( r_me + r_other )
 L2_error_r = LA.norm(difference_error_r, 2)     # sqrt(sum(e_i),1<=i<=num_particules)
 LInf_error_r = LA.norm(difference_error_r, Inf) # max [e_i], 1<=i<=num_particules
 
+print("The error difference is: ")
+print(LInf_error_r)
+
 if ( L2_error_r > epsilon ) :
     print("No convergence")
 else:
