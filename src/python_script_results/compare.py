@@ -8,7 +8,9 @@ import argparse
 import csv
 import itertools
 
-# Sample execution command: python script.py ../../test/resources/tab1024.txt ../../test/resources/tab1024.txt 7 7 3
+# Sample execution command: python compare.py filename_me filename_other num_of_columns epsilon
+# Note that the file inputs should be in the same directory as the compare.py file. Otherwise, provide the path 
+# of each file in the terminal. 
 
 filename_me = sys.argv[1]
 filename2_other = sys.argv[2]
