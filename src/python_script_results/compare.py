@@ -1,28 +1,18 @@
 from numpy import *
-from pylab import *
-import matplotlib.pyplot as plt
 from numpy import linalg as LA
-from matplotlib import rc
 import sys
-import argparse
-import csv
-import itertools
 
 # Sample execution command: python compare.py filename_me filename_other num_of_columns epsilon
 # Note that the file inputs should be in the same directory as the compare.py file. Otherwise, provide the path 
 # of each file in the terminal. 
 
 filename_me = sys.argv[1]
-filename2_other = sys.argv[2]
+filename_other = sys.argv[2]
 num_of_columns = int(sys.argv[3])
 epsilon  = float(sys.argv[4])
 
-if num_of_columns == 3:
-    rx_me,ry_me,rz_me = genfromtxt(filename_me,unpack=True,delimiter=' ')
-    rx_other,ry_other,rz_other = genfromtxt(filename_other,unpack=True,delimiter=' ')
-elif num_of_columns == 6:
-    rx_me,ry_me,rz_me,vx_me,vy_me,vz_me = genfromtxt(filename_me,unpack=True,delimiter=' ')
-    rx_other,ry_other,rz_other,vx_other,vy_other,vz_other = genfromtxt(filename_other,unpack=True,delimiter=' ')
+rx_me,ry_me,rz_me,vx_me,vy_me,vz_me = genfromtxt(filename_me,unpack=True,delimiter='    ')
+rx_other,ry_other,rz_other,vx_other,vy_other,vz_other = genfromtxt(filename_other,unpack=True,delimiter='    ')
 
 #For accuracy, use np.square(), for speed use **2
 r_me = sqrt(rx_me**2+ry_me**2+rz_me**2)
