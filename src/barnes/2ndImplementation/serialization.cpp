@@ -47,10 +47,13 @@ void Serialization::insert(int j, double rx, double ry, double rz, double m) {
     queue<size_t> list;
     list.push(0);
 
+    std::cout << "insert" << std::endl;
     while (!list.empty()) {
         size_t f = list.front();
-        std::cout << f << std::endl;
+        std::cout << "popping " << f << std::endl;
         list.pop();
+
+        std::cout << list.size() << std::endl;
 
         const double x = treeArray[f].x;
         const double y = treeArray[f].y;
@@ -77,24 +80,25 @@ void Serialization::insert(int j, double rx, double ry, double rz, double m) {
 
         if (treeArray[f].leaf && treeArray[f].cum_size == 1) {
             treeArray[f].index = j;
-            std::cout << "leaf " << j << std::endl;
+            std::cout << "leaf " << f << " index " << j << std::endl;
             return;
         }
 
         if (treeArray[f].leaf) {
             std::cout << "sub " << f << std::endl;
            subdivide(f);
-           treeArray[f].child = position+1;
         }
 
-        list.push(treeArray[f].child);
-        list.push(treeArray[f].child+1);
-        list.push(treeArray[f].child+2);
-        list.push(treeArray[f].child+3);
-        list.push(treeArray[f].child+4);
-        list.push(treeArray[f].child+5);
-        list.push(treeArray[f].child+6);
-        list.push(treeArray[f].child+7);
+        if (treeArray[f].child != 0) {
+            list.push(treeArray[f].child);
+            list.push(treeArray[f].child+1);
+            list.push(treeArray[f].child+2);
+            list.push(treeArray[f].child+3);
+            list.push(treeArray[f].child+4);
+            list.push(treeArray[f].child+5);
+            list.push(treeArray[f].child+6);
+            list.push(treeArray[f].child+7);
+        }
     }
 }
 
@@ -120,6 +124,7 @@ bool Serialization::insertInLeaf(int current, int index, double rx, double ry, d
     treeArray[current].massCenter[2] = rz;
     treeArray[current].mass = m;
     treeArray[current].index = index;
+    std::cout << index << " in leaf " << current << std::endl;
     return true;
 }
 
@@ -158,6 +163,7 @@ void Serialization::subdivide(int current) {
 
     treeArray[current].leaf = false;
     treeArray[current].index = -1;
+    treeArray[current].child = position + 1;
     position += 8;
 }
 
