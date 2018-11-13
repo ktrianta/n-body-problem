@@ -80,3 +80,18 @@ Simulate with converted data
 
 Convert result (snapshot) to table
 	snapprint tab128.snap.out options=x,y,z,vx,vy,vz > tab128_nemo.txt.out 
+
+
+[Good results for fig8]
+Create data from our naive program
+	./bin/naive/sequential/prog -i test/resources/testsets/figure8.txt -n 3 -t 10 -s 0.00001
+
+Convert our data format (table) to nemos data format (snapshot, binary)
+	tabtos test/resources/testsets/figure8.txt test/resources/testsets/figure8.snap block1=mass,pos,vel
+
+Simulate with converted data
+	hackcode1 in=test/resources/testsets/figure8.snap out=figure8.snap.out nbody=3 tstop=10 freqout=200 freq=10000 tol=0 eps=0 > junk
+
+Convert result (snapshot) to table
+        snapprint figure8.snap.out options=x,y,z,vx,vy,vz > figure8_nemo.txt.out
+
