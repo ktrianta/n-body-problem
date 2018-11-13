@@ -10,17 +10,17 @@ import itertools
 
 # Sample execution command: python script.py ../../test/resources/tab1024.txt ../../test/resources/tab1024.txt 7 7 3
 
-filename1 = sys.argv[1]
-filename2 = sys.argv[2]
+filename_me = sys.argv[1]
+filename2_other = sys.argv[2]
 num_of_columns = int(sys.argv[3])
 epsilon  = float(sys.argv[4])
 
 if num_of_columns == 3:
-    rx_me,ry_me,rz_me = genfromtxt(filename1,unpack=True,delimiter=' ')
-    rx_other,ry_other,rz_other = genfromtxt(filename2,unpack=True,delimiter=' ')
+    rx_me,ry_me,rz_me = genfromtxt(filename_me,unpack=True,delimiter=' ')
+    rx_other,ry_other,rz_other = genfromtxt(filename_other,unpack=True,delimiter=' ')
 elif num_of_columns == 6:
-    rx_me,ry_me,rz_me,vx_me,vy_me,vz_me = genfromtxt(filename1,unpack=True,delimiter=' ')
-    rx_other,ry_other,rz_other,vx_other,vy_other,vz_other = genfromtxt(filename2,unpack=True,delimiter=' ')
+    rx_me,ry_me,rz_me,vx_me,vy_me,vz_me = genfromtxt(filename_me,unpack=True,delimiter=' ')
+    rx_other,ry_other,rz_other,vx_other,vy_other,vz_other = genfromtxt(filename_other,unpack=True,delimiter=' ')
 
 #For accuracy, use np.square(), for speed use **2
 r_me = sqrt(rx_me**2+ry_me**2+rz_me**2)
