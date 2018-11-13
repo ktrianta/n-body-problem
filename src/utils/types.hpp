@@ -18,7 +18,7 @@ namespace sim {
         // Default parameters as constants. Not static as there shouldn't exist
         // more than one instance of this struct in the end.
         const size_t def_n = 10;
-        const data_type def_t = 10;
+        const data_type def_t = 1;
         const data_type def_dt = 0.00001;
         const std::string def_out_filename = "output";
         const std::string def_out_dirname = ".";
