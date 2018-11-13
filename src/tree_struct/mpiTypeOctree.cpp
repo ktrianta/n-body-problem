@@ -59,22 +59,36 @@ int main(int argc, char** argv){
 	MPI_Type_create_struct(4,blocklength,indices,old_types,&treeNodeStruct);
 	MPI_Type_commit(&treeNodeStruct);
 
+
+	Treenode* t = new Treenode[2];
 	
 	if (rank == 0){
-		tree.x = 1.23; tree.y = 4.1; tree.z = 1.41; tree.w = 25.1;
-		tree.h = 1.21; tree.t = 7.2; 
-		tree.mass = 27.2; tree.massCenter[0] = 1.1;tree.massCenter[1] = 1.2;
-		tree.massCenter[2] = 1.3;
-		tree.index = 10; tree.leaf = true; tree.cum_size = 31; tree.child = 41;
+		t[0].x = 1.23; t[0].y = 4.1; t[0].z = 1.41; t[0].w = 25.1;
+		t[0].h = 1.21; t[0].t = 7.2; 
+		t[0].mass = 27.2; t[0].massCenter[0] = 1.1;t[0].massCenter[1] = 1.2;
+		t[0].massCenter[2] = 1.3;
+		t[0].index = 10; t[0].leaf = true; t[0].cum_size = 31; t[0].child = 41;
+	
+		t[1].x = 1.23; t[1].y = 4.1; t[1].z = 1.41; t[1].w = 25.1;
+		t[1].h = 1.21; t[1].t = 7.2; 
+		t[1].mass = 27.2; t[1].massCenter[0] = 1.1;t[1].massCenter[1] = 1.2;
+		t[1].massCenter[2] = 1.3;
+		t[1].index = 10; t[1].leaf = true; t[1].cum_size = 31; t[1].child = 41;
 	}
-
-	MPI_Bcast(&tree,1,treeNodeStruct,0,MPI_COMM_WORLD);	
+             
+	MPI_Bcast(t,2,treeNodeStruct,0,MPI_COMM_WORLD);	
 	
 	if (rank == 1){
-		std::cout<<tree.x<<" "<<tree.y<<" "<<tree.z<<" "<<tree.w<<" "<<std::endl;
-		std::cout<<tree.h<<" "<<tree.t<<" "<<tree.mass<<" "<<tree.massCenter[0]<<" "<<std::endl;
-		std::cout<<tree.massCenter[1]<<" "<<tree.massCenter[2]<<" "<<tree.index<<" "<<tree.leaf<<" "<<std::endl;
-		std::cout<<tree.cum_size<<" "<<tree.child<<std::endl;
+		std::cout<<t[0].x<<" "<<t[0].y<<" "<<t[0].z<<" "<<t[0].w<<" "<<std::endl;
+		std::cout<<t[0].h<<" "<<t[0].t<<" "<<t[0].mass<<" "<<t[0].massCenter[0]<<" "<<std::endl;
+		std::cout<<t[0].massCenter[1]<<" "<<t[0].massCenter[2]<<" "<<t[0].index<<" "<<t[0].leaf<<" "<<std::endl;
+		std::cout<<t[0].cum_size<<" "<<t[0].child<<std::endl;
+		std::cout<<"\n";	
+		std::cout<<t[1].x<<" "<<t[1].y<<" "<<t[1].z<<" "<<t[1].w<<" "<<std::endl;
+		std::cout<<t[1].h<<" "<<t[1].t<<" "<<t[1].mass<<" "<<t[1].massCenter[0]<<" "<<std::endl;
+		std::cout<<t[1].massCenter[1]<<" "<<t[1].massCenter[2]<<" "<<t[1].index<<" "<<t[1].leaf<<" "<<std::endl;
+		std::cout<<t[1].cum_size<<" "<<t[1].child<<std::endl;
+	
 	}
 
 
