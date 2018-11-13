@@ -8,13 +8,21 @@ Dependencies:
 
 Basic Installation
 
+
+
+
 	wget https://teuben.github.io/nemo/install_nemo
 
 	chmod +x install_nemo
 
 
+	./install_nemo nemo=$HOME/opt/nemo
+
+		
 	(Run the following two commands again if you switch graphics cards because of pgplot)
-		./install_nemo nemo=$HOME/opt/nemo
+	
+		cd $HOME/opt/nemo/
+		./configure
 
 	(Run again if you start a new session)
 		source $HOME/opt/nemo/nemo_start.sh
@@ -46,20 +54,29 @@ Basic Installation
 		cd $HOME/opt/nemo
 		snapdiagplot in=~/r001.dat	
 		snapplot in=r001.dat
-	
-Convert our data format (table) to nemos data format (snapshot, binary)
 
+[Old]	
+Convert our data format (table) to nemos data format (snapshot, binary)
 	cd <our_repo>/src/utils/
 	./data_conversion <init_table_file> <init_snapshot_file>
 	
 
 Simulate with converted data
-
-	hackcode1 in=<init_snapshot_file> out=<result_snapshot_file> tstop=20 freqout=2 freq=40 eps=0.05 tol=0.7 options=mass,phase,phi > r001.log
+	hackcode1 in=<init_snapshot_file> out=<result_snapshot_file> tstop=10 freqout=10000 freq=10000 eps=0.05 tol=0.0 options=mass,phase,phi > r001.log
 
 
 Convert result (snapshot) to table
+	snapprint <result_snapshot_file> options=x,y,z,vx,vy,vz > <result_table_file>
 
-	snapprint <result_snapshot_file> options=m,x,y,z,vx,vy,vz > <result_table_file>
 
+[New]
+Create data from our naive program
+	./bin/naive/sequential/prog -i test/resources/testsets/tab128.txt -n 128 -t 1 -s 0.1
 
+Convert our data format (table) to nemos data format (snapshot, binary)
+	tabtos test/resources/testsets/tab128.txt test/resources/testsets/tab128.snap block1=mass,pos,vel
+Simulate with converted data
+	nbody0 test/resources/testsets/tab128.snap tab128.snap.out tcrit=1 eta=0.1 deltat=0.1
+
+Convert result (snapshot) to table
+	snapprint tab128.snap.out options=x,y,z,vx,vy,vz > tab128_nemo.txt.out 
