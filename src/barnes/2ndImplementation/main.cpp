@@ -96,7 +96,7 @@ int main(int argc, char** argv)
     writeDataToFile(N, r, u, file);
 
 
-    Serialization* tree = new Serialization(xc, yc, zc, w2, h2, t2);
+    Serialization* tree = new Serialization(0, 0, 0, 50, 50, 50);
 
     for (int i = 0; i < N; i++)
     {
@@ -133,7 +133,9 @@ int main(int argc, char** argv)
         }
 
         delete tree;
-        tree = new Serialization(xc, yc, zc, w2, h2, t2);
+        tree = new Serialization(0, 0, 0, 50, 50, 50);
+
+        //std::cout << "HEY" << std::endl;
         for (int i = 0; i < N; i++) {
             tree->insert(i, r[i][0], r[i][1], r[i][2], m[i]);
         }
