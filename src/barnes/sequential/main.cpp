@@ -4,6 +4,7 @@
 #include "io.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
+#include "boxComputation.hpp"
 #include "octree.hpp"
 #include <unistd.h>
 
@@ -59,35 +60,7 @@ int main(int argc, char** argv)
 
 //  the center of the parent node and the half width and height
     double xc, yc, zc, h2, w2, t2;
-    double maxX, minX, maxY, minY, maxZ, minZ;
-    
-    maxX = r[0][0];
-    minX = r[0][0];
-    maxY = r[0][1];
-    minY = r[0][1];
-    maxZ = r[0][2];
-    minZ = r[0][2];
-    for (int i = 1; i < N; i++) 
-    {
-        if (r[i][0] > maxX)
-            maxX = r[i][0];
-        if (r[i][0] < minX)
-            minX = r[i][0];
-        if (r[i][1] > maxY)
-            maxY = r[i][1];
-        if (r[i][1] < minY)
-            minY = r[i][1];
-        if (r[i][2] > maxZ)
-            maxZ = r[i][2];
-        if (r[i][2] < minZ)
-            minZ = r[i][2];
-    }
-    w2 = (maxX-minX+0.05)/2.;
-    xc = (maxX+minX)/2.;
-    h2 = (maxY-minY+0.05)/2.;
-    yc = (maxY+minY)/2.;
-    t2 = (maxZ-minZ+0.05)/2.;
-    zc = (maxZ+minZ)/2.;
+    boxComputation(N, r, xc, yc, zc, w2, h2, t2);
 
     ofstream file;
     file.open("output.dat");
@@ -124,6 +97,7 @@ int main(int argc, char** argv)
             u[j][2] += 0.5 * a[j][2] * dt;
         }
 
+        boxComputation(N, r, xc, yc, zc, w2, h2, t2);
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
 
         if (t % 200 == 0)
