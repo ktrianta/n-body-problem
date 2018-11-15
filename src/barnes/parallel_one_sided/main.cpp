@@ -4,7 +4,8 @@
 #include "io.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
-#include "octree.hpp"
+#include "boxComputation.hpp"
+#include "serialization.hpp"
 #include <unistd.h>
 #include <mpi.h>
 
@@ -18,6 +19,23 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD,&size);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 
+	Treenode defTree;
+	MPI_Datatype treeNodeStruct;
+	int blocklength[] = {10,1,1,2};
+	MPI_Datatype old_types[] = {MPI_DOUBLE,MPI_INT,MPI_C_BOOL,MPI_UNSIGNED_LONG};
+	MPI_Aint baseaddr,a1,a2,a3,a4;
+	MPI_Get_address(&defTree,&baseaddr);
+	MPI_Get_address(&defTree.x, &a1);
+	MPI_Get_address(&defTree.index,&a2);
+	MPI_Get_address(&defTree.leaf,&a3);
+	MPI_Get_address(&defTree.cum_size,&a4);
+	MPI_Aint indices[] = {a1-baseaddr,a2-baseaddr,a3-baseaddr,a4-baseaddr};
+	MPI_Type_create_struct(4,blocklength,indices,old_types,&treeNodeStruct);
+	MPI_Type_commit(&treeNodeStruct);
+
+
+	MPI_Win win;
+	MPI_Win_create_dynamic(MPI_INFO_NULL, MPI_COMM_WORLD, &win);
 
     int c;
     int N = 5;      // the number of particles
@@ -79,67 +97,32 @@ int main(int argc, char** argv)
 
 //  the center of the parent node and the half width and height
     double xc, yc, zc, h2, w2, t2;
-// coordinates for tab8096
-    double maxX, minX, maxY, minY, maxZ, minZ;
-
-    
-    maxX = r[0][0];
-    minX = r[0][0];
-    maxY = r[0][1];
-    minY = r[0][1];
-    maxZ = r[0][2];
-    minZ = r[0][2];
-    for (int i = 1; i < N; i++) 
-    {
-        if (r[i][0] > maxX)
-            maxX = r[i][0];
-        if (r[i][0] < minX)
-            minX = r[i][0];
-        if (r[i][1] > maxY)
-            maxY = r[i][1];
-        if (r[i][1] < minY)
-            minY = r[i][1];
-        if (r[i][2] > maxZ)
-            maxZ = r[i][2];
-        if (r[i][2] < minZ)
-            minZ = r[i][2];
-    }
-    w2 = (maxX-minX+0.05)/2.;
-    xc = (maxX+minX)/2.;
-    h2 = (maxY-minY+0.05)/2.;
-    yc = (maxY+minY)/2.;
-    t2 = (maxZ-minZ+0.05)/2.;
-    zc = (maxZ+minZ)/2.;
  
+    boxComputation(N, r, xc, yc, zc, w2, h2, t2);
+
     // split the domain in 64 parts
-//  if (rank == 0)
-//  {
-        for (int k = 0; k < 4; k++)
-        { 
-            for (int i = 0; i < 4; i++)
+    for (int k = 0; k < 4; k++)
+    { 
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
             {
-                for (int j = 0; j < 4; j++)
+            xcenter[j+4*i+16*k] = xc + (2.*i-3.)*w2/4.;
+            ycenter[j+4*i+16*k] = yc + (2.*j-3.)*h2/4.;
+            zcenter[j+4*i+16*k] = zc + (2.*k-3.)*t2/4.;
+                for (int n =0; n < N; n++)
                 {
-                xcenter[j+4*i+16*k] = xc + (2.*i-3.)*w2/4.;
-                ycenter[j+4*i+16*k] = yc + (2.*j-3.)*h2/4.;
-                zcenter[j+4*i+16*k] = zc + (2.*k-3.)*t2/4.;
-//              printf(" x = %f y = %f z= %f \n" , xcenter[j+4*i+16*k], ycenter[j+4*i+16*k], zcenter[j+4*i+16*k]);
-                    for (int n =0; n < N; n++)
+                    if (r[n][0] <= (xcenter[j+4*i+16*k] + w2/4) && (r[n][0] > xcenter[j+4*i+16*k] - w2/4) &&
+                        r[n][1] <= (ycenter[j+4*i+16*k] + h2/4) && (r[n][1] > ycenter[j+4*i+16*k] - h2/4) &&
+                        r[n][2] <= (zcenter[j+4*i+16*k] + t2/4) && (r[n][2] > zcenter[j+4*i+16*k] - t2/4))
                     {
-                        if (r[n][0] <= (xcenter[j+4*i+16*k] + w2/4) && (r[n][0] > xcenter[j+4*i+16*k] - w2/4) &&
-                            r[n][1] <= (ycenter[j+4*i+16*k] + h2/4) && (r[n][1] > ycenter[j+4*i+16*k] - h2/4) &&
-                            r[n][2] <= (zcenter[j+4*i+16*k] + t2/4) && (r[n][2] > zcenter[j+4*i+16*k] - t2/4))
-                        {
-                            rdecomposed[j+4*i+16*k].push_back(n); 
-//                          printf("particle tad %d and how many particles %d \n", rdecomposed[j+4*i+16*k][pNumber[j+4*i+16*k]],j+4*i+16*k );  
-                            pNumber[j+4*i+16*k]++; 
-                        }
+                        rdecomposed[j+4*i+16*k].push_back(n); 
+                        pNumber[j+4*i+16*k]++; 
                     }
-//                  printf(" print number in tree %d, %d \n", pNumber[j+4*i+16*k], rank);
                 }
             }
         }
-//  }
+    }
 
     
 
@@ -186,23 +169,42 @@ int main(int argc, char** argv)
     for (int i = 1; i < localSubdomains[rank]; i++)
     {
         offsetParticles[i] = offsetParticles[i-1]+ pNumber[i-1 + offset[rank]];
-//        printf("%d  %d \n", offsetParticles[i], rank); 
     }
     
-
-
-    Octree *tree[localSubdomains[rank]]; 
     sim::data_type (*u_local)[3] = new sim::data_type[localNumber[rank]][3];
     sim::data_type (*r_local)[3] = new sim::data_type[localNumber[rank]][3];
     sim::data_type (*a_local)[3] = new sim::data_type[localNumber[rank]][3];
 
+
+// Construction of trees for every rank
+
+    double sum = 0; // is the number of nodes in all trees of a processor
+ 
+    Serialization *tree[localSubdomains[rank]]; 
     for(int i = offset[rank]; i < localSubdomains[rank] +offset[rank]; i++)
     {
-        tree[i]= new Octree(r, m, pNumber[i], xcenter[i], ycenter[i], zcenter[i], w2/4,h2/4,t2/4);
-//        printf(" i = %d %d \n", i, rank); 
+        tree[i]= new Serialization(xcenter[i], ycenter[i], zcenter[i], w2/4,h2/4,t2/4);
+        for(int j = 0; j < pNumber[i]; j++)
+            tree[i]->insert(rdecomposed[i][j], r[j][0], r[j][1], r[j][2], m[j]);
+            sum += tree[i]->size;
     }
-   
-//    Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
+  
+
+    MPI_Aint my_displ[localSubdomains[rank]];
+    MPI_Aint ** target_disp = new MPI_Aint*[localSubdomains[rank]];
+
+    for (int i = 0; i < localSubdomains[rank] ;i++){
+        target_disp[i] = new MPI_Aint[tree[i]->size];
+        }
+
+    for(int i = 0; i < localSubdomains[rank]; i++)
+    {
+//      MPI_Alloc_mem(tree[i]->size*sizeof(struct Treenode), MPI_INFO_NULL, &tree[i]->treeArray);
+        MPI_Win_attach(win,tree[i]->treeArray,tree[i]->size*sizeof(struct Treenode));
+
+        MPI_Get_address(tree[i]->treeArray, &my_displ[i]); 
+        MPI_Allgather(&my_displ[i], localSubdomains[rank], MPI_AINT, target_disp, localSubdomains[rank], MPI_AINT, MPI_COMM_WORLD);
+    }   
 
     const int Ntimesteps = T/dt + 1;
 
@@ -211,8 +213,6 @@ int main(int argc, char** argv)
     {
         for (int j = 0; j < pNumber[i]; j++)
         {
-            printf("%d , %d , %d  \n", rank, j+offsetParticles[i-offset[rank]], rdecomposed[i][j]);
-//          printf("%d , %d , %d %d \n", rank, i, j, offsetParticles[i]);
             u_local[j+offsetParticles[i-offset[rank]]][0] = u[rdecomposed[i][j]][0];
             u_local[j+offsetParticles[i-offset[rank]]][1] = u[rdecomposed[i][j]][1];
             u_local[j+offsetParticles[i-offset[rank]]][2] = u[rdecomposed[i][j]][2];
@@ -276,6 +276,14 @@ int main(int argc, char** argv)
 
     printf("time= %f \n", time);
     */
-    MPI_Finalize();
+    for(int i = 0; i < localSubdomains[rank]; i++)
+    {
+        MPI_Win_detach(win,tree[i]->treeArray);
+        free(tree[i]->treeArray);
+    }   
+    free(target_disp);
+	MPI_Win_free(&win);
+	MPI_Type_free(&treeNodeStruct);
+	MPI_Finalize();
     return 0;
 }

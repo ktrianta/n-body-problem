@@ -2,7 +2,7 @@
 add_definitions(-DOMPI_SKIP_MPICXX)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
-set(SOURCE_FILES main.cpp octree.cpp octree.hpp)
+set(SOURCE_FILES main.cpp serialization.cpp serialization.hpp)
 add_executable(barnes-parallel-one-sided ${SOURCE_FILES} ${UTILS_SOURCES})
 target_link_libraries(barnes-parallel-one-sided ${MPI_LIBRARIES})
 set_target_properties(barnes-parallel-one-sided PROPERTIES OUTPUT_NAME prog)
