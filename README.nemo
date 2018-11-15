@@ -95,3 +95,36 @@ Simulate with converted data
 Convert result (snapshot) to table
         snapprint figure8.snap.out options=x,y,z,vx,vy,vz > figure8_nemo.txt.out
 
+
+
+
+<shape>=ball,cusp,sphere
+<N>=100,500,1000
+
+[Make configuration]
+Make configuration using mkconfig
+	mkconfig out=test/resources/testsets/galaxy<N>_<shape>.snap shape=<shape> nbody=<N> seed=0 zerocm=true
+
+Convert from snap to table
+	snapprint test/resources/testsets/galaxy<N>_<shape>.snap options=m,x,y,z,vx,vy,vz > test/resources/testsets/galaxy<N>_<shape>.txt
+
+3D Plot (optional)
+	gnuplot
+	splot "test/resources/testsets/galaxy<N>_<shape>.txt" u 2:3:4
+
+
+[Run tests with made configurations]
+Run with our sequential code and move to default directory
+	./bin/naive/sequential/prog -i test/resources/testsets/galaxy<N>_<shape>.txt -n <N> -t 1 -s 0.00001
+	mv galaxy<N>_<shape>.txt.out test/resources/expected/galaxy<N>_<shape>.txt.out
+
+Run with nemo tool hackcode1
+	hackcode1 in=test/resources/testsets/galaxy<N>_<shape>.snap out=test/resources/expected/galaxy<N>_<shape>.snap.out nbody=<N> tstop=1 freqout=200 freq=10000 tol=0 eps=0.001 > junk
+
+Convert from snap to tab
+	snapprint test/resources/expected/galaxy<N>_<shape>.snap.out options=x,y,z,vx,vy,vz > test/resources/expected/galaxy<N>_<shape>_nemo.txt.out
+
+Plot in 3D (optional)
+	gnuplot
+	splot "test/resources/expected/galaxy<N>_<shape>_nemo.txt.out", "test/resources/expected/galaxy<N>_<shape>.txt.out"
+
