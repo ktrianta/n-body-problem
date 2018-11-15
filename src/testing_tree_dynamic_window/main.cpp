@@ -52,43 +52,58 @@ int main(int argc, char** argv){
 	MPI_Win win;
 	MPI_Win_create_dynamic(MPI_INFO_NULL, MPI_COMM_WORLD, &win);
 
+	int NT = 1;
+	int NNPT=1;
 
-	Treenode* t;
+	Treenode **t = new Treenode*[NNPT];
+	for (int i=0; i<NNPT; i++)
+		t[i] = new Treenode[NT];
+
+	MPI_Aint* my_disp = new MPI_Aint[NT];
+
+	MPI_Aint **target_disp = new MPI_Aint*[NT];
+	for (int i=0; i<NT ; i++){
+		target_disp[i] = new MPI_Aint[comm_size];
+		MPI_Get_address(&t[i],&my_disp[i]);
+	}	
+
+	MPI_Allgather(my_disp, NT, MPI_AINT, &target_disp[0][0], NT, MPI_AINT, MPI_COMM_WORLD);
 	
-	MPI_Alloc_mem(sizeof(struct Treenode), MPI_INFO_NULL, &t);
-	MPI_Win_attach(win,t,sizeof(struct Treenode));
- 	
-	MPI_Aint my_displ;
-	MPI_Aint * target_displ = (MPI_Aint *) malloc(sizeof(MPI_Aint)*comm_size);
-	MPI_Get_address(t, &my_displ); 
-	MPI_Allgather(&my_displ, 1, MPI_AINT, target_displ, 1, MPI_AINT, MPI_COMM_WORLD);
+	for (int i=0; i<NT; i++){
+		MPI_Alloc_mem(NNPT*sizeof(struct Treenode), MPI_INFO_NULL, &t[i]);
+		MPI_Win_attach(win,t[i],sizeof(struct Treenode)); 
+	}
+	
+
+//	MPI_Aint my_displ[2];
+//	MPI_Aint (*target_displ)[2] = new MPI_Aint[comm_size][2];
+//	MPI_Get_address(t,&my_displ[0]);
+//	MPI_Get_address(t1,&my_displ[1]);
+
 	if (rank == 0){
-		t[0].x = 1.23; t[0].y = 4.1; t[0].z = 1.41; t[0].w = 25.1;
-		t[0].h = 1.21; t[0].t = 7.2;
-		t[0].mass = 27.2; t[0].massCenter[0] = 1.1;t[0].massCenter[1] = 1.2;
-		t[0].massCenter[2] = 1.3;
-		t[0].index = 10; t[0].leaf = true; t[0].cum_size = 31; t[0].child = 41;
+		t[0][0].x = 1.23; t[0][0].y = 4.1; t[0][0].z = 1.41; t[0][0].w = 25.1;
+		t[0][0].h = 1.21; t[0][0].t = 7.2;
+		t[0][0].mass = 27.2; t[0][0].massCenter[0] = 1.1;t[0][0].massCenter[1] = 1.2;
+		t[0][0].massCenter[2] = 1.3;
+		t[0][0].index = 10; t[0][0].leaf = true; t[0][0].cum_size = 31; t[0][0].child = 41;
 	}
 
 	MPI_Win_fence(0,win);
 	if (rank == 1){
-		MPI_Get(t,1,treeNodeStruct,0,target_displ[0],1,treeNodeStruct,win);
+		MPI_Get(&t[0][0],1,treeNodeStruct,0,target_disp[0][0],1,treeNodeStruct,win);
 	}	
 	MPI_Win_fence(0,win);
 	
 	if (rank == 1){
-		std::cout<<t[0].x<<" "<<t[0].y<<" "<<t[0].z<<" "<<t[0].w<<" "<<std::endl;
-		std::cout<<t[0].h<<" "<<t[0].t<<" "<<t[0].mass<<" "<<t[0].massCenter[0]<<" "<<std::endl;
-		std::cout<<t[0].massCenter[1]<<" "<<t[0].massCenter[2]<<" "<<t[0].index<<" "<<t[0].leaf<<" "<<std::endl;
-		std::cout<<t[0].cum_size<<" "<<t[0].child<<std::endl;
+		std::cout<<t[0][0].x<<" "<<t[0][0].y<<" "<<t[0][0].z<<" "<<t[0][0].w<<" "<<std::endl;
+		std::cout<<t[0][0].h<<" "<<t[0][0].t<<" "<<t[0][0].mass<<" "<<t[0][0].massCenter[0]<<" "<<std::endl;
+		std::cout<<t[0][0].massCenter[1]<<" "<<t[0][0].massCenter[2]<<" "<<t[0][0].index<<" "<<t[0][0].leaf<<" "<<std::endl;
+		std::cout<<t[0][0].cum_size<<" "<<t[0][0].child<<std::endl;
 	}
-	
-	
-	
 	
 	MPI_Win_detach(win,t);free(t);
 	MPI_Win_free(&win);
-	free(target_displ);
+	free(target_disp);free(my_disp);
 	MPI_Type_free(&treeNodeStruct);
 	MPI_Finalize();
 
