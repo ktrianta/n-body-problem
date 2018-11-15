@@ -20,7 +20,15 @@ r_other = sqrt(rx_other**2+ry_other**2+rz_other**2)
 v_me = sqrt(vx_me**2+vy_me**2+vz_me**2)
 v_other = sqrt(vx_other**2+vy_other**2+vz_other**2)
 
-difference_error_r =  100 * 2 * abs(r_me - r_other) / ( r_me + r_other )
+difference_error_r = zeros(len(r_me))
+for i in range(0,len(r_me)):
+    diffr = r_me[i] + r_other[i]
+    if ( diffr == 0 ):
+        difference_error_r[i] = 0
+    else: 
+        difference_error_r[i] =  100 * 2 * abs(r_me[i] - r_other[i]) / diffr 
+
+
 L2_error_r = LA.norm(difference_error_r, 2)     # sqrt(sum(e_i),1<=i<=num_particules)
 LInf_error_r = LA.norm(difference_error_r, Inf) # max [e_i], 1<=i<=num_particules
 
