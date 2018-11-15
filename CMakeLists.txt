@@ -58,6 +58,7 @@ set(BARNES_SEQUENTIAL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/sequentia
 set(BARNES_PARALLEL_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/parallel)
 set(BARNES_PARALLEL_ONE_SIDED_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/parallel_one_sided)
 set(BARNES_2NDIMPLEMENTATION_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/2ndImplementation)
+set(BARNES_PARALLEL_SERIALIZATION_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/parallel_serialization)
 
 # Project Subdirectories
 add_subdirectory(${SRC_DIR})
