@@ -52,16 +52,27 @@ int main(int argc, char** argv){
 	MPI_Win win;
 	MPI_Win_create_dynamic(MPI_INFO_NULL, MPI_COMM_WORLD, &win);
 
+	int NT;
+	int NNPT;
 
-	Treenode* t;
-	
+	Treenode ** t = new Treenode*[NNPT];
+	for (int i=0; i<NNPT; i++)
+		Treenode*[i] = new Treenode[NT];
+
+
+
 	MPI_Alloc_mem(sizeof(struct Treenode), MPI_INFO_NULL, &t);
 	MPI_Win_attach(win,t,sizeof(struct Treenode));
- 	
-	MPI_Aint my_displ;
-	MPI_Aint * target_displ = (MPI_Aint *) malloc(sizeof(MPI_Aint)*comm_size);
-	MPI_Get_address(t, &my_displ); 
-	MPI_Allgather(&my_displ, 1, MPI_AINT, target_displ, 1, MPI_AINT, MPI_COMM_WORLD);
+ 
+	MPI_Alloc_mem(sizeof(struct Treenode), MPI_INFO_NULL, &t1);
+	MPI_Win_attach(win,t1,sizeof(struct Treenode));
+ 
+	MPI_Aint my_displ[2];
+	MPI_Aint (*target_displ)[2] = new MPI_Aint[comm_size][2];
+	MPI_Get_address(t,&my_displ[0]);
+	MPI_Get_address(t1,&my_displ[1]);
+
+	MPI_Allgather(&my_displ, 2, MPI_AINT, target_displ, 2, MPI_AINT, MPI_COMM_WORLD);
 	if (rank == 0){
 		t[0].x = 1.23; t[0].y = 4.1; t[0].z = 1.41; t[0].w = 25.1;
 		t[0].h = 1.21; t[0].t = 7.2;
@@ -72,7 +83,7 @@ int main(int argc, char** argv){
 
 	MPI_Win_fence(0,win);
 	if (rank == 1){
-		MPI_Get(t,1,treeNodeStruct,0,target_displ[0],1,treeNodeStruct,win);
+		MPI_Get(t,1,treeNodeStruct,0,target_displ[0][0],1,treeNodeStruct,win);
 	}	
 	MPI_Win_fence(0,win);
 	
