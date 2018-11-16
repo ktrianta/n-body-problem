@@ -62,10 +62,9 @@ int main(int argc, char** argv)
     double xc, yc, zc, h2, w2, t2;
     boxComputation(N, r, xc, yc, zc, w2, h2, t2);
 
-    ofstream file;
-    file.open("output.dat");
-
-    writeDataToFile(N, r, u, file);
+    std::ofstream out_file;
+    openFileToWrite(out_file, params.out_filename, params.out_dirname);
+    writeDataToFile(N, r, u, out_file);
 
     Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
 
@@ -100,9 +99,8 @@ int main(int argc, char** argv)
         boxComputation(N, r, xc, yc, zc, w2, h2, t2);
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
 
-        if (t % 200 == 0)
-        {
-            writeDataToFile(N, r, u, file);
+        if (t % 200 == 0) {
+            writeDataToFile(N, r, u, out_file);
         }
     }
 

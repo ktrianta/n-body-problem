@@ -61,7 +61,8 @@ int main(int argc, char** argv) {
         initializePositionOnSphere(N, r);
     }
 
-    std::ofstream out_file = openFileToWrite(params.out_filename, params.out_dirname);
+    std::ofstream out_file;
+    openFileToWrite(out_file, params.out_filename, params.out_dirname);
     writeDataToFile(params.n, r, u, out_file);
 
     computeAcceleration(params.n, r, a, m);

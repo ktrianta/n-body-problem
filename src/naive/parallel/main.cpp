@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 
     std::ofstream out_file;
     if (rank ==0) {
-        out_file = openFileToWrite(params.out_filename, params.out_dirname);
+        openFileToWrite(out_file, params.out_filename, params.out_dirname);
         writeDataToFile(params.n, r, u, out_file);
     }
 

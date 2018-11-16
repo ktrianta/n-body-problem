@@ -6,11 +6,9 @@ std::string baseName(std::string const& path)
     return path.substr(path.find_last_of("/") + 1);
 }
 
-std::ofstream openFileToWrite(std::string filename, std::string dirname) {
-    std::ofstream fs;
+void openFileToWrite(std::ofstream& fs, std::string filename, std::string dirname) {
     std::string out_filename = dirname + "/" + baseName(filename) + ".out";
     fs.open(out_filename);
-    return fs;
 }
 
 
