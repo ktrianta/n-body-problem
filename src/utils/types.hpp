@@ -26,6 +26,7 @@ namespace sim {
         size_t n;                                   // number of particles
         data_type t;                                // simulation duration
         data_type dt;                               // time step duration
+        data_type theta;                            // barnes hut theta
 
         std::string in_filename;
         std::string out_filename;
