@@ -55,3 +55,8 @@ PATH=$HOME/opt/bin:$PATH
 # Source .bashrc
 source .bashrc
 ```
+
+## Loading required Modules on the Cluster
+```bash
+./cluster.sh
+```
