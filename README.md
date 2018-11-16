@@ -1,6 +1,6 @@
 # N Body Problem
 
-## Building The Project
+## Building the Project
 
 ```bash
 # Build out of source in build dir
@@ -35,20 +35,19 @@ rm -rf bin
 Run plot.text as 'gnuplot -e "n=#P" plot.text'
 where #P should be the same as the -n execution option
 
-## Setting up the environment on the cluster
+## Setting up the Environment on the Cluster
 ```bash
 # Install OpenMPI in $HOME/opt
 cd $HOME
 mkdir opt
+
 wget https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.gz
 tar xf openmpi-4.0.0.tar.gz
+
 cd openmpi-4.0.0
 ./configure --prefix=$HOME/opt
 make -j 4 all
 make install
-
-# Update the path
-vim .bashrc
 
 # Set the new path in .bashrc
 PATH=$HOME/opt/bin:$PATH
