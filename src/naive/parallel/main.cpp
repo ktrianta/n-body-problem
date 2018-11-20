@@ -93,31 +93,29 @@ int main(int argc, char** argv) {
     for (size_t i = 0; i < size; i++) {
         local_N[i] = local_N_int;
         if (counter < rem) {
-                local_N[i] += 1;
-                counter ++;
+            local_N[i] += 1;
+            counter ++;
         }
         local_Nx3[i] = local_N[i]*3;
     }
     
     sim::data_type (*r_local)[3] = new sim::data_type[local_N[rank]][3];
 
-    size_t offset[size];
-    offset[0] = 0;
-    int offset_x3[size];
-    offset_x3[0] = 0;
+    size_t offset[size]; offset[0] = 0;
+    int offset_x3[size]; offset_x3[0] = 0;
 
     for (size_t i = 1; i < size; i++) {
         offset[i] = offset[i-1] + local_N[i-1];
         offset_x3[i] = offset_x3[i-1] + local_Nx3[i-1];
     }
 
-    for (size_t i = 0; i < local_N[rank]; i++) {
-        r_local[i][0] = r[offset[rank]+i][0];
-        r_local[i][1] = r[offset[rank]+i][1];
-        r_local[i][2] = r[offset[rank]+i][2];
+    for (size_t i = 0, j = offset[rank], end = local_N[rank]; i < end; i++, j++) {
+        r_local[i][0] = r[j][0];
+        r_local[i][1] = r[j][1];
+        r_local[i][2] = r[j][2];
     }
 
-    computeAcceleration(N, r, a, m, local_N[rank], offset[rank]); // NEEDS TO BE PARALLELIZED
+    computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
 
     for (size_t t = 0; t < timesteps; t++) {
         for (size_t j = 0, idx = offset[rank]; j < local_N[rank]; j++, idx++) {
@@ -129,11 +127,12 @@ int main(int argc, char** argv) {
             r_local[j][2] += u[idx][2] * dt;
         }
         
-        MPI_Allgatherv(&(r_local[0][0]),local_N[rank]*3,MPI_DOUBLE,&(r[0][0]),local_Nx3, offset_x3, MPI_DOUBLE,MPI_COMM_WORLD);
+        MPI_Allgatherv(&(r_local[0][0]), local_N[rank]*3, MPI_DOUBLE, &(r[0][0]),
+            local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
 
         computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
 
-        for (size_t j = 0, idx = offset[rank]; j < local_N[rank]; j++, idx++) {
+        for (size_t idx = offset[rank], end = offset[rank] + local_N[rank]; idx < end; idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
             u[idx][1] += 0.5 * a[idx][1] * dt;
             u[idx][2] += 0.5 * a[idx][2] * dt;
