@@ -53,7 +53,7 @@ public:
     bool insert(int new_index);
     void subdivide();
     void print();
-    void computeAcceleration(int idxGlobal, int idxLocal, double (*)[3], double (*)[3], double g, double theta);
+    void computeAcceleration(int idxGlobal, double (*)[3], double (*)[3], double g, double theta);
 private:
     void initialization(Octree* inp_parent, double (*r)[3], double* m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t);
     void fill(int N);
