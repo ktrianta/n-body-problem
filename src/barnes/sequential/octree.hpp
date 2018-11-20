@@ -1,39 +1,53 @@
 #ifndef OCTREE_H
 #define OCTREE_H
 
-class Rectangle{
+#include "types.hpp"
+
+class Rectangle {
     public:
-        double x; // the x-center of the rectangle
-        double y; // the y-center of the rectangle
-        double z; // the z-center of the rectangle
-        double h; // the height/2 of the rectangle
-        double w; // the width/2  of the rectangle
-        double t; // the 3rd dimension/2  of the rectangle
-        bool containPoint(double point[]);
+        sim::data_type x; // the x-center of the rectangle
+        sim::data_type y; // the y-center of the rectangle
+        sim::data_type z; // the z-center of the rectangle
+        sim::data_type w; // the width/2  of the rectangle
+        sim::data_type h; // the height/2 of the rectangle
+        sim::data_type t; // the depth/2  of the rectangle
+
+        Rectangle(sim::data_type px, sim::data_type py, sim::data_type pz,
+                  sim::data_type pw, sim::data_type ph, sim::data_type pt);
+        bool containPoint(const sim::data_type point[]);
 };
 
+class Octree {
+public:
+    // Static fields
+    // Need to be initialized by caller
+    static sim::data_type (*r)[3];
+    static sim::data_type (*a)[3];
+    static sim::data_type *m;
+    static sim::data_type g;
+    static sim::data_type theta;
 
-using namespace std;
+    // Methods
+    Octree(size_t N, sim::data_type px, sim::data_type py, sim::data_type pz, sim::data_type pw,
+           sim::data_type ph, sim::data_type pt);
+    Octree(sim::data_type px, sim::data_type py, sim::data_type pz, sim::data_type pw,
+           sim::data_type ph, sim::data_type pt);
 
-class Octree{
+    ~Octree();
 
-    static const int dimension = 3;
-    double centerMass[3];
-    double cum_Mass;
-   
+    void print();
+    void computeAcceleration(int idx);
+private:
+    static const size_t dimension = 3;
 
     Rectangle boundary;
+    sim::data_type massCenter[dimension];
+    sim::data_type mass;
     int index;
-    double (*data)[3];
-    double* mass;
-    
-//   Parent node
-    Octree* parent;
     bool leaf;
-    int size;
-    int cum_size;
+    size_t cumSize;
 
-// Children
+    // Children
     Octree* fnorthWest;
     Octree* fnorthEast;
     Octree* fsouthWest;
@@ -42,24 +56,11 @@ class Octree{
     Octree* bnorthEast;
     Octree* bsouthWest;
     Octree* bsouthEast;
-    
 
-// private functions
-public:
-    Octree(double (*r)[3], double* m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
-    Octree(Octree* inp_parent, double (*r)[3], double* m, int N, double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
-    Octree(Octree* inp_parent, double (*r)[3], double* m,  double inp_x, double inp_y, double inp_z, double inp_hw, double inp_hh, double inp_ht);
-    ~Octree();
+    // Methods
+    void fill(size_t N);
     bool insert(int new_index);
     void subdivide();
-    void print();
-    void computeAcceleration(int idx, double (*)[3], double (*)[3], double g, double theta);
-private:
-    void initialization(Octree* inp_parent, double (*r)[3], double* m, double inp_x, double inp_y, double inp_z, double inp_w, double inp_h, double inp_t);
-    void fill(int N);
 };
-
-
-
 
 #endif  // OCTREE_H
