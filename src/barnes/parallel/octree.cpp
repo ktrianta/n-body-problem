@@ -196,7 +196,7 @@ void Octree::print()
 }
 
 
-void Octree::computeAcceleration(int idxGlobal, int idxLocal, double (*r)[3], double (*a)[3], double g, double theta) {
+void Octree::computeAcceleration(int idxGlobal, double (*r)[3], double (*a)[3], double g, double theta) {
     if (cum_size == 0 || (leaf == true && size == 1 && index == idxGlobal)) {
         return;
     }
@@ -215,36 +215,34 @@ void Octree::computeAcceleration(int idxGlobal, int idxLocal, double (*r)[3], do
         double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
         double denom = r2 * sqrt(r2);
         double a_i = -g * cum_Mass / denom;
-        a[idxLocal][0] -= a_i * rji[0];
-        a[idxLocal][1] -= a_i * rji[1];
-        a[idxLocal][2] -= a_i * rji[2];
+        a[idxGlobal][0] -= a_i * rji[0];
+        a[idxGlobal][1] -= a_i * rji[1];
+        a[idxGlobal][2] -= a_i * rji[2];
         return;
     }
     if (leaf == true) {
-//        for(int i = 0; i < size; i++) {
-            int idx_i = index;
-            if (idxGlobal == idx_i) return;
+        int idx_i = index;
+        if (idxGlobal == idx_i) return;
 
-            double rji[3];
-            rji[0] = r[idx_i][0] - r[idxGlobal][0];
-            rji[1] = r[idx_i][1] - r[idxGlobal][1];
-            rji[2] = r[idx_i][2] - r[idxGlobal][2];
-            double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-            double denom = r2 * sqrt(r2);
-            double a_i = -g * mass[idx_i] / denom;
-            a[idxLocal][0] -= a_i * rji[0];
-            a[idxLocal][1] -= a_i * rji[1];
-            a[idxLocal][2] -= a_i * rji[2];
-//        }
+        double rji[3];
+        rji[0] = r[idx_i][0] - r[idxGlobal][0];
+        rji[1] = r[idx_i][1] - r[idxGlobal][1];
+        rji[2] = r[idx_i][2] - r[idxGlobal][2];
+        double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
+        double denom = r2 * sqrt(r2);
+        double a_i = -g * mass[idx_i] / denom;
+        a[idxGlobal][0] -= a_i * rji[0];
+        a[idxGlobal][1] -= a_i * rji[1];
+        a[idxGlobal][2] -= a_i * rji[2];
     } else {
-        fnorthWest->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
-        fnorthEast->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
-        fsouthWest->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
-        fsouthEast->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
-        bnorthWest->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
-        bnorthEast->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
-        bsouthWest->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
-        bsouthEast->computeAcceleration(idxGlobal, idxLocal, r, a, g, theta);
+        fnorthWest->computeAcceleration(idxGlobal, r, a, g, theta);
+        fnorthEast->computeAcceleration(idxGlobal, r, a, g, theta);
+        fsouthWest->computeAcceleration(idxGlobal, r, a, g, theta);
+        fsouthEast->computeAcceleration(idxGlobal, r, a, g, theta);
+        bnorthWest->computeAcceleration(idxGlobal, r, a, g, theta);
+        bnorthEast->computeAcceleration(idxGlobal, r, a, g, theta);
+        bsouthWest->computeAcceleration(idxGlobal, r, a, g, theta);
+        bsouthEast->computeAcceleration(idxGlobal, r, a, g, theta);
     }
 }
 
