@@ -7,8 +7,7 @@
 #include "initialization.hpp"
 #include <xmmintrin.h>
 
-void * operator new(size_t size) throw(std::bad_alloc)
-{       // try to allocate size bytes
+void * operator new(size_t size) throw(std::bad_alloc){
    void *p;
    if ((p = _mm_malloc(size,16)) == 0){
         static const std::bad_alloc nomem;
