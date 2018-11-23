@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     }
 
     for (int j = 0; j < N; j++) {
-        tree->computeAcceleration(0, j, r, a, sim::g, theta);
+        tree->computeAcceleration(j, r[j], a[j], sim::g, theta);
     }
 
     const size_t Ntimesteps = params.t / params.dt + 1;
@@ -59,24 +59,22 @@ int main(int argc, char** argv) {
             r[j][0] += u[j][0] * dt;
             r[j][1] += u[j][1] * dt;
             r[j][2] += u[j][2] * dt;
-
-            a[j][0] = 0;
-            a[j][1] = 0;
-            a[j][2] = 0;
-         
-            tree->computeAcceleration(0, j, r, a, sim::g, theta);
-
-            u[j][0] += 0.5 * a[j][0] * dt;
-            u[j][1] += 0.5 * a[j][1] * dt;
-            u[j][2] += 0.5 * a[j][2] * dt;
         }
 
         boxComputation(N, r, xc, yc, zc, w2, h2, t2);
         delete tree;
         tree = new Serialization(xc, yc, zc, w2, h2, t2);
-
         for (size_t i = 0; i < N; i++) {
             tree->insert(i, r[i][0], r[i][1], r[i][2], m[i]);
+        }
+        std::fill(&a[0][0], &a[0][0] + N*3, 0);
+
+        for (size_t j = 0; j < N; j++) {
+            tree->computeAcceleration(j, r[j], a[j], sim::g, theta);
+
+            u[j][0] += 0.5 * a[j][0] * dt;
+            u[j][1] += 0.5 * a[j][1] * dt;
+            u[j][2] += 0.5 * a[j][2] * dt;
         }
 
         if (t % 200 == 0) {
