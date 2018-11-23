@@ -67,3 +67,15 @@ void writeDataToFile(int N, dtype (*a)[3], dtype (*b)[3], std::ofstream& fs) {
            << b[i][2] << "\n";
     }
 }
+
+
+void writeDataToFile(int N, dtype (*a)[7], std::ofstream& fs) {
+    for (size_t i = 0; i < N; i++) {
+        fs << a[i][1] << "    "
+           << a[i][2] << "    "
+           << a[i][3] << "    "
+           << a[i][4] << "    "
+           << a[i][5] << "    "
+           << a[i][6] << "\n";
+    }
+}
