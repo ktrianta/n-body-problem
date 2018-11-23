@@ -19,10 +19,10 @@ int comp2(const void *arg1, const void *arg2) {
     return (lhs[2] < rhs[2]) ? -1 : ((lhs[2] > rhs[2]) ? 1 : 0);
 }
 
-void sort1(int (*ar)[3], const size_t size, const size_t p);
-void sort2(int (*ar)[3], const size_t size, const size_t p);
+void sort1(int (*ar)[7], const size_t size, const size_t p);
+void sort2(int (*ar)[7], const size_t size, const size_t p);
 
-void p_sort(int (*ar)[3], const size_t size, const size_t p) {
+void p_sort(int (*ar)[7], const size_t size, const size_t p) {
     if (p == 1) return;
 
     std::qsort(ar, size, sizeof(*ar), comp0);
@@ -30,7 +30,7 @@ void p_sort(int (*ar)[3], const size_t size, const size_t p) {
     sort1(ar + size/2, size/2, p/2);
 }
 
-void sort1(int (*ar)[3], const size_t size, const size_t p) {
+void sort1(int (*ar)[7], const size_t size, const size_t p) {
     if (p == 1) return;
 
     std::qsort(ar, size, sizeof(*ar), comp1);
@@ -38,7 +38,7 @@ void sort1(int (*ar)[3], const size_t size, const size_t p) {
     sort2(ar + size/2, size/2, p/2);
 }
 
-void sort2(int (*ar)[3], const size_t size, const size_t p) {
+void sort2(int (*ar)[7], const size_t size, const size_t p) {
     if (p == 1) return;
 
     std::qsort(ar, size, sizeof(*ar), comp2);
