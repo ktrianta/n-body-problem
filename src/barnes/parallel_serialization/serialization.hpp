@@ -33,6 +33,7 @@ public:
     Treenode *treeArray;
 
     Serialization(double px, double py, double pz, double pw, double ph, double pt);
+    Serialization();
     ~Serialization();
 
     void insert(int j, double rx, double ry, double rz, double m);

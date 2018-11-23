@@ -41,6 +41,11 @@ Serialization::Serialization(double px, double py, double pz, double pw, double 
     position = 0;
 }
 
+Serialization::Serialization()
+    : size(0), treeArray(NULL)
+    {}
+
+
 Serialization::~Serialization() {
     delete[] treeArray;
 }
@@ -49,13 +54,10 @@ void Serialization::insert(int j, double rx, double ry, double rz, double m) {
     queue<size_t> list;
     list.push(0);
 
-    //std::cout << " ---------------- insert " << j << std::endl;
     while (!list.empty()) {
         size_t f = list.front();
-        //std::cout << "popping " << f << std::endl;
         list.pop();
 
-        //std::cout << list.size() << std::endl;
 
         const double x = treeArray[f].x;
         const double y = treeArray[f].y;
@@ -74,7 +76,6 @@ void Serialization::insert(int j, double rx, double ry, double rz, double m) {
         size_t cum_size = ++treeArray[f].cum_size;
 
         if (treeArray[f].leaf && cum_size == 1) {
-            //std::cout << "leaf " << f << " index " << j << std::endl;
             treeArray[f].index = j;
             treeArray[f].massCenter[0] = rx;
             treeArray[f].massCenter[1] = ry;
@@ -84,7 +85,6 @@ void Serialization::insert(int j, double rx, double ry, double rz, double m) {
         }
 
         if (treeArray[f].leaf) {
-            //std::cout << "sub " << f << " index " << treeArray[f].index<< std::endl;
             subdivide(f);
             double mult1 = (double) (cum_size - 1) / cum_size;
             double mult2 = 1.0 / (double) cum_size;
@@ -109,7 +109,6 @@ void Serialization::insert(int j, double rx, double ry, double rz, double m) {
 }
 
 bool Serialization::insertInLeaf(int current, int index, double rx, double ry, double rz, double m) {
-    //std::cout << "!!!" << std::endl;
     const double x = treeArray[current].x;
     const double y = treeArray[current].y;
     const double z = treeArray[current].z;
@@ -130,15 +129,11 @@ bool Serialization::insertInLeaf(int current, int index, double rx, double ry, d
     treeArray[current].massCenter[2] = rz;
     treeArray[current].mass = m;
     treeArray[current].index = index;
-    //std::cout << "index " << treeArray[current].index << " position " << rx << " " << ry << " " << rz << std::endl;
-    //std::cout << x << " " << y << " " << z << " " << w << " " << h << " " << t << std::endl;
-    //std::cout << index << " in leaf " << current << std::endl;
     return true;
 }
 
 void Serialization::subdivide(int current) {
     if (position + 8 >= size) {
-        //std::cout << "size " << size*2 << std::endl;
         size_t old_size = size;
         size *= 2;
         Treenode *temp = new Treenode[size];
@@ -185,12 +180,9 @@ void Serialization::subdivide(int current) {
 
 void Serialization::computeAcceleration(int current, int idx, double (*r)[3], double (*a)[3], double g, double theta) {
     if (treeArray[current].cum_size == 0 || (treeArray[current].leaf == true && treeArray[current].cum_size == 1 && treeArray[current].index == idx)) {                           
-//  std::cout << idx  << std::endl;
         return;                                                                                   
     }                                                                                             
     
-//  std::cout << "sinexisa" << std::endl;
-    //std::cout << current << std::endl;                                                                                      
     double centerMass[3];
     centerMass[0] = treeArray[current].massCenter[0];
     centerMass[1] = treeArray[current].massCenter[1];
@@ -201,7 +193,6 @@ void Serialization::computeAcceleration(int current, int idx, double (*r)[3], do
                    + (centerMass[2] - r[idx][2]) * (centerMass[2] - r[idx][2]));                  
     
     if (2.*treeArray[current].w/d <= theta) {                                                               
-//        std::cout << "NO" << std::endl;
         double rji[3];
         rji[0] = centerMass[0] - r[idx][0];                                                       
         rji[1] = centerMass[1] - r[idx][1];                                                       
@@ -229,7 +220,6 @@ void Serialization::computeAcceleration(int current, int idx, double (*r)[3], do
             a[idx][1] -= a_i * rji[1];
             a[idx][2] -= a_i * rji[2];
     } else {
-//      printf("mpikai kai edo /n");
         current = treeArray[current].child;
         computeAcceleration(current, idx, r, a, g, theta);
         computeAcceleration(current+1, idx, r, a, g, theta);
