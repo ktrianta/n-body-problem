@@ -98,7 +98,7 @@ Convert result (snapshot) to table
 
 
 
-<shape>=ball,cusp,sphere
+<shape>=ball,cusp,shell
 <N>=100,500,1000
 
 [Make configuration]
