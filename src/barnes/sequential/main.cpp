@@ -52,8 +52,8 @@ int main(int argc, char** argv) {
     const size_t Ntimesteps = params.t / params.dt + 1;
     const sim::data_type dt = params.dt;
 
-    for (int t = 0; t < Ntimesteps; t++) {
-        for (int j = 0; j < N; j++) {
+    for (size_t t = 0; t < Ntimesteps; t++) {
+        for (size_t j = 0; j < N; j++) {
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
@@ -63,18 +63,17 @@ int main(int argc, char** argv) {
 
         }
 
+        boxComputation(N, r, xc, yc, zc, w2, h2, t2);
         Octree tree = Octree(N, xc, yc, zc, w2, h2, t2);
         std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-        for (int j = 0; j < N; j++) {
+        for (size_t j = 0; j < N; j++) {
             tree.computeAcceleration(j);
 
             u[j][0] += 0.5 * a[j][0] * dt;
             u[j][1] += 0.5 * a[j][1] * dt;
             u[j][2] += 0.5 * a[j][2] * dt;
         }
-
-        boxComputation(N, r, xc, yc, zc, w2, h2, t2);
 
         if (t % 200 == 0) {
             writeDataToFile(N, r, u, out_file);
