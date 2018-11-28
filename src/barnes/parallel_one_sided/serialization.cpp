@@ -195,7 +195,6 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
     queue<size_t> list; list.push(0);
     sim::data_type rji[3];
    
-    std::cout<< r[0]  << "  "<< a[0] << "  " << idx << std::endl;
     while (!list.empty()) {
         size_t c = list.front(); list.pop();
         const Treenode& current = treeArray[c];
