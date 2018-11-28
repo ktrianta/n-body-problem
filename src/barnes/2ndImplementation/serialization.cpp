@@ -199,10 +199,10 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
         rji[1] = current.massCenter[1] - r[1];
         rji[2] = current.massCenter[2] - r[2];
         sim::data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-        sim::data_type d = sqrt(r2);
+        sim::data_type d = sqrt(r2+sim::e2);
 
         if (current.leaf) {
-            sim::data_type denom = r2 * d;
+            sim::data_type denom = r2+sim::e2 * d;
             sim::data_type a_i = -g * current.mass / denom;
             a[0] -= a_i * rji[0];
             a[1] -= a_i * rji[1];
@@ -211,7 +211,7 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
         }
 
         if (2 * current.w / d <= theta) {
-            sim::data_type denom = r2 * d;
+            sim::data_type denom = r2+sim::e2 * d;
             sim::data_type a_i = -g * current.mass / denom;
             a[0] -= a_i * rji[0];
             a[1] -= a_i * rji[1];

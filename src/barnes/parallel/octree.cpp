@@ -213,7 +213,7 @@ void Octree::computeAcceleration(int idxGlobal, double (*r)[3], double (*a)[3], 
         rji[1] = centerMass[1] - r[idxGlobal][1];
         rji[2] = centerMass[2] - r[idxGlobal][2];
         double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-        double denom = r2 * sqrt(r2);
+        double denom = r2+sim::e2 * sqrt(r2+sim::e2);
         double a_i = -g * cum_Mass / denom;
         a[idxGlobal][0] -= a_i * rji[0];
         a[idxGlobal][1] -= a_i * rji[1];
@@ -229,7 +229,7 @@ void Octree::computeAcceleration(int idxGlobal, double (*r)[3], double (*a)[3], 
         rji[1] = r[idx_i][1] - r[idxGlobal][1];
         rji[2] = r[idx_i][2] - r[idxGlobal][2];
         double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-        double denom = r2 * sqrt(r2);
+        double denom = r2+sim::e2 * sqrt(r2+sim::e2);
         double a_i = -g * mass[idx_i] / denom;
         a[idxGlobal][0] -= a_i * rji[0];
         a[idxGlobal][1] -= a_i * rji[1];

@@ -1,7 +1,7 @@
 #ifndef SERIALIZATION_H
 #define SERIALIZATION_H
 
-
+#include "types.hpp"
 
 using namespace std;
 
