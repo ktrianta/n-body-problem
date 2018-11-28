@@ -71,6 +71,8 @@ cd liblsb-0.2.2
 #and add the following to the local CMakeLists.txt e.g.:
 vi src/naive/parallel/CMakeLists.txt
 
-#add target_link_libraries(naive-parallel lsb) after target_link_libraries(naive-parallel ${MPI_LIBRARIES})
+#add target_link_libraries(naive-parallel lsb) 
+#and set(CMAKE_CXX_COMPILER mpicxx)
+#after target_link_libraries(naive-parallel ${MPI_LIBRARIES})
 
 ```
