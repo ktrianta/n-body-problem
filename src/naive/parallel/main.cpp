@@ -2,6 +2,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <liblsb.h>
 #include "io.hpp"
 #include "args.hpp"
 #include "types.hpp"
@@ -41,10 +42,15 @@ int main(int argc, char** argv) {
     // *** MPI *** // 
     int size, rank;
     MPI_Init(&argc,&argv);
+    LSB_Init("test_lsb", 0);
     MPI_Comm_size(MPI_COMM_WORLD,&size);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     // *** MPI *** // 
     
+    // *** LSB *** //
+    LSB_Set_Rparam_int("rank", rank);
+    // *** LSB *** //
+
     sim::Parameters params;
     readArgs(argc, argv, params);
 
@@ -126,11 +132,14 @@ int main(int argc, char** argv) {
             r_local[j][1] += u[idx][1] * dt;
             r_local[j][2] += u[idx][2] * dt;
         }
-        
+            
+        LSB_Set_Rparam_int("Iter", t);
         MPI_Allgatherv(&(r_local[0][0]), local_N[rank]*3, MPI_DOUBLE, &(r[0][0]),
             local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
 
+        LSB_Res();
         computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
+        LSB_Rec(t);
 
         for (size_t idx = offset[rank], end = offset[rank] + local_N[rank]; idx < end; idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
@@ -144,7 +153,7 @@ int main(int argc, char** argv) {
             }   
         }
     }
-
+    LSB_Finalize();
     MPI_Finalize();
     return 0;
 }
