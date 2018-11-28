@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 3.5)
 
 # Includes
 include(CTest)
-
 # MPI
 find_package(MPI REQUIRED)
 
+#set(CMAKE_CXX_STANDARD_LIBRARIES /usr/local/lib/liblsb.a)
+
 # Download and unpack googletest at configure time
+
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
   RESULT_VARIABLE result
@@ -60,5 +62,10 @@ set(BARNES_PARALLEL_ONE_SIDED_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/p
 set(BARNES_2NDIMPLEMENTATION_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/2ndImplementation)
 set(BARNES_PARALLEL_SERIALIZATION_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barnes/parallel_serialization)
 
+
+
 # Project Subdirectories
+#set(CMAKE_EXE_LINKER_FLAGS "-llsb")
 add_subdirectory(${SRC_DIR})
+
+
