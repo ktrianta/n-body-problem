@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Project"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake-build-debug\;CMake Files\cmake-build-debug\googletest-src\;CMake Files\cmake-build-debug\googletest-src\googlemock\;CMake Files\cmake-build-debug\googletest-src\googlemock\cmake\;CMake Files\cmake-build-debug\googletest-src\googletest\;CMake Files\cmake-build-debug\googletest-src\googletest\cmake\;CMake Files\src\;CMake Files\src\naive\;CMake Files\src\naive\sequential\;CMake Files\src\naive\parallel\;CMake Files\src\naive\parallel_one_sided\;CMake Files\src\barnes\;CMake Files\src\barnes\sequential\;CMake Files\src\barnes\parallel\;CMake Files\src\barnes\parallel_one_sided\;CMake Files\src\barnes\2ndImplementation\;CMake Files\src\barnes\parallel_serialization\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Nightly">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 Nightly"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Continuous">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 Continuous"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 test"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Experimental">
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 Experimental"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gmock_main">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgmock_maind.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 gmock_main"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gmock_main/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgmock_maind.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 gmock_main/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gmock">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgmockd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 gmock"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gmock/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgmockd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 gmock/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgtestd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgtestd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest_main">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgtest_maind.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest_main"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest_main/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/lib/libgtest_maind.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/include"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest_main/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-build/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="naive-sequential">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 naive-sequential"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="naive-sequential/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 naive-sequential/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="naive-parallel">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 naive-parallel"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="naive-parallel/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 naive-parallel/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="naive-parallel-one-sided">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 naive-parallel-one-sided"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="naive-parallel-one-sided/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 naive-parallel-one-sided/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/naive/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-sequential">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 barnes-sequential"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-sequential/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 barnes-sequential/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/sequential/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-parallel">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 barnes-parallel"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-parallel/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 barnes-parallel/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-parallel-one-sided">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 barnes-parallel-one-sided"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-parallel-one-sided/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 barnes-parallel-one-sided/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_one_sided/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-2ndImplementation">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 barnes-2ndImplementation"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-2ndImplementation/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 barnes-2ndImplementation/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/2ndImplementation/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-parallel-serialization">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 barnes-parallel-serialization"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="barnes-parallel-serialization/fast">
+				<Option output="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/prog" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DOMPI_SKIP_MPICXX"/>
+					<Add directory="/home/diego/CLionProjects/n-body-problem/src/utils"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 barnes-parallel-serialization/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/diego/CLionProjects/n-body-problem/cmake-build-debug/src/barnes/parallel_serialization/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/src/gmock-all.cc">
+			<Option target="gmock"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/src/gmock_main.cc">
+			<Option target="gmock_main"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/src/gtest-all.cc">
+			<Option target="gtest"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/src/gtest_main.cc">
+			<Option target="gtest_main"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/2ndImplementation/main.cpp">
+			<Option target="barnes-2ndImplementation"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/2ndImplementation/serialization.cpp">
+			<Option target="barnes-2ndImplementation"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/2ndImplementation/serialization.hpp">
+			<Option target="barnes-2ndImplementation"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel/main.cpp">
+			<Option target="barnes-parallel"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel/octree.cpp">
+			<Option target="barnes-parallel"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel/octree.hpp">
+			<Option target="barnes-parallel"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_one_sided/main.cpp">
+			<Option target="barnes-parallel-one-sided"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_one_sided/serialization.cpp">
+			<Option target="barnes-parallel-one-sided"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_one_sided/serialization.hpp">
+			<Option target="barnes-parallel-one-sided"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_serialization/main.cpp">
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_serialization/serialization.cpp">
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_serialization/serialization.hpp">
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/sequential/main.cpp">
+			<Option target="barnes-sequential"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/sequential/octree.cpp">
+			<Option target="barnes-sequential"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/sequential/octree.hpp">
+			<Option target="barnes-sequential"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/naive/parallel/main.cpp">
+			<Option target="naive-parallel"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/naive/parallel_one_sided/main.cpp">
+			<Option target="naive-parallel-one-sided"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/naive/sequential/main.cpp">
+			<Option target="naive-sequential"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/args.cpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/args.hpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/boxComputation.cpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/boxComputation.hpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/initialization.cpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/initialization.hpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/io.cpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/io.hpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/sort.cpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/utils/sort.hpp">
+			<Option target="naive-sequential"/>
+			<Option target="naive-parallel"/>
+			<Option target="naive-parallel-one-sided"/>
+			<Option target="barnes-sequential"/>
+			<Option target="barnes-parallel"/>
+			<Option target="barnes-parallel-one-sided"/>
+			<Option target="barnes-2ndImplementation"/>
+			<Option target="barnes-parallel-serialization"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/CMakeLists.txt.in">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googlemock\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/cmake/gmock.pc.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googlemock/cmake/gmock_main.pc.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googletest\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/cmake/Config.cmake.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/cmake/gtest.pc.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/cmake/gtest_main.pc.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/cmake-build-debug/googletest-src/googletest/cmake/internal_utils.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-debug\googletest-src\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/naive/sequential/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\naive\sequential\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/naive/parallel/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\naive\parallel\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/naive/parallel_one_sided/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\naive\parallel_one_sided\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/sequential/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\barnes\sequential\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\barnes\parallel\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_one_sided/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\barnes\parallel_one_sided\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/2ndImplementation/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\barnes\2ndImplementation\"/>
+		</Unit>
+		<Unit filename="/home/diego/CLionProjects/n-body-problem/src/barnes/parallel_serialization/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\barnes\parallel_serialization\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
