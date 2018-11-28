@@ -65,7 +65,7 @@ set(BARNES_PARALLEL_SERIALIZATION_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin/barn
 
 
 # Project Subdirectories
-#set(CMAKE_EXE_LINKER_FLAGS "-llsb")
+# set(CMAKE_EXE_LINKER_FLAGS "-llsb")
 add_subdirectory(${SRC_DIR})
 
 

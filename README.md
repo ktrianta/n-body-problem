@@ -65,7 +65,7 @@ source .bashrc
 #Download Library from https://spcl.inf.ethz.ch/Research/Performance/LibLSB/
 tar -xf liblsb-0.2.2.tar.gz
 cd liblsb-0.2.2
-./configure && make && make install
+./configure --with-mpi --enable-sync && make && make install
 
 #Now you want to go to the source code of our project 
 #and add the following to the local CMakeLists.txt e.g.:
