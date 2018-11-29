@@ -10,6 +10,9 @@
 
 using namespace std;
 
+#define WARMUP_TESTS 4000
+
+
 void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m, const int local_N, const int offset) {
     std::fill(&a[offset][0], &a[offset][0] + local_N*3, 0);
 
@@ -121,8 +124,32 @@ int main(int argc, char** argv) {
         r_local[i][2] = r[j][2];
     }
 
+    //Run warmup computations
+    sim::data_type (*test_a)[3] = new sim::data_type[N][3];
+    std::fill(&test_a[0][0], &test_a[0][0] + N*3, 0);
+    for (size_t i = 0; i < WARMUP_TESTS; i++){
+        computeAcceleration(N, r, test_a, m, local_N[rank], offset[rank]);
+    }
+
+    LSB_Set_Rparam_int("rank", rank);
+    //LSB_Set_Rparam_double("err", 0); // meaningless here
+    LSB_Set_Rparam_string("type", "WARMUP");
+    //Get size for window synchronization
+    for (size_t i = 0; i < WARMUP_TESTS; i++){
+        LSB_Res();
+        computeAcceleration(N, r, test_a, m, local_N[rank], offset[rank]);
+        LSB_Rec(i);
+    }
+    double win;
+    LSB_Fold(0, LSB_MAX, &win);
+
+
+
     computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
 
+    //Start benchmark
+    double t1, t2, t_tot;
+    LSB_Set_Rparam_string("type", "measurement");
     for (size_t t = 0; t < timesteps; t++) {
         for (size_t j = 0, idx = offset[rank]; j < local_N[rank]; j++, idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
@@ -132,27 +159,35 @@ int main(int argc, char** argv) {
             r_local[j][1] += u[idx][1] * dt;
             r_local[j][2] += u[idx][2] * dt;
         }
-            
-        LSB_Set_Rparam_int("Iter", t);
         MPI_Allgatherv(&(r_local[0][0]), local_N[rank]*3, MPI_DOUBLE, &(r[0][0]),
             local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
 
-        LSB_Res();
+        LSB_Sync();
+        t1 = MPI_Wtime();
         computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
-        LSB_Rec(t);
+        t2  = MPI_Wtime();
+        t_tot += (t2-t1);
 
         for (size_t idx = offset[rank], end = offset[rank] + local_N[rank]; idx < end; idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
             u[idx][1] += 0.5 * a[idx][1] * dt;
             u[idx][2] += 0.5 * a[idx][2] * dt;
 	    }
-        
+
         if (rank == 0) {
             if (t % 200 == 0){
                 writeDataToFile(N, r, u, out_file);
             }   
         }
     }
+    double plotData;
+    MPI_Reduce(&t_tot, &plotData, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if( rank== 0 ) {
+        FILE *plotFile;
+        plotFile = fopen("plotData.txt", "a");
+        fprintf(plotFile, "%d %lf\n", size, plotData);
+    }
+
     LSB_Finalize();
     MPI_Finalize();
     return 0;

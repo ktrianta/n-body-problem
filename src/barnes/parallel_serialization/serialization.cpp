@@ -198,7 +198,7 @@ void Serialization::computeAcceleration(int current, int idx, double (*r)[3], do
         rji[1] = centerMass[1] - r[idx][1];                                                       
         rji[2] = centerMass[2] - r[idx][2];
         double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];                          
-        double denom = r2 * sqrt(r2);
+        double denom = r2+sim::e2 * sqrt(r2+sim::e2);
         double a_i = -g * treeArray[current].mass / denom;                                                       
         a[idx][0] -= a_i * rji[0];                                                                
         a[idx][1] -= a_i * rji[1];                                                                
@@ -214,7 +214,7 @@ void Serialization::computeAcceleration(int current, int idx, double (*r)[3], do
             rji[1] = r[idx_i][1] - r[idx][1];                                                     
             rji[2] = r[idx_i][2] - r[idx][2];
             double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];                      
-            double denom = r2 * sqrt(r2); 
+            double denom = r2+sim::e2 * sqrt(r2+sim::e2); 
             double a_i = -g * treeArray[current].mass / denom;
             a[idx][0] -= a_i * rji[0];
             a[idx][1] -= a_i * rji[1];

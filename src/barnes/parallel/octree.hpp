@@ -1,6 +1,8 @@
 #ifndef OCTREE_H
 #define OCTREE_H
 
+#include "types.hpp"
+
 class Rectangle{
     public:
         double x; // the x-center of the rectangle

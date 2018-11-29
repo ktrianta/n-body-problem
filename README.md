@@ -60,3 +60,19 @@ source .bashrc
 ```bash
 ./cluster.sh
 ```
+## Installing LibLSB
+```bash
+#Download Library from https://spcl.inf.ethz.ch/Research/Performance/LibLSB/
+tar -xf liblsb-0.2.2.tar.gz
+cd liblsb-0.2.2
+./configure --with-mpi --enable-sync && make && make install
+
+#Now you want to go to the source code of our project 
+#and add the following to the local CMakeLists.txt e.g.:
+vi src/naive/parallel/CMakeLists.txt
+
+#add target_link_libraries(naive-parallel lsb) 
+#and set(CMAKE_CXX_COMPILER mpicxx)
+#after target_link_libraries(naive-parallel ${MPI_LIBRARIES})
+
+```
