@@ -43,7 +43,7 @@ endif()
 
 # Variables
 ## C++ Compiler Flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2 -std=c++11 -O3")
 
 ## Source Directory
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
