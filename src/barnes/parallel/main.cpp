@@ -137,6 +137,17 @@ int main(int argc, char** argv) {
     }
 
     printf("time= %f \n", time);
+
+    delete[] m;
+    delete[] r;
+    delete[] u;
+    delete[] a;
+    delete[] local_N;
+    delete[] local_Nx3;
+    delete[] offset;
+    delete[] offset_x3;
+    delete[] r_local;
+
     MPI_Finalize();
     return 0;
 }

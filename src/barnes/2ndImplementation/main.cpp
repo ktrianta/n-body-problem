@@ -82,5 +82,10 @@ int main(int argc, char** argv) {
         }
     }
 
+    delete[] m;
+    delete[] r;
+    delete[] u;
+    delete[] a;
+    delete tree;
     return 0;
 }
