@@ -7,9 +7,6 @@
 #include "types.hpp"
 #include "initialization.hpp"
 
-using namespace std;
-
-
 
 void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m, const int local_N, const int offset) {
     std::fill(&a[offset][0], &a[offset][0] + local_N*3, 0);
