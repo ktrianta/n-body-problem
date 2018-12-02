@@ -2,15 +2,10 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
-#include <liblsb.h>
 #include "io.hpp"
 #include "args.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
-
-using namespace std;
-
-#define WARMUP_TESTS 4000
 
 
 void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m, const int local_N, const int offset) {
@@ -42,17 +37,14 @@ void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type 
 }
 
 int main(int argc, char** argv) {
+
     // *** MPI *** // 
     int size, rank;
     MPI_Init(&argc,&argv);
-    LSB_Init("test_lsb", 0);
     MPI_Comm_size(MPI_COMM_WORLD,&size);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     // *** MPI *** // 
     
-    // *** LSB *** //
-    LSB_Set_Rparam_int("rank", rank);
-    // *** LSB *** //
 
     sim::Parameters params;
     readArgs(argc, argv, params);
@@ -124,32 +116,10 @@ int main(int argc, char** argv) {
         r_local[i][2] = r[j][2];
     }
 
-    //Run warmup computations
-    sim::data_type (*test_a)[3] = new sim::data_type[N][3];
-    std::fill(&test_a[0][0], &test_a[0][0] + N*3, 0);
-    for (size_t i = 0; i < WARMUP_TESTS; i++){
-        computeAcceleration(N, r, test_a, m, local_N[rank], offset[rank]);
-    }
-
-    LSB_Set_Rparam_int("rank", rank);
-    //LSB_Set_Rparam_double("err", 0); // meaningless here
-    LSB_Set_Rparam_string("type", "WARMUP");
-    //Get size for window synchronization
-    for (size_t i = 0; i < WARMUP_TESTS; i++){
-        LSB_Res();
-        computeAcceleration(N, r, test_a, m, local_N[rank], offset[rank]);
-        LSB_Rec(i);
-    }
-    double win;
-    LSB_Fold(0, LSB_MAX, &win);
-    LSB_Sync_init(MPI_COMM_WORLD, win*4);
-
-
     computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
 
     //Start benchmark
     double t1_comp, t2_comp, t_tot_comp, t1_comm, t2_comm, t_tot_comm;
-    LSB_Set_Rparam_string("type", "measurement");
     for (size_t t = 0; t < timesteps; t++) {
         for (size_t j = 0, idx = offset[rank]; j < local_N[rank]; j++, idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
@@ -159,15 +129,12 @@ int main(int argc, char** argv) {
             r_local[j][1] += u[idx][1] * dt;
             r_local[j][2] += u[idx][2] * dt;
         }
-        LSB_Sync();
         t1_comm = MPI_Wtime();
         MPI_Allgatherv(&(r_local[0][0]), local_N[rank]*3, MPI_DOUBLE, &(r[0][0]),
             local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
         t2_comm  = MPI_Wtime();
         t_tot_comm += (t2_comm-t1_comm);
 
-        // Sync procs. and meas. computeAcceleration exec. time
-        LSB_Sync();
         t1_comp = MPI_Wtime();
         computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
         t2_comp  = MPI_Wtime();
@@ -192,10 +159,9 @@ int main(int argc, char** argv) {
     if( rank== 0 ) {
         FILE *plotFile;
         plotFile = fopen("plotData.txt", "a");
-        fprintf(plotFile, "%d %lf\n", size, plotData);
+        fprintf(plotFile, "%d %lf %lf\n", size, plotData_comp, plotData_comm);
     }
 
-    LSB_Finalize();
     MPI_Finalize();
     return 0;
 }

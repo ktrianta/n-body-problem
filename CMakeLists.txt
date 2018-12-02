@@ -43,7 +43,9 @@ endif()
 
 # Variables
 ## C++ Compiler Flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2 -std=c++11 -O3")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -ftree-vectorize -O3 -g3")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=native -mavx -mavx2 -ftree-vectorize -g3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -mavx -mavx2 -g3")
 
 ## Source Directory
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)

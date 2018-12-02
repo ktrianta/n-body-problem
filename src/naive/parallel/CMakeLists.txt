@@ -3,7 +3,7 @@ add_definitions(-DOMPI_SKIP_MPICXX)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
 add_executable(naive-parallel main.cpp ${UTILS_SOURCES})
-target_link_libraries(naive-parallel ${MPI_LIBRARIES} lsb)
+target_link_libraries(naive-parallel ${MPI_LIBRARIES})
 set(CMAKE_CXX_COMPILER mpicxx)
 set_target_properties(naive-parallel PROPERTIES OUTPUT_NAME prog)
 
