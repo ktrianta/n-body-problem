@@ -40,6 +40,7 @@ void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type 
 }
 
 int main(int argc, char** argv) {
+
     // *** MPI *** // 
     int size, rank;
     MPI_Init(&argc,&argv);
