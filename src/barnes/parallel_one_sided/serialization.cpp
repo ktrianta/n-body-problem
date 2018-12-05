@@ -150,6 +150,7 @@ void Serialization::subdivide(int current) {
         size_t old_size = size;
         size *= 2;
         Treenode *temp = new Treenode[size];
+
         std::copy(treeArray, treeArray + old_size, temp);
         delete[] treeArray;
         treeArray = temp;
@@ -191,7 +192,7 @@ void Serialization::subdivide(int current) {
     if (insertInLeaf(position, index, rx, ry, rz, treeArray[current].mass)) return;
 }
 
-void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_type a[3], sim::data_type g, sim::data_type theta) {
+void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_type a[3], sim::data_type g, sim::data_type theta, size_t& calcs) {
     queue<size_t> list; list.push(0);
     sim::data_type rji[3];
    
@@ -202,6 +203,7 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
         if (current.cum_size == 0 || current.index == idx) {
             continue;
         }
+
 
         rji[0] = current.massCenter[0] - r[0];
         rji[1] = current.massCenter[1] - r[1];
@@ -215,6 +217,7 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
             a[0] -= a_i * rji[0];
             a[1] -= a_i * rji[1];
             a[2] -= a_i * rji[2];
+            calcs += 1;
             continue;
         }
 
@@ -224,6 +227,7 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
             a[0] -= a_i * rji[0];
             a[1] -= a_i * rji[1];
             a[2] -= a_i * rji[2];
+            calcs += 1;
         } else {
             list.push(current.child);
             list.push(current.child+1);

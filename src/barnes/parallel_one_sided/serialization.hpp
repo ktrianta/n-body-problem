@@ -39,7 +39,7 @@ public:
     void insert(int j, sim::data_type rx, sim::data_type ry, sim::data_type rz, sim::data_type m);
     bool insertInLeaf(int i, int j, sim::data_type rx, sim::data_type ry, sim::data_type rz, sim::data_type m);
     void subdivide(int current);
-    void computeAcceleration(int idx, sim::data_type r[3], sim::data_type a[3], sim::data_type g, sim::data_type theta);
+    void computeAcceleration(int idx, sim::data_type r[3], sim::data_type a[3], sim::data_type g, sim::data_type theta, size_t&);
 };
 
 #endif  // SERIALIZATION_H

@@ -50,7 +50,6 @@ int main(int argc, char** argv) {
     MPI_Type_commit(&vtype);
 
     sim::data_type (*r)[7];
-    sim::data_type (*a)[3] = new sim::data_type[N][3];
     sim::data_type (*r_local)[7] = new sim::data_type[local_N][7];
     sim::data_type (*a_local)[3] = new sim::data_type[local_N][3];
     std::fill(&a_local[0][0], &a_local[0][0] + local_N*3, 0);
@@ -93,6 +92,7 @@ int main(int argc, char** argv) {
         if (i != rank) {
             tree[i] = new Serialization();
             MPI_Alloc_mem(treeSize[i]*sizeof(struct Treenode), MPI_INFO_NULL, &(tree[i]->treeArray));
+            //tree[i]->treeArray = (struct Treenode*) malloc(treeSize[i] * sizeof(struct Treenode));
         }
     }
 
@@ -102,20 +102,27 @@ int main(int argc, char** argv) {
     MPI_Get_address(tree[rank]->treeArray, &my_disp);
     MPI_Allgather(&my_disp, 1, MPI_AINT, &target_disp[0], 1, MPI_AINT, MPI_COMM_WORLD);
 
+    MPI_Win_fence(0,win);
     for (int i = 0; i < size; i++) {
         if (i != rank) {
-            MPI_Win_fence(0,win);
             MPI_Get(tree[i]->treeArray, treeSize[i], treeNodeStruct, i, target_disp[i], treeSize[i], treeNodeStruct, win);
-            MPI_Win_fence(0,win);
         }
+    }
+    MPI_Win_fence(0,win);
 
+    size_t p;
+    for (int i = 0; i < size; i++) {
         for (int j = 0; j < local_N; j++) {
-            tree[i]->computeAcceleration(rank*local_N+j, &r_local[j][1], a_local[j], sim::g, theta);
+            tree[i]->computeAcceleration(rank*local_N+j, &r_local[j][1], a_local[j], sim::g, theta, p);
         }
     }
 
     const size_t Ntimesteps = params.t / params.dt + 1;
     const sim::data_type dt = params.dt;
+
+    double t1_start = 0;
+    double t1_end = 0;
+    double time_con = 0, time_com = 0;
 
     for (int t = 0; t < Ntimesteps; t++) {
         for (int j = 0; j < local_N; j++) {
@@ -155,13 +162,14 @@ int main(int argc, char** argv) {
             tree[rank]->insert(rank*local_N+j, r_local[j][1], r_local[j][2], r_local[j][3], r_local[j][0]);
         }
 
-        tSize = tree[rank]->size;
+        tSize = tree[rank]->position+1;
         MPI_Allgather(&tSize, 1, MPI_INT, &treeSize, 1, MPI_INT, MPI_COMM_WORLD);
 
         for (int i = 0; i < size; i++) {
             if (i !=rank) {
                 tree[i] = new Serialization();
                 MPI_Alloc_mem(treeSize[i] * sizeof(struct Treenode), MPI_INFO_NULL, &(tree[i]->treeArray));
+                //tree[i]->treeArray = (struct Treenode*) malloc(treeSize[i] * sizeof(struct Treenode));
             }
         }
 
@@ -169,17 +177,41 @@ int main(int argc, char** argv) {
         MPI_Get_address(tree[rank]->treeArray, &my_disp);
         MPI_Allgather(&my_disp, 1, MPI_AINT, target_disp, 1, MPI_AINT, MPI_COMM_WORLD);
 
-        for (int i = rank; i < rank+size; i++) {
-            MPI_Win_fence(0, win);
-            if (i+1 != rank) {
-                MPI_Get(tree[(i+1)%size]->treeArray, treeSize[(i+1)%size], treeNodeStruct, (i+1)%size, target_disp[(i+1)%size], treeSize[(i+1)%size], treeNodeStruct, win);
-            }
+//        for (int i = rank; i < rank+size; i++) {
+//            MPI_Win_fence(0, win);
+//            if (i+1 != rank) {
+//                MPI_Get(tree[(i+1)%size]->treeArray, treeSize[(i+1)%size], treeNodeStruct, (i+1)%size, target_disp[(i+1)%size], treeSize[(i+1)%size], treeNodeStruct, win);
+//            }
+//
+//            for (int j = 0; j < local_N; j++) {
+//                tree[i%size]->computeAcceleration(rank*local_N+j, &r_local[j][1], a_local[j], sim::g, theta);
+//            }
+//            MPI_Win_fence(0, win);
+//        }
 
-            for (int j = 0; j < local_N; j++) {
-                tree[i%size]->computeAcceleration(rank*local_N+j, &r_local[j][1], a_local[j], sim::g, theta);
+        t1_start = MPI_Wtime();
+        MPI_Win_fence(0, win);
+        for (int i = 0; i < size; i++) {
+            if (i != rank) {
+                MPI_Get(tree[i]->treeArray, treeSize[i], treeNodeStruct, i, target_disp[i], treeSize[i], treeNodeStruct, win);
             }
-            MPI_Win_fence(0, win);
         }
+        MPI_Win_fence(0, win);
+        t1_end = MPI_Wtime();
+        time_con += (t1_end - t1_start);
+
+        size_t calcs = 0;
+
+        t1_start = MPI_Wtime();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < local_N; j++) {
+                tree[i]->computeAcceleration(rank*local_N+j, &r_local[j][1], a_local[j], sim::g, theta, calcs);
+            }
+        }
+        t1_end = MPI_Wtime();
+        time_com += (t1_end - t1_start);
+
+        std::cout << rank << " calcs " << calcs << std::endl;
 
         for (int j = 0; j < local_N; j++) {
             r_local[j][4] += 0.5 * a_local[j][0] * dt;
@@ -201,6 +233,16 @@ int main(int argc, char** argv) {
         }
         delete tree[i];
     }
+
+    std::cout << rank << " t_com: " << time_com << std::endl;
+    std::cout << rank << " t_con: " << time_con << std::endl;
+
+    if (rank == 0) {
+        delete[] r;
+    }
+    delete[] r_local;
+    delete[] a_local;
+    delete[] target_disp;
 
     MPI_Win_free(&win);
 	MPI_Finalize();
