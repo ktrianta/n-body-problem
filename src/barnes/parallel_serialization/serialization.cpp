@@ -178,7 +178,8 @@ void Serialization::subdivide(int current) {
     if (insertInLeaf(position, index, rx, ry, rz, treeArray[current].mass)) return;
 }
 
-void Serialization::computeAcceleration(int current, int idx, double (*r)[3], double (*a)[3], double g, double theta) {
+/*
+void Serialization::computeAcceleration(int current, int idx, double (*r)[7], double (*a)[3], double g, double theta) {
     if (treeArray[current].cum_size == 0 || (treeArray[current].leaf == true && treeArray[current].cum_size == 1 && treeArray[current].index == idx)) {                           
         return;                                                                                   
     }                                                                                             
@@ -188,15 +189,15 @@ void Serialization::computeAcceleration(int current, int idx, double (*r)[3], do
     centerMass[1] = treeArray[current].massCenter[1];
     centerMass[2] = treeArray[current].massCenter[2];
 
-    double d = sqrt( (centerMass[0] - r[idx][0]) * (centerMass[0] - r[idx][0])                    
-                   + (centerMass[1] - r[idx][1]) * (centerMass[1] - r[idx][1])
-                   + (centerMass[2] - r[idx][2]) * (centerMass[2] - r[idx][2]));                  
+    double d = sqrt( (centerMass[0] - r[idx][1]) * (centerMass[0] - r[idx][1])                    
+                   + (centerMass[1] - r[idx][2]) * (centerMass[1] - r[idx][2])
+                   + (centerMass[2] - r[idx][3]) * (centerMass[2] - r[idx][3]));                  
     
     if (2.*treeArray[current].w/d <= theta) {                                                               
         double rji[3];
-        rji[0] = centerMass[0] - r[idx][0];                                                       
-        rji[1] = centerMass[1] - r[idx][1];                                                       
-        rji[2] = centerMass[2] - r[idx][2];
+        rji[0] = centerMass[0] - r[idx][1];                                                       
+        rji[1] = centerMass[1] - r[idx][2];                                                       
+        rji[2] = centerMass[2] - r[idx][3];
         double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];                          
         double denom = r2+sim::e2 * sqrt(r2+sim::e2);
         double a_i = -g * treeArray[current].mass / denom;                                                       
@@ -210,9 +211,9 @@ void Serialization::computeAcceleration(int current, int idx, double (*r)[3], do
             if (idx == idx_i) return;                                                             
             
             double rji[3];
-            rji[0] = r[idx_i][0] - r[idx][0];                                                     
-            rji[1] = r[idx_i][1] - r[idx][1];                                                     
-            rji[2] = r[idx_i][2] - r[idx][2];
+            rji[0] = r[idx_i][1] - r[idx][1];                                                     
+            rji[1] = r[idx_i][2] - r[idx][2];                                                     
+            rji[2] = r[idx_i][3] - r[idx][3];
             double r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];                      
             double denom = r2+sim::e2 * sqrt(r2+sim::e2); 
             double a_i = -g * treeArray[current].mass / denom;
@@ -229,5 +230,51 @@ void Serialization::computeAcceleration(int current, int idx, double (*r)[3], do
         computeAcceleration(current+5, idx, r, a, g, theta);
         computeAcceleration(current+6, idx, r, a, g, theta);
         computeAcceleration(current+7, idx, r, a, g, theta);
+    }
+}
+*/
+
+void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_type a[3], sim::data_type g, sim::data_type theta) {
+    queue<size_t> list; list.push(0);
+    sim::data_type rji[3];
+    while (!list.empty()) {
+        size_t c = list.front(); list.pop();
+        const Treenode& current = treeArray[c];
+
+        if (current.cum_size == 0 || current.index == idx) {
+            continue;
+        }
+
+        rji[0] = current.massCenter[0] - r[0];
+        rji[1] = current.massCenter[1] - r[1];
+        rji[2] = current.massCenter[2] - r[2];
+        sim::data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
+        sim::data_type d = sqrt(r2+sim::e2);
+
+        if (current.leaf) {
+            sim::data_type denom = (r2+sim::e2) * d;
+            sim::data_type a_i = -g * current.mass / denom;
+            a[0] -= a_i * rji[0];
+            a[1] -= a_i * rji[1];
+            a[2] -= a_i * rji[2];
+            continue;
+        }
+
+        if (2 * current.w / d <= theta) {
+            sim::data_type denom = (r2+sim::e2) * d;
+            sim::data_type a_i = -g * current.mass / denom;
+            a[0] -= a_i * rji[0];
+            a[1] -= a_i * rji[1];
+            a[2] -= a_i * rji[2];
+        } else {
+            list.push(current.child);
+            list.push(current.child+1);
+            list.push(current.child+2);
+            list.push(current.child+3);
+            list.push(current.child+4);
+            list.push(current.child+5);
+            list.push(current.child+6);
+            list.push(current.child+7);
+        }
     }
 }

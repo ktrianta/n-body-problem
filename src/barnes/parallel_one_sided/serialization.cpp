@@ -195,7 +195,6 @@ void Serialization::subdivide(int current) {
 void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_type a[3], sim::data_type g, sim::data_type theta, size_t& calcs) {
     queue<size_t> list; list.push(0);
     sim::data_type rji[3];
-   
     while (!list.empty()) {
         size_t c = list.front(); list.pop();
         const Treenode& current = treeArray[c];
@@ -212,7 +211,7 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
         sim::data_type d = sqrt(r2+sim::e2);
 
         if (current.leaf) {
-            sim::data_type denom = r2+sim::e2 * d;
+            sim::data_type denom = (r2+sim::e2) * d;
             sim::data_type a_i = -g * current.mass / denom;
             a[0] -= a_i * rji[0];
             a[1] -= a_i * rji[1];
@@ -222,7 +221,7 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
         }
 
         if (2 * current.w / d <= theta) {
-            sim::data_type denom = r2+sim::e2 * d;
+            sim::data_type denom = (r2+sim::e2) * d;
             sim::data_type a_i = -g * current.mass / denom;
             a[0] -= a_i * rji[0];
             a[1] -= a_i * rji[1];

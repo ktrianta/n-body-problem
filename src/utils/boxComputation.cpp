@@ -26,6 +26,32 @@ void boxComputation(const size_t N, sim::data_type (*r)[7], sim::data_type &x, s
 }
 
 
+void boxComputation(const size_t N, int start, int end, sim::data_type (*r)[7], sim::data_type &x, sim::data_type &y, sim::data_type &z, sim::data_type &w, sim::data_type &h, sim::data_type &t) {
+    sim::data_type xmax = r[start][1];
+    sim::data_type xmin = r[start][1];
+    sim::data_type ymax = r[start][2];
+    sim::data_type ymin = r[start][2];
+    sim::data_type zmax = r[start][3];
+    sim::data_type zmin = r[start][3];
+
+    for (int i = start; i < end; i++)  {
+        xmax = std::max(xmax, r[i][1]);
+        xmin = std::min(xmin, r[i][1]);
+        ymax = std::max(ymax, r[i][2]);
+        ymin = std::min(ymin, r[i][2]);
+        zmax = std::max(zmax, r[i][3]);
+        zmin = std::min(zmin, r[i][3]);
+    }
+
+    w = (xmax-xmin+0.05) / 2;
+    x = (xmax+xmin) / 2; 
+    h = (ymax-ymin+0.05) / 2;
+    y = (ymax+ymin) / 2;
+    t = (zmax-zmin+0.05) / 2;
+    z = (zmax+zmin) / 2;
+}
+
+
 void boxComputation(const size_t N, sim::data_type (*r)[3], sim::data_type &x, sim::data_type &y, sim::data_type &z, sim::data_type &w, sim::data_type &h, sim::data_type &t) {
     sim::data_type xmax = r[0][0];
     sim::data_type xmin = r[0][0];
