@@ -48,6 +48,9 @@ int main(int argc, char** argv) {
     for (size_t j = 0; j < N; j++) {
         tree.computeAcceleration(j);
     }
+    for (size_t j = 0; j < N; j++) {
+        std::cout << a[j][0] << std::endl;
+    }
 
     const size_t Ntimesteps = params.t / params.dt + 1;
     const sim::data_type dt = params.dt;
