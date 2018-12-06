@@ -33,7 +33,7 @@ void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type 
         }
         a[i][0] += a_i0;  // a(i, 0) and a(i, 1) are accessed once here, avoiding
         a[i][1] += a_i1;  // repeated accesses in the inner loop of j
-        a[i][2] += a_i2;  // repeated accesses in the inner loop of j
+        a[i][2] += a_i2;
     }
 }
 
