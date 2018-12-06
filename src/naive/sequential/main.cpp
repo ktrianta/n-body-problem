@@ -50,16 +50,11 @@ int main(int argc, char** argv) {
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-
-    if (!params.in_filename.empty()) {
-        if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
-            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
-            return -1;
-        }
-        params.out_filename = params.in_filename;
-    } else {
-        initializePositionOnSphere(N, r);
+    if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
+        std::cerr << "File " << params.in_filename << " not found!" << std::endl;
+        return -1;
     }
+    params.out_filename = params.in_filename;
 
     std::ofstream out_file;
     openFileToWrite(out_file, params.out_filename, params.out_dirname);
