@@ -87,5 +87,11 @@ int main(int argc, char** argv) {
             writeDataToFile(N, r, u, out_file);
         }
     }
+
+    delete[] m;
+    delete[] r;
+    delete[] u;
+    delete[] a;
+
     return 0;
 }
