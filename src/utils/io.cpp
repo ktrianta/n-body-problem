@@ -12,6 +12,25 @@ void openFileToWrite(std::ofstream& fs, std::string filename, std::string dirnam
 
 
 
+int readDataFromFile(std::string filename, int N, dtype *m, dtype (*rx), dtype (*ry),dtype (*rz), dtype (*u)[3]) {
+    std::ifstream fs;
+
+    fs.open(filename);
+    if (!fs.is_open()) {
+        return -1;
+    }
+
+    for (size_t i = 0; i < N; i++) {
+        fs >> m[i]
+           >> rx[i] >> ry[i] >> rz[i]
+           >> u[i][0] >> u[i][1] >> u[i][2];
+    }
+
+    fs.close();
+    return 0;
+}
+
+
 int readDataFromFile(std::string filename, int N, dtype *m, dtype (*r)[3], dtype (*u)[3]) {
     std::ifstream fs;
 
@@ -53,6 +72,17 @@ void writeDataToFile(int N, dtype (*a)[3], std::ofstream& fs) {
         fs << a[i][0] << "    "
            << a[i][1] << "    "
            << a[i][2] << "\n";
+    }
+}
+
+void writeDataToFile(int N, dtype (*ax),dtype (*ay),dtype (*az), dtype (*b)[3], std::ofstream& fs) {
+    for (size_t i = 0; i < N; i++) {
+        fs << ax[i] << "    "
+           << ay[i] << "    "
+           << az[i] << "    "
+           << b[i][0] << "    "
+           << b[i][1] << "    "
+           << b[i][2] << "\n";
     }
 }
 
