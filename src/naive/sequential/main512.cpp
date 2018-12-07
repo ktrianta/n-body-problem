@@ -58,10 +58,13 @@ void * operator new(size_t size) throw(std::bad_alloc){
 		__m512d add      = _mm512_add_pd(_mm512_add_pd(multx, multy), multz); 
  		__m512d denom    = _mm512_mul_pd(_mm512_sqrt_pd(add), add);        
 		__m512d zeros = _mm512_set1_pd(0);
-		__mmask8 cmp_res = _mm512_cmpeq_epi64_mask(_mm512_castpd_si512(zeros), _mm512_castpd_si512(denom));
+		__mmask8 cmp_res = _mm512_cmpeq_pd_mask(zeros, denom);
+		__mmask8 notmask  = _knot_mask8(cmp_res);
 //		__m512i cmp_res = _mm512_cmpeq_epi64(_mm512_castpd_si512(zeros),_mm512_castpd_si512(denom));	
 		__m512d masses = _mm512_load_pd(m+j);
- 		
+
+
+ //		__m512d a_i = _mm512_mul_pd(_mm512_mul_pd(_mm512_set1_pd(-sim::g),masses),_mm512_rcp14_pd(denom));
 		__m512d a_i = _mm512_div_pd(_mm512_mul_pd(_mm512_set1_pd(-sim::g),masses),denom);	
 //
 //		__m512d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
