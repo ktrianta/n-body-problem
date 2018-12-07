@@ -1,11 +1,14 @@
 #include <mpi.h>
 #include <cmath>
 #include <fstream>
+#include <chrono>
 #include <iostream>
 #include "io.hpp"
 #include "args.hpp"
 #include "types.hpp"
 #include "initialization.hpp"
+
+using time_point_t = std::chrono::high_resolution_clock::time_point;
 
 
 void computeAcceleration(const size_t N, sim::data_type (*r)[3], sim::data_type (*a)[3], sim::data_type *m, const int local_N, const int offset) {
@@ -45,6 +48,20 @@ int main(int argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     // *** MPI *** // 
     
+    time_point_t prog_start;
+    time_point_t prog_end;
+    time_point_t io_start;
+    time_point_t io_end;
+    time_point_t comp_start;
+    time_point_t comp_end;
+    time_point_t comm_start;
+    time_point_t comm_end;
+    double  prog_time = 0;
+    double io_time = 0;
+    double comp_time = 0;
+    double comm_time = 0;
+
+    prog_start = std::chrono::high_resolution_clock::now();
 
     sim::Parameters params;
     readArgs(argc, argv, params);
@@ -59,28 +76,46 @@ int main(int argc, char** argv) {
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
     // PROCESS 0 initialize position vector r.
+    io_start = std::chrono::high_resolution_clock::now();
+    std::ofstream out_file;
     if (rank == 0) {
-        if (!params.in_filename.empty()) {
-            if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
-                std::cerr << "File " << params.in_filename << " not found!" << std::endl;
-                return -1;
-            }
-            params.out_filename = params.in_filename;
-        } else {
-            initializePositionOnSphere(N, r);
+        if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
+            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
+            delete[] m;
+            delete[] r;
+            delete[] u;
+            delete[] a;
+            return -1;
         }
+        params.out_filename = params.in_filename;
+        openFileToWrite(out_file, params.out_filename, params.out_dirname);
+        writeDataToFile(params.n, r, u, out_file);
+  //    if (!params.in_filename.empty()) {
+  //        if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
+  //            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
+  //            return -1;
+  //        }
+  //        params.out_filename = params.in_filename;
+  //    } else {
+  //        initializePositionOnSphere(N, r);
+  //    }
     }
+    io_end = std::chrono::high_resolution_clock::now();
+    io_time += std::chrono::duration< double >(io_end - io_start).count();
 
+    comm_start = std::chrono::high_resolution_clock::now();
     // SEND the position vector r from Process 0 to all processes.
     MPI_Bcast(&r[0][0],N*3, MPI_DOUBLE,0, MPI_COMM_WORLD);
     MPI_Bcast(&u[0][0],N*3, MPI_DOUBLE,0, MPI_COMM_WORLD);
     MPI_Bcast(&m[0],N, MPI_DOUBLE,0, MPI_COMM_WORLD);
+    comm_end = std::chrono::high_resolution_clock::now();
+    comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
 
-    std::ofstream out_file;
-    if (rank ==0) {
-        openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(params.n, r, u, out_file);
-    }
+//  std::ofstream out_file;
+//  if (rank ==0) {
+//      openFileToWrite(out_file, params.out_filename, params.out_dirname);
+//      writeDataToFile(params.n, r, u, out_file);
+//  }
 
     const sim::data_type dt = params.dt;
     const size_t timesteps = params.t/dt + 1;
@@ -116,10 +151,13 @@ int main(int argc, char** argv) {
         r_local[i][2] = r[j][2];
     }
 
+    comp_start = std::chrono::high_resolution_clock::now();
     computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
+    comp_end = std::chrono::high_resolution_clock::now();
+    comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
     //Start benchmark
-    double t1_comp, t2_comp, t_tot_comp, t1_comm, t2_comm, t_tot_comm;
+//  double t1_comp, t2_comp, t_tot_comp, t1_comm, t2_comm, t_tot_comm;
     for (size_t t = 0; t < timesteps; t++) {
         for (size_t j = 0, idx = offset[rank]; j < local_N[rank]; j++, idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
@@ -129,16 +167,22 @@ int main(int argc, char** argv) {
             r_local[j][1] += u[idx][1] * dt;
             r_local[j][2] += u[idx][2] * dt;
         }
-        t1_comm = MPI_Wtime();
+//        t1_comm = MPI_Wtime();
+        comm_start = std::chrono::high_resolution_clock::now();
         MPI_Allgatherv(&(r_local[0][0]), local_N[rank]*3, MPI_DOUBLE, &(r[0][0]),
             local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
-        t2_comm  = MPI_Wtime();
-        t_tot_comm += (t2_comm-t1_comm);
+        comm_end = std::chrono::high_resolution_clock::now();
+        comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
+//        t2_comm  = MPI_Wtime();
+//        t_tot_comm += (t2_comm-t1_comm);
 
-        t1_comp = MPI_Wtime();
+//        t1_comp = MPI_Wtime();
+        comp_start = std::chrono::high_resolution_clock::now();
         computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
-        t2_comp  = MPI_Wtime();
-        t_tot_comp += (t2_comp-t1_comp);
+        comp_end = std::chrono::high_resolution_clock::now();
+        comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
+//        t2_comp  = MPI_Wtime();
+//        t_tot_comp += (t2_comp-t1_comp);
 
         for (size_t idx = offset[rank], end = offset[rank] + local_N[rank]; idx < end; idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
@@ -146,21 +190,37 @@ int main(int argc, char** argv) {
             u[idx][2] += 0.5 * a[idx][2] * dt;
 	    }
 
+        io_start = std::chrono::high_resolution_clock::now();
         if (rank == 0) {
             if (t % 200 == 0){
                 writeDataToFile(N, r, u, out_file);
             }   
         }
+        io_end = std::chrono::high_resolution_clock::now();
+        io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
+
+    prog_end = std::chrono::high_resolution_clock::now();
+    prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
     double plotData_comp;
     double plotData_comm;
-    MPI_Reduce(&t_tot_comp, &plotData_comp, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&t_tot_comm, &plotData_comm, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    double plotData_io;
+    double plotData_prog;
+    MPI_Reduce(&comp_time, &plotData_comp, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&comm_time, &plotData_comm, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&io_time, &plotData_io, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&prog_time, &plotData_prog, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if( rank== 0 ) {
         FILE *plotFile;
         plotFile = fopen("plotData.txt", "a");
-        fprintf(plotFile, "%d %lf %lf\n", size, plotData_comp, plotData_comm);
+        fprintf(plotFile, "%lf, %lf, %lf, %lf\n", plotData_prog, plotData_comp, plotData_io, plotData_comm);
+        fclose(plotFile);
     }
+
+    delete[] m;
+    delete[] r;
+    delete[] u;
+    delete[] a;
 
     MPI_Finalize();
     return 0;

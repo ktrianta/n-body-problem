@@ -17,7 +17,7 @@ set(UTILS_HEADERS ${UTILS_DIR}/initialiaztion.hpp
 include_directories(${UTILS_DIR})
 
 add_subdirectory(naive/sequential)
-#add_subdirectory(naive/parallel)
+add_subdirectory(naive/parallel)
 add_subdirectory(naive/parallel_one_sided)
 add_subdirectory(barnes/sequential)
 add_subdirectory(barnes/parallel)
