@@ -10,9 +10,9 @@
 
 using time_point_t = std::chrono::high_resolution_clock::time_point;
  
-void * operator new(size_t size) throw(std::bad_alloc){
+void * operator new(size_t size) {
    void *p;
-   if ((p = _mm_malloc(size,16)) == 0){
+   if ((p = _mm_malloc(size,32)) == 0){
         static const std::bad_alloc nomem;
         throw (nomem);
    }
@@ -28,68 +28,70 @@ void * operator new(size_t size) throw(std::bad_alloc){
      std::fill(&ay[0], &ay[0] + N, 0);
      std::fill(&az[0], &az[0] + N, 0);
 
-
-     sim::data_type a_ix[4]; 
-     sim::data_type a_iy[4];
-     sim::data_type a_iz[4];    
+     sim::data_type* a_ix = new sim::data_type[4];
+     sim::data_type* a_iy = new sim::data_type[4];
+     sim::data_type* a_iz = new sim::data_type[4];
      
      for (size_t i = 0; i < N; i++) {
-	__m256d aix = _mm256_setzero_pd();
-	__m256d aiy = _mm256_setzero_pd();
-	__m256d aiz = _mm256_setzero_pd();
- 	
-	__m256d rix   = _mm256_set1_pd( rx[i] );
-	__m256d riy   = _mm256_set1_pd( ry[i] );
-	__m256d riz   = _mm256_set1_pd( rz[i] );
- 		
-	for (int j = 0; j<N ; j+= 4){
-		__m256d rjx   = _mm256_load_pd( rx+j );
-		__m256d rjy   = _mm256_load_pd( ry+j );
-		__m256d rjz   = _mm256_load_pd( rz+j );
+        __m256d aix = _mm256_setzero_pd();
+        __m256d aiy = _mm256_setzero_pd();
+        __m256d aiz = _mm256_setzero_pd();
 
- 		__m256d subx  = _mm256_sub_pd( rjx, rix );
-		__m256d suby  = _mm256_sub_pd( rjy, riy );
-		__m256d subz  = _mm256_sub_pd( rjz, riz );
- 		
-		__m256d multx = _mm256_mul_pd( subx, subx );
-		__m256d multy = _mm256_mul_pd( suby, suby );
-		__m256d multz = _mm256_mul_pd( subz, subz );  
- 	
-		__m256d add      = _mm256_add_pd(_mm256_add_pd(multx, multy), multz); 
- 		__m256d denom    = _mm256_mul_pd(_mm256_sqrt_pd(add), add);        
-		__m256d zeros = _mm256_set1_pd(0);
-		
-		__m256d cmp_res = _mm256_cmpeq_epi64(zeros,denom);	
-		__m256d masses = _mm256_load_pd(m+j);
- 		
-//		__m256d a_i = _mm256_div_pd(_mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),denom);	
+        __m256d rix   = _mm256_set1_pd( rx[i] );
+        __m256d riy   = _mm256_set1_pd( ry[i] );
+        __m256d riz   = _mm256_set1_pd( rz[i] );
 
-//		__m256d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
-//			     _mm256_castpd128_pd256(_mm_rcp14_pd(_mm256_castpd256_pd128(denom) ))  );
+        for (int j = 0; j<N ; j+= 4) {
+            __m256d rjx   = _mm256_load_pd( rx+j );
+            __m256d rjy   = _mm256_load_pd( ry+j );
+            __m256d rjz   = _mm256_load_pd( rz+j );
 
-		__m256d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
-			     	_mm256_rcp_ps(denom) );	
+            __m256d subx  = _mm256_sub_pd( rjx, rix );
+            __m256d suby  = _mm256_sub_pd( rjy, riy );
+            __m256d subz  = _mm256_sub_pd( rjz, riz );
+
+            __m256d multx = _mm256_mul_pd( subx, subx );
+            __m256d multy = _mm256_mul_pd( suby, suby );
+            __m256d multz = _mm256_mul_pd( subz, subz );
+
+            __m256d add      = _mm256_add_pd(_mm256_add_pd(multx, multy), multz);
+            __m256d denom    = _mm256_mul_pd(_mm256_sqrt_pd(add), add);
+            __m256d zeros = _mm256_set1_pd(0);
+
+            __m256i cmp_res = _mm256_cmpeq_epi64(_mm256_castpd_si256(zeros), _mm256_castpd_si256(denom));
+            __m256d masses = _mm256_load_pd(m+j);
+
+            __m256d a_i = _mm256_div_pd(_mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),denom);
+
+            //		__m256d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
+            //			     _mm256_castpd128_pd256(_mm_rcp14_pd(_mm256_castpd256_pd128(denom) ))  );
+
+            //		__m256d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
+            //			     	_mm256_rcp_ps(denom) );
 
 
-		a_i = _mm256_andnot_si256(cmp_res, a_i);
- 	
-		aix = _mm256_sub_pd(aix,_mm256_mul_pd(a_i,subx));
-		aiy = _mm256_sub_pd(aiy,_mm256_mul_pd(a_i,suby));
-		aiz = _mm256_sub_pd(aiz,_mm256_mul_pd(a_i,subz));
-		
-		
-		_mm256_store_pd(a_ix,aix);
-		_mm256_store_pd(a_iy,aiy);
-		_mm256_store_pd(a_iz,aiz);
-	}
-		ax[i] = a_ix[0] + a_ix[1] + a_ix[2] + a_ix[3]; 
-		ay[i] = a_iy[0] + a_iy[1] + a_iy[2] + a_iy[3];
-		az[i] = a_iz[0] + a_iz[1] + a_iz[2] + a_iz[3]; 
-     }
+            a_i = _mm256_andnot_pd(_mm256_castsi256_pd(cmp_res), a_i);
 
- }
+            aix = _mm256_sub_pd(aix,_mm256_mul_pd(a_i,subx));
+            aiy = _mm256_sub_pd(aiy,_mm256_mul_pd(a_i,suby));
+            aiz = _mm256_sub_pd(aiz,_mm256_mul_pd(a_i,subz));
 
- int main(int argc, char** argv) {
+            _mm256_store_pd(a_ix,aix);
+            _mm256_store_pd(a_iy,aiy);
+            _mm256_store_pd(a_iz,aiz);
+        }
+
+        ax[i] = a_ix[0] + a_ix[1] + a_ix[2] + a_ix[3];
+        ay[i] = a_iy[0] + a_iy[1] + a_iy[2] + a_iy[3];
+        az[i] = a_iz[0] + a_iz[1] + a_iz[2] + a_iz[3];
+    }
+
+    delete[] a_ix;
+    delete[] a_iy;
+    delete[] a_iz;
+}
+
+int main(int argc, char** argv) {
     sim::Parameters params;
     readArgs(argc, argv, params);
      const size_t N = params.n;
