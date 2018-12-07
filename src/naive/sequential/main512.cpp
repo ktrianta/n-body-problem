@@ -43,23 +43,23 @@ void * operator new(size_t size) throw(std::bad_alloc){
 	__m512d riz   = _mm512_set1_pd( rz[i] );
  		
 	for (int j = 0; j<N ; j+= 8){
-		__512d rjx   = _mm512_load_pd( rx+j );
-		__512d rjy   = _mm512_load_pd( ry+j );
-		__512d rjz   = _mm512_load_pd( rz+j );
+		__m512d rjx   = _mm512_load_pd( rx+j );
+		__m512d rjy   = _mm512_load_pd( ry+j );
+		__m512d rjz   = _mm512_load_pd( rz+j );
 
- 		__512d subx  = _mm512_sub_pd( rjx, rix );
-		__512d suby  = _mm512_sub_pd( rjy, riy );
-		__512d subz  = _mm512_sub_pd( rjz, riz );
+ 		__m512d subx  = _mm512_sub_pd( rjx, rix );
+		__m512d suby  = _mm512_sub_pd( rjy, riy );
+		__m512d subz  = _mm512_sub_pd( rjz, riz );
  		
-		__512d multx = _mm512_mul_pd( subx, subx );
-		__512d multy = _mm512_mul_pd( suby, suby );
-		__512d multz = _mm512_mul_pd( subz, subz );  
+		__m512d multx = _mm512_mul_pd( subx, subx );
+		__m512d multy = _mm512_mul_pd( suby, suby );
+		__m512d multz = _mm512_mul_pd( subz, subz );  
  	
-		__512d add      = _mm512_add_pd(_mm512_add_pd(multx, multy), multz); 
- 		__512d denom    = _mm512_mul_pd(_mm512_sqrt_pd(add), add);        
-		__512d zeros = _mm512_set1_pd(0);
-		
-		__m512i cmp_res = _mm512_cmpeq_epi64(_mm512_castpd_si512(zeros),_mm512_castpd_si512(denom));	
+		__m512d add      = _mm512_add_pd(_mm512_add_pd(multx, multy), multz); 
+ 		__m512d denom    = _mm512_mul_pd(_mm512_sqrt_pd(add), add);        
+		__m512d zeros = _mm512_set1_pd(0);
+		__mmask8 cmp_res = _mm512_cmpeq_epi64_mask(_mm512_castpd_si512(zeros), _mm512_castpd_si512(denom));
+//		__m512i cmp_res = _mm512_cmpeq_epi64(_mm512_castpd_si512(zeros),_mm512_castpd_si512(denom));	
 		__m512d masses = _mm512_load_pd(m+j);
  		
 		__m512d a_i = _mm512_div_pd(_mm512_mul_pd(_mm512_set1_pd(-sim::g),masses),denom);	
@@ -67,8 +67,8 @@ void * operator new(size_t size) throw(std::bad_alloc){
 //		__m512d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
 //			     	_mm512_rcp14_pd(denom) );	
 
-
-		a_i = _mm512_andnot_si512(_mm512_castsi512_pd(cmp_res), a_i);
+		a_i = _mm512_maskz_andnot_pd(cmp_res, zeros, a_i);
+//		a_i = _mm512_andnot_si512(_mm512_castsi512_pd(cmp_res), a_i);
  	
 		aix = _mm512_sub_pd(aix,_mm512_mul_pd(a_i,subx));
 		aiy = _mm512_sub_pd(aiy,_mm512_mul_pd(a_i,suby));
@@ -80,9 +80,9 @@ void * operator new(size_t size) throw(std::bad_alloc){
 		_mm512_store_pd(a_iz,aiz);
 	}
 	
-		ax[i] = a_ix[0] + a_ix[1] + a_ix[2] + a_ix[3]; 
-		ay[i] = a_iy[0] + a_iy[1] + a_iy[2] + a_iy[3];
-		az[i] = a_iz[0] + a_iz[1] + a_iz[2] + a_iz[3]; 
+		ax[i] = a_ix[0] + a_ix[1] + a_ix[2] + a_ix[3] + a_ix[4] + a_ix[5] + a_ix[6] + a_ix[7]; 
+		ay[i] = a_iy[0] + a_iy[1] + a_iy[2] + a_iy[3] + a_iy[4] + a_iy[5] + a_iy[6] + a_iy[7];
+		az[i] = a_iz[0] + a_iz[1] + a_iz[2] + a_iz[3] + a_iz[4] + a_iz[5] + a_iz[6] + a_iz[7];
 
 
      }
