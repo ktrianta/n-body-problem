@@ -64,9 +64,6 @@ void * operator new(size_t size) {
             __m256d a_i = _mm256_div_pd(_mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),denom);
 
             //		__m256d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
-            //			     _mm256_castpd128_pd256(_mm_rcp14_pd(_mm256_castpd256_pd128(denom) ))  );
-
-            //		__m256d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
             //			     	_mm256_rcp_ps(denom) );
 
 
