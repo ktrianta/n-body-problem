@@ -75,7 +75,15 @@ void writeDataToFile(int N, dtype (*a)[3], std::ofstream& fs) {
     }
 }
 
-void writeDataToFile(int N, dtype (*ax),dtype (*ay),dtype (*az), dtype (*b)[3], std::ofstream& fs) {
+void writeDataToFile(int N, dtype (*ax), dtype (*ay), dtype (*az), std::ofstream& fs) {
+    for (size_t i = 0; i < N; i++) {
+        fs << ax[i] << "    "
+           << ay[i] << "    "
+           << az[i] << "\n";
+    }
+}
+
+void writeDataToFile(int N, dtype (*ax), dtype (*ay), dtype (*az), dtype (*b)[3], std::ofstream& fs) {
     for (size_t i = 0; i < N; i++) {
         fs << ax[i] << "    "
            << ay[i] << "    "
@@ -85,7 +93,6 @@ void writeDataToFile(int N, dtype (*ax),dtype (*ay),dtype (*az), dtype (*b)[3], 
            << b[i][2] << "\n";
     }
 }
-
 
 void writeDataToFile(int N, dtype (*a)[3], dtype (*b)[3], std::ofstream& fs) {
     for (size_t i = 0; i < N; i++) {

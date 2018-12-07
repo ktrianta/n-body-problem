@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
     std::ofstream out_file;
     if (rank == 0) {
         openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(params.n, r, u, out_file);
+        writeDataToFile(N, r, out_file);
     }
 
     const sim::data_type dt = params.dt;
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
 
         if (rank == 0) {
             if (t % 200 == 0) {
-                writeDataToFile(N, r1, u, out_file);
+                writeDataToFile(N, r1, out_file);
             }
         }
     }

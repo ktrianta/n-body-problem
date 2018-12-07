@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
         }
         params.out_filename = params.in_filename;
         openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(params.n, r, u, out_file);
+        writeDataToFile(N, r, out_file);
   //    if (!params.in_filename.empty()) {
   //        if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
   //            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
@@ -193,7 +193,7 @@ int main(int argc, char** argv) {
         io_start = std::chrono::high_resolution_clock::now();
         if (rank == 0) {
             if (t % 200 == 0){
-                writeDataToFile(N, r, u, out_file);
+                writeDataToFile(N, r, out_file);
             }   
         }
         io_end = std::chrono::high_resolution_clock::now();
