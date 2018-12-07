@@ -85,7 +85,10 @@ int main(int argc, char** argv) {
     io_time += std::chrono::duration< double >(io_end - io_start).count();
 
 
-    computeAcceleration(params.n, r, a, m);
+    comp_start = std::chrono::high_resolution_clock::now();
+    computeAcceleration(N, r, a, m);
+    comp_end = std::chrono::high_resolution_clock::now();
+    comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
     const size_t Ntimesteps = params.t / params.dt + 1;
     const sim::data_type dt = params.dt;     
