@@ -12,7 +12,7 @@ using time_point_t = std::chrono::high_resolution_clock::time_point;
  
 void * operator new(size_t size) throw(std::bad_alloc){
    void *p;
-   if ((p = _mm_malloc(size,16)) == 0){
+   if ((p = _mm_malloc(size,64)) == 0){
         static const std::bad_alloc nomem;
         throw (nomem);
    }
@@ -29,9 +29,9 @@ void * operator new(size_t size) throw(std::bad_alloc){
      std::fill(&az[0], &az[0] + N, 0);
 
 
-     sim::data_type a_ix[4]; 
-     sim::data_type a_iy[4];
-     sim::data_type a_iz[4];    
+     sim::data_type* a_ix = new sim::data_type[8]; 
+     sim::data_type* a_iy = new sim::data_type[8];
+     sim::data_type* a_iz = new sim::data_type[8];    
      
      for (size_t i = 0; i < N; i++) {
 	__m512d aix = _mm512_setzero_pd();
@@ -59,16 +59,16 @@ void * operator new(size_t size) throw(std::bad_alloc){
  		__512d denom    = _mm512_mul_pd(_mm512_sqrt_pd(add), add);        
 		__512d zeros = _mm512_set1_pd(0);
 		
-		__m512d cmp_res = _mm512_cmpeq_epi64(zeros,denom);	
+		__m512i cmp_res = _mm512_cmpeq_epi64(_mm512_castpd_si512(zeros),_mm512_castpd_si512(denom));	
 		__m512d masses = _mm512_load_pd(m+j);
  		
-//		__m512d a_i = _mm512_div_pd(_mm512_mul_pd(_mm512_set1_pd(-sim::g),masses),denom);	
+		__m512d a_i = _mm512_div_pd(_mm512_mul_pd(_mm512_set1_pd(-sim::g),masses),denom);	
 //
 //		__m512d a_i = _mm256_mul_pd( _mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),
 //			     	_mm512_rcp14_pd(denom) );	
 
 
-		a_i = _mm512_andnot_si512(cmp_res, a_i);
+		a_i = _mm512_andnot_si512(_mm512_castsi512_pd(cmp_res), a_i);
  	
 		aix = _mm512_sub_pd(aix,_mm512_mul_pd(a_i,subx));
 		aiy = _mm512_sub_pd(aiy,_mm512_mul_pd(a_i,suby));
@@ -86,6 +86,10 @@ void * operator new(size_t size) throw(std::bad_alloc){
 
 
      }
+
+     delete[] a_ix;
+     delete[] a_iy;
+     delete[] a_iz;
 
  }
 
