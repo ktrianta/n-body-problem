@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
 //  }
 
     const sim::data_type dt = params.dt;
-    const size_t timesteps = params.t/dt + 1;
+    const size_t timesteps = params.s;
 
     size_t local_N[size];
     int local_Nx3[size];

@@ -10,10 +10,10 @@ void readArgs(int argc, char** argv, sim::Parameters& params) {
             case 'n':
                 params.n = atoi(optarg);
                 break;
-            case 't':
-                params.t = atof(optarg);
-                break;
             case 's':
+                params.s = atoi(optarg);
+                break;
+            case 't':
                 params.dt = atof(optarg);
                 break;
             case 'h':

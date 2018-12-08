@@ -118,7 +118,7 @@ int main(int argc, char** argv)
     tree_end = std::chrono::high_resolution_clock::now();
     tree_time += std::chrono::duration< double >(tree_end - tree_start).count();
 
-    const size_t Ntimesteps = params.t / params.dt + 1;
+    const size_t Ntimesteps = params.s;
     const sim::data_type dt = params.dt;
     
 

@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
     comp_end = std::chrono::high_resolution_clock::now();
     comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
-    const size_t Ntimesteps = params.t / params.dt + 1;
+    const size_t Ntimesteps = params.s;
     const sim::data_type dt = params.dt;
     for (size_t t = 0; t < Ntimesteps; t++) {
         for (size_t j = 0; j < N; j++) {
