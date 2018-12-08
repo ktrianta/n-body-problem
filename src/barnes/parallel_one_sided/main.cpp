@@ -63,7 +63,15 @@ int main(int argc, char** argv) {
     sim::Parameters params;
     readArgs(argc, argv, params);
 
-    const size_t N = params.n;
+    size_t N0;
+    if (params.n % size != 0){
+        N0 = params.n + size - params.n % size;
+    } 
+    else { 
+        N0 = params.n;
+    }
+    const size_t N = N0;
+
     const sim::data_type theta = params.theta;
     int local_N = N/size;
 
@@ -87,6 +95,15 @@ int main(int argc, char** argv) {
         if (readDataFromFile(params.in_filename, N, r) == -1) {
             std::cerr << "File " << params.in_filename << " not found!" << std::endl;
             return -1;
+        }
+        for (int i = N - size + params.n % size; i < N; i++){
+            r[i][0]=0;
+            r[i][1]=r[i-1][1]+0.003;
+            r[i][2]=r[i-1][2]+0.003;
+            r[i][3]=r[i-1][3]+0.003;
+            r[i][4]=0;
+            r[i][5]=0;
+            r[i][6]=0;
         }
 
         params.out_filename = params.in_filename;
