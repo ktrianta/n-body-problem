@@ -18,6 +18,7 @@ include_directories(${UTILS_DIR})
 
 add_subdirectory(naive/sequential)
 add_subdirectory(naive/avx256)
+add_subdirectory(naive/avx512)
 add_subdirectory(naive/parallel)
 add_subdirectory(naive/parallel_one_sided)
 add_subdirectory(barnes/sequential)
