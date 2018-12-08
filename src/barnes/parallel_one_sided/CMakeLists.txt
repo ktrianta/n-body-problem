@@ -4,6 +4,7 @@ include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
 set(SOURCE_FILES main.cpp serialization.cpp serialization.hpp)
 add_executable(barnes-parallel-one-sided ${SOURCE_FILES} ${UTILS_SOURCES})
+target_compile_definitions(barnes-parallel-one-sided PRIVATE MPI_IS_USED=1)
 target_link_libraries(barnes-parallel-one-sided ${MPI_LIBRARIES})
 set_target_properties(barnes-parallel-one-sided PROPERTIES OUTPUT_NAME prog)
 

@@ -3,9 +3,17 @@
 
 #include <string>
 
+#ifdef MPI_IS_USED
+#include <mpi.h>
+#endif
+
 namespace sim {
     // Basic data type, (probably) float or double
     typedef double data_type;
+
+#ifdef MPI_IS_USED
+    const MPI_Datatype mpi_data_type = MPI_DOUBLE;
+#endif
 
     // Global constants
     const data_type g = 1;
