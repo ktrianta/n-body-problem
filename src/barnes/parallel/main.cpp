@@ -7,6 +7,9 @@
 #include "octree.hpp"
 #include "initialization.hpp"
 #include "boxComputation.hpp"
+#include <chrono>
+
+using time_point_t = std::chrono::high_resolution_clock::time_point;
 
 using namespace std;
 
@@ -15,6 +18,24 @@ int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    time_point_t prog_start;
+    time_point_t prog_end;
+    time_point_t io_start;
+    time_point_t io_end;
+    time_point_t comp_start;
+    time_point_t comp_end;
+    time_point_t tree_start;
+    time_point_t tree_end;
+    time_point_t comm_start;
+    time_point_t comm_end;
+    double  prog_time = 0;
+    double io_time = 0;
+    double comp_time = 0;
+    double tree_time = 0;
+    double comm_time = 0;
+
+    prog_start = std::chrono::high_resolution_clock::now();
 
     sim::Parameters params;
     readArgs(argc, argv, params);
@@ -29,6 +50,7 @@ int main(int argc, char** argv) {
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
+    io_start = std::chrono::high_resolution_clock::now();
     if (rank == 0) {
         if (!params.in_filename.empty()) {
             if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
@@ -40,22 +62,31 @@ int main(int argc, char** argv) {
               initializePositionOnSphere(N, r);
         }
     }
-
-    // SEND the position vector r from Process 0 to all processes.
-    MPI_Bcast(&r[0][0], N*3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&u[0][0], N*3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&m[0], N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-    sim::data_type xc, yc, zc, h2, w2, t2;
-    boxComputation(N, r, xc, yc, zc, w2, h2, t2);
-
     std::ofstream out_file;
     if (rank == 0) {
         openFileToWrite(out_file, params.out_filename, params.out_dirname);
         writeDataToFile(N, r, u, out_file);
     }
+    io_end = std::chrono::high_resolution_clock::now();
+    io_time += std::chrono::duration< double >(io_end - io_start).count();
 
+    // SEND the position vector r from Process 0 to all processes.
+    comm_start = std::chrono::high_resolution_clock::now();
+    MPI_Bcast(&r[0][0], N*3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&u[0][0], N*3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&m[0], N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    comm_end = std::chrono::high_resolution_clock::now();
+    comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
+
+
+
+    sim::data_type xc, yc, zc, h2, w2, t2;
+    boxComputation(N, r, xc, yc, zc, w2, h2, t2);
+
+    tree_start = std::chrono::high_resolution_clock::now();
     Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
+    tree_end = std::chrono::high_resolution_clock::now();
+    tree_time += std::chrono::duration< double >(tree_end - tree_start).count();
 
     const size_t Ntimesteps = params.t / params.dt + 1;
     const sim::data_type dt = params.dt;
@@ -92,13 +123,13 @@ int main(int argc, char** argv) {
         r_local[i][2] = r[j][2];
     }
 
+    comp_start = std::chrono::high_resolution_clock::now();
     for (size_t j = offset[rank], end = local_N[rank] + offset[rank]; j < end; j++) {
         tree.computeAcceleration(j, r, a, sim::g, theta);
     }
+    comp_end = std::chrono::high_resolution_clock::now();
+    comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
-    double t_start = 0;
-    double t_end = 0;
-    double time = 0;
 
     for (size_t t = 0; t < Ntimesteps; t++) {
         for (size_t j = 0, idx = offset[rank], end = local_N[rank]; j < end; j++, idx++) {
@@ -113,14 +144,17 @@ int main(int argc, char** argv) {
             a[idx][2] = 0;
         }
 
+        comm_start = std::chrono::high_resolution_clock::now();
         MPI_Allgatherv(&(r_local[0][0]), local_N[rank]*3, MPI_DOUBLE, &(r[0][0]),
             local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
+        comm_end = std::chrono::high_resolution_clock::now();
+        comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
 
         for (size_t idx = offset[rank], end = offset[rank] + local_N[rank]; idx < end; idx++) {
-            t_start = MPI_Wtime();
+            comp_start = std::chrono::high_resolution_clock::now();
             tree.computeAcceleration(idx, r, a, sim::g, theta);
-            t_end = MPI_Wtime();
-            time += t_end - t_start;
+            comp_end = std::chrono::high_resolution_clock::now();
+            comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
             u[idx][0] += 0.5 * a[idx][0] * dt;
             u[idx][1] += 0.5 * a[idx][1] * dt;
@@ -129,14 +163,38 @@ int main(int argc, char** argv) {
         }
 
         boxComputation(N, r, xc, yc, zc, w2, h2, t2);
+        tree_start = std::chrono::high_resolution_clock::now();
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
+        tree_end = std::chrono::high_resolution_clock::now();
+        tree_time += std::chrono::duration< double >(tree_end - tree_start).count();
 
+        io_start = std::chrono::high_resolution_clock::now();
         if (t % 200 == 0 && rank == 0) {
             writeDataToFile(N, r, u, out_file);
         }
+        io_end = std::chrono::high_resolution_clock::now();
+        io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
 
-    printf("time= %f \n", time);
+    prog_end = std::chrono::high_resolution_clock::now();
+    prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
+    double plotData_comp;
+    double plotData_comm;
+    double plotData_io;
+    double plotData_prog;
+    double plotData_tree;
+    MPI_Reduce(&comp_time, &plotData_comp, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&comm_time, &plotData_comm, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&io_time, &plotData_io, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&prog_time, &plotData_prog, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&tree_time, &plotData_tree, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0) {
+        delete[] r;
+        FILE *plotFile;
+        plotFile = fopen("plotData.txt", "a");
+        fprintf(plotFile, "%lf,  %lf, %lf, %lf, %lf \n", plotData_prog, plotData_comp, plotData_io, plotData_tree, plotData_comm);
+        fclose(plotFile);
+    }
 
     delete[] m;
     delete[] r;
