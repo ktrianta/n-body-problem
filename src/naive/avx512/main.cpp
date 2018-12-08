@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
 
     std::ofstream out_file;
     openFileToWrite(out_file, params.out_filename, params.out_dirname);
-    writeDataToFile(params.n, rx, ry, rz, u, out_file);
+    writeDataToFile(params.n, rx, ry, rz, out_file);
     io_end = std::chrono::high_resolution_clock::now();
     io_time += std::chrono::duration< double >(io_end - io_start).count();
 
@@ -186,7 +186,7 @@ int main(int argc, char** argv) {
 
         io_start = std::chrono::high_resolution_clock::now();
         if (t % 200 == 0) {
-            writeDataToFile(N, rx, ry, rz, u, out_file);
+            writeDataToFile(N, rx, ry, rz, out_file);
         }
         io_end = std::chrono::high_resolution_clock::now();
         io_time += std::chrono::duration< double >(io_end - io_start).count();
