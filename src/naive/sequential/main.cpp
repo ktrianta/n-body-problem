@@ -84,6 +84,20 @@ int main(int argc, char** argv) {
     io_end = std::chrono::high_resolution_clock::now();
     io_time += std::chrono::duration< double >(io_end - io_start).count();
 
+// Computation of Initial Energy    
+    double initialKEnergy = 0;
+    double initialPEnergy = 0;
+    double initialEnergy = 0;
+    for (int i = 0; i < N; i++){
+        initialKEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
+        for (int j = 0; j < i; j++){
+            double denominator = sqrt((r[j][0]-r[i][0])*(r[j][0]-r[i][0]) + (r[j][1]-r[i][1])*(r[j][1]-r[i][1]) +
+                                      (r[j][2]-r[i][2])*(r[j][2]-r[i][2]));
+            initialPEnergy -= sim::g*m[i]*m[j]/denominator;
+            }
+        }
+        initialEnergy = initialKEnergy + initialPEnergy;
+
 
     comp_start = std::chrono::high_resolution_clock::now();
     computeAcceleration(N, r, a, m);
@@ -121,6 +135,20 @@ int main(int argc, char** argv) {
         io_end = std::chrono::high_resolution_clock::now();
         io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
+
+    double energy =0;
+    double kineticEnergy = 0;
+    double potentialEnergy = 0;
+    for (int i = 0; i < N; i++){
+        kineticEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
+        for (int j = 0; j < i; j++){
+            double denominator = sqrt((r[j][0]-r[i][0])*(r[j][0]-r[i][0]) + (r[j][1]-r[i][1])*(r[j][1]-r[i][1]) +
+                                      (r[j][2]-r[i][2])*(r[j][2]-r[i][2]));
+            potentialEnergy -= sim::g*m[i]*m[j]/denominator;
+            }
+        }
+        energy = kineticEnergy + potentialEnergy;
+    std::cout << "initial energy is = " << initialEnergy << "Error in total energy at the end of simulation = " << (energy - initialEnergy)/initialEnergy*100 << "%" <<  std::endl; 
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
