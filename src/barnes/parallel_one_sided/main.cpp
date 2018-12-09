@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
         r = new sim::data_type[N][7];
 
         io_start = std::chrono::high_resolution_clock::now();
-        if (readDataFromFile(params.in_filename, N, r) == -1) {
+        if (readDataFromFile(params.in_filename, N - size + params.n % size, r) == -1) {
             std::cerr << "File " << params.in_filename << " not found!" << std::endl;
             return -1;
         }
