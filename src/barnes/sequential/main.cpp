@@ -33,7 +33,6 @@ int main(int argc, char** argv) {
     readArgs(argc, argv, params);
 
     const size_t N = params.n;
-    const sim::data_type theta = params.theta;
     sim::data_type *m = new sim::data_type[N];
     sim::data_type (*r)[3] = new sim::data_type[N][3];
     sim::data_type (*u)[3] = new sim::data_type[N][3];
@@ -51,7 +50,7 @@ int main(int argc, char** argv) {
         delete[] a;
         return -1;
     }
-
+    params.out_filename = params.in_filename;
     std::ofstream out_file;
     openFileToWrite(out_file, params.out_filename, params.out_dirname);
     writeDataToFile(N, r, u, out_file);
@@ -66,7 +65,7 @@ int main(int argc, char** argv) {
     Octree::a = a;
     Octree::m = m;
     Octree::g = sim::g;
-    Octree::theta = theta;
+    Octree::theta = params.theta;
     tree_start = std::chrono::high_resolution_clock::now();
     Octree tree = Octree(N, xc, yc, zc, w2, h2, t2);
     tree_end = std::chrono::high_resolution_clock::now();
