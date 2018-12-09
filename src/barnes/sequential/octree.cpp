@@ -163,41 +163,37 @@ void Octree::computeAcceleration(int idx) {
         return;
     }
 
+    sim::data_type rji[3];
+    rji[0] = massCenter[0] - r[idx][0];
+    rji[1] = massCenter[1] - r[idx][1];
+    rji[2] = massCenter[2] - r[idx][2];
+    sim::data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
+    sim::data_type d = sqrt(r2+sim::e2);
+
     if (leaf == true) {
-        sim::data_type rji[3];
-        rji[0] = massCenter[0] - r[idx][0];
-        rji[1] = massCenter[1] - r[idx][1];
-        rji[2] = massCenter[2] - r[idx][2];
-        sim::data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-        sim::data_type denom = (r2+sim::e2) * sqrt(r2+sim::e2);
+        sim::data_type denom = (r2+sim::e2) * d;
         sim::data_type a_i = -g * mass / denom;
         a[idx][0] -= a_i * rji[0];
         a[idx][1] -= a_i * rji[1];
         a[idx][2] -= a_i * rji[2];
-    } else {
-        sim::data_type rji[3];
-        rji[0] = massCenter[0] - r[idx][0];
-        rji[1] = massCenter[1] - r[idx][1];
-        rji[2] = massCenter[2] - r[idx][2];
-        sim::data_type r2 = rji[0] * rji[0] + rji[1] * rji[1] + rji[2] * rji[2];
-        sim::data_type d = sqrt(r2+sim::e2);
+        return;
+    }
 
-        if (2.*boundary.w/d <= theta) {
-            sim::data_type denom = (r2+sim::e2) * d;
-            sim::data_type a_i = -g * mass / denom;
-            a[idx][0] -= a_i * rji[0];
-            a[idx][1] -= a_i * rji[1];
-            a[idx][2] -= a_i * rji[2];
-            return;
-        } else {
-            fnorthWest->computeAcceleration(idx);
-            fnorthEast->computeAcceleration(idx);
-            fsouthWest->computeAcceleration(idx);
-            fsouthEast->computeAcceleration(idx);
-            bnorthWest->computeAcceleration(idx);
-            bnorthEast->computeAcceleration(idx);
-            bsouthWest->computeAcceleration(idx);
-            bsouthEast->computeAcceleration(idx);
-        }
+    if (2.*boundary.w/d <= theta) {
+        sim::data_type denom = (r2+sim::e2) * d;
+        sim::data_type a_i = -g * mass / denom;
+        a[idx][0] -= a_i * rji[0];
+        a[idx][1] -= a_i * rji[1];
+        a[idx][2] -= a_i * rji[2];
+        return;
+    } else {
+        fnorthWest->computeAcceleration(idx);
+        fnorthEast->computeAcceleration(idx);
+        fsouthWest->computeAcceleration(idx);
+        fsouthEast->computeAcceleration(idx);
+        bnorthWest->computeAcceleration(idx);
+        bnorthEast->computeAcceleration(idx);
+        bsouthWest->computeAcceleration(idx);
+        bsouthEast->computeAcceleration(idx);
     }
 }
