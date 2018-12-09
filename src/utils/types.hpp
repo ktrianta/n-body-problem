@@ -28,6 +28,7 @@ namespace sim {
         const size_t def_n = 10;                        // default number of particles
         const size_t def_s = 5;                         // default number of time steps
         const data_type def_dt = 0.0001;                // default time step duration
+        const data_type def_theta = 1;                  // default barnes hut theta
         const std::string def_out_filename = "output";
         const std::string def_out_dirname = ".";
 
@@ -41,8 +42,8 @@ namespace sim {
         std::string out_dirname;
 
         Parameters()
-            : n(def_n), s(def_s), dt(def_dt), out_filename(def_out_filename),
-              out_dirname(def_out_dirname)
+            : n(def_n), s(def_s), dt(def_dt), theta(def_theta),
+              out_filename(def_out_filename), out_dirname(def_out_dirname)
         {}
 
     };
