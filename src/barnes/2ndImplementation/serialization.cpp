@@ -84,16 +84,21 @@ void Serialization::insert(int j, sim::data_type rx, sim::data_type ry, sim::dat
         }
 
         if (treeArray[f].leaf) {
-            //std::cout << "sub " << f << " index " << treeArray[f].index<< std::endl;
+            //std::cout << f << " sub " << rx << " " << ry << std::endl;
+            //std::cout << "cen " << treeArray[f].massCenter[0] << " " << treeArray[f].massCenter[1] << std::endl;
             subdivide(f);
-            sim::data_type mult1 = (sim::data_type) (cum_size - 1) / cum_size;
-            sim::data_type mult2 = 1.0 / (sim::data_type) cum_size;
-            for (int d = 0; d < 3; d++) treeArray[f].massCenter[d] *= mult1;
-            treeArray[f].massCenter[0] += mult2 * rx;
-            treeArray[f].massCenter[1] += mult2 * ry;
-            treeArray[f].massCenter[2] += mult2 * rz;
-            treeArray[f].mass += m;
         }
+
+        sim::data_type mult1 = (sim::data_type) (cum_size - 1) / cum_size;
+        sim::data_type mult2 = 1.0 / (sim::data_type) cum_size;
+        //std::cout << "mult1 " << mult1 << std::endl;
+        //std::cout << "mult2 " << mult2 << std::endl;
+        for (int d = 0; d < 3; d++) treeArray[f].massCenter[d] *= mult1;
+        treeArray[f].massCenter[0] += mult2 * rx;
+        treeArray[f].massCenter[1] += mult2 * ry;
+        treeArray[f].massCenter[2] += mult2 * rz;
+        //std::cout << f << " cen " << treeArray[f].massCenter[0] << " " << treeArray[f].massCenter[1] << std::endl;
+        treeArray[f].mass += m;
 
         if (treeArray[f].child != 0) {
             list.push(treeArray[f].child);
