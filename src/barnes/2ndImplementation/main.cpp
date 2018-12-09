@@ -50,8 +50,7 @@ int main(int argc, char** argv) {
         delete[] a;
         return -1;
     }
-
-
+    params.out_filename = params.in_filename;
     std::ofstream out_file;
     openFileToWrite(out_file, params.out_filename, params.out_dirname);
     writeDataToFile(N, r, u, out_file);
