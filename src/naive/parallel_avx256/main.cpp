@@ -45,12 +45,12 @@ void computeAcceleration(const size_t N,sim::data_type (*rx),sim::data_type (*ry
 		__m256d aiy = _mm256_setzero_pd();
         	__m256d aiz = _mm256_setzero_pd();
 
-		__m256 rix = _mm256_set1_pd( rx[i] );
-		__m256 riy = _mm256_set1_pd( ry[i] );
-		__m256 riz = _mm256_set1_pd( rz[i] );
+		__m256d rix = _mm256_set1_pd( rx[i] );
+		__m256d riy = _mm256_set1_pd( ry[i] );
+		__m256d riz = _mm256_set1_pd( rz[i] );
 
 	for (size_t j = 0; j < N; j+=4 ) {
-            if (i == j) continue;
+       //     if (i == j) continue;
 		
 	    __m256d rjx = _mm256_load_pd(rx+j);
 	    __m256d rjy = _mm256_load_pd(ry+j);
@@ -134,8 +134,8 @@ int main(int argc, char** argv) {
     
     
     std::fill(&ax[0], &ax[0] + N, 0);
-    std::fill(&ay[0], &ax[0] + N, 0);
-    std::fill(&az[0], &ay[0] + N, 0);
+    std::fill(&ay[0], &ay[0] + N, 0);
+    std::fill(&az[0], &az[0] + N, 0);
 
     // PROCESS 0 initialize position vector r.
     io_start = std::chrono::high_resolution_clock::now();
@@ -178,10 +178,10 @@ int main(int argc, char** argv) {
 
     comm_start = std::chrono::high_resolution_clock::now();
     // SEND the position vector r from Process 0 to all processes.
-    MPI_Bcast(&rx[0],N, MPI_DOUBLE,0, MPI_COMM_WORLD);
-    MPI_Bcast(&ry[0],N, MPI_DOUBLE,0, MPI_COMM_WORLD);
-    MPI_Bcast(&rz[0],N, MPI_DOUBLE,0, MPI_COMM_WORLD);
-    
+    MPI_Bcast(rx,N, MPI_DOUBLE,0, MPI_COMM_WORLD);
+    MPI_Bcast(ry,N, MPI_DOUBLE,0, MPI_COMM_WORLD);
+    MPI_Bcast(rz,N, MPI_DOUBLE,0, MPI_COMM_WORLD);
+ 
     MPI_Bcast(&u[0][0],N*3, MPI_DOUBLE,0, MPI_COMM_WORLD);
     MPI_Bcast(&m[0],N, MPI_DOUBLE,0, MPI_COMM_WORLD);
     comm_end = std::chrono::high_resolution_clock::now();
