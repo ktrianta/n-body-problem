@@ -18,6 +18,7 @@ void Treenode::set(double px, double py, double pz, double pw, double ph, double
     w = pw;
     h = ph;
     t = pt;
+    root = cbrt(pw*ph*pt);
     mass = 0;
     index = -1;
     leaf = true;
@@ -38,6 +39,7 @@ Serialization::Serialization(double px, double py, double pz, double pw, double 
     treeArray[0].w = pw;
     treeArray[0].h = ph;
     treeArray[0].t = pt;
+    treeArray[0].root = cbrt(pw*ph*pt);
     position = 0;
 }
 
@@ -260,7 +262,7 @@ void Serialization::computeAcceleration(int idx, sim::data_type r[3], sim::data_
             continue;
         }
 
-        if (2 * current.w / d <= theta) {
+        if (2 * current.root / d <= theta) {
             sim::data_type denom = (r2+sim::e2) * d;
             sim::data_type a_i = -g * current.mass / denom;
             a[0] -= a_i * rji[0];

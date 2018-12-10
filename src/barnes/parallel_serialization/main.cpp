@@ -61,9 +61,9 @@ int main(int argc, char** argv)
     sim::data_type (*a)[3] = new sim::data_type[N][3];
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-    double initialKEnergy = 0;
-    double initialPEnergy = 0;
-    double initialEnergy = 0;
+//  double initialKEnergy = 0;
+//  double initialPEnergy = 0;
+//  double initialEnergy = 0;
 
     if (rank == 0) {
         io_start = std::chrono::high_resolution_clock::now();
@@ -88,22 +88,22 @@ int main(int argc, char** argv)
 
         params.out_filename = params.in_filename;
 
-        for (int i = 0; i < N; i++){
-            initialKEnergy += r[i][0] * (r[i][1]*r[i][1] + r[i][2]*r[i][2] + r[i][3]*r[i][3])/2.;
-            for (int j = 0; j < i; j++){
-                double denominator = sqrt((r[j][0]*r[j][1]-r[i][0]*r[i][1])*(r[j][0]*r[j][1]-r[i][0]*r[i][1]) + (r[j][0]*r[j][2]-r[i][0]*r[i][2])*(r[j][0]*r[j][2]-r[i][0]*r[i][2]) +
-                                          (r[j][0]*r[j][3]-r[i][0]*r[i][3])*(r[j][0]*r[j][3]-r[i][0]*r[i][3]));
-                initialPEnergy -= sim::g*r[i][0]*r[j][0]/denominator;
-                }
-            }
-            initialEnergy = initialKEnergy + initialPEnergy;
+//      for (int i = 0; i < N; i++){
+//          initialKEnergy += r[i][0] * (r[i][1]*r[i][1] + r[i][2]*r[i][2] + r[i][3]*r[i][3])/2.;
+//          for (int j = 0; j < i; j++){
+//              double denominator = sqrt((r[j][0]*r[j][1]-r[i][0]*r[i][1])*(r[j][0]*r[j][1]-r[i][0]*r[i][1]) + (r[j][0]*r[j][2]-r[i][0]*r[i][2])*(r[j][0]*r[j][2]-r[i][0]*r[i][2]) +
+//                                        (r[j][0]*r[j][3]-r[i][0]*r[i][3])*(r[j][0]*r[j][3]-r[i][0]*r[i][3]));
+//              initialPEnergy -= sim::g*r[i][0]*r[j][0]/denominator;
+//              }
+//          }
+//          initialEnergy = initialKEnergy + initialPEnergy;
 
     }
     // SEND the position vector r from Process 0 to all processes.
-    comm_start = std::chrono::high_resolution_clock::now();
+//    comm_start = std::chrono::high_resolution_clock::now();
     MPI_Bcast(&r[0][0],N*7, MPI_DOUBLE,0, MPI_COMM_WORLD);
-    comm_end = std::chrono::high_resolution_clock::now();
-    comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
+//    comm_end = std::chrono::high_resolution_clock::now();
+//    comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
 
 //  the center of the parent node and the half width and height
     sim::data_type xc, yc, zc, h2, w2, t2;
@@ -148,7 +148,9 @@ int main(int argc, char** argv)
    
  
     comm_start = std::chrono::high_resolution_clock::now();
+        MPI_Barrier(MPI_COMM_WORLD);
     MPI_Allreduce(a_local,a,3*N, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+        MPI_Barrier(MPI_COMM_WORLD);
     comm_end = std::chrono::high_resolution_clock::now();
     comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
 
@@ -192,11 +194,13 @@ int main(int argc, char** argv)
         }
         comp_end = std::chrono::high_resolution_clock::now();
         comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
-        
+
+        MPI_Barrier(MPI_COMM_WORLD);
         comm_start = std::chrono::high_resolution_clock::now();
         MPI_Allreduce(a_local,a,3*N, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
         comm_end = std::chrono::high_resolution_clock::now();
         comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
+        MPI_Barrier(MPI_COMM_WORLD);
         for (int j = 0; j < N; j++)
         {
 
@@ -215,7 +219,7 @@ int main(int argc, char** argv)
         io_time += std::chrono::duration< double >(io_end - io_start).count();
 
     }
-
+    
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
     double plotData_comp;
