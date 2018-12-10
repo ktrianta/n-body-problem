@@ -48,28 +48,31 @@ void computeAcceleration(const size_t N,sim::data_type (*rx),sim::data_type (*ry
 		__m256d rix = _mm256_set1_pd( rx[i] );
 		__m256d riy = _mm256_set1_pd( ry[i] );
 		__m256d riz = _mm256_set1_pd( rz[i] );
-
+		
+	    	__m256d zeros = _mm256_set1_pd(0);
+//		__m256d epsilon = _mm256_set1_pd(sim::e2);
 	for (size_t j = 0; j < N; j+=4 ) {
        //     if (i == j) continue;
 		
+	    __m256d masses = _mm256_load_pd(m+j);
+	    
 	    __m256d rjx = _mm256_load_pd(rx+j);
-	    __m256d rjy = _mm256_load_pd(ry+j);
-	    __m256d rjz = _mm256_load_pd(rz+j);
-            
 	    __m256d subx = _mm256_sub_pd(rjx,rix);
-	    __m256d suby = _mm256_sub_pd(rjy,riy);
-	    __m256d subz = _mm256_sub_pd(rjz,riz);
-		
 	    __m256d multx = _mm256_mul_pd(subx,subx);
+	   
+	    __m256d rjy = _mm256_load_pd(ry+j);
+	    __m256d suby = _mm256_sub_pd(rjy,riy);
 	    __m256d multy = _mm256_mul_pd(suby,suby);
+	   
+	    __m256d rjz = _mm256_load_pd(rz+j);
+	    __m256d subz = _mm256_sub_pd(rjz,riz);	
 	    __m256d multz = _mm256_mul_pd(subz,subz);
 
 	    __m256d add = _mm256_add_pd(_mm256_add_pd(multx,multy),multz);
+//	    __m256d denom = _mm256_mul_pd(_mm256_sqrt_pd( _mm256_add_pd(add,epsilon) ),_mm256_add_pd(add,epsilon) );
 	    __m256d denom = _mm256_mul_pd(_mm256_sqrt_pd(add),add);
-	    __m256d zeros = _mm256_set1_pd(0);
 
 	    __m256i cmp_res = _mm256_cmpeq_epi64(_mm256_castpd_si256(zeros), _mm256_castpd_si256(denom) );
-	    __m256d masses = _mm256_load_pd(m+j);
 
 	   __m256d a_i = _mm256_div_pd(_mm256_mul_pd(_mm256_set1_pd(-sim::g),masses),denom);
 	   a_i = _mm256_andnot_pd(_mm256_castsi256_pd(cmp_res), a_i);
@@ -195,9 +198,8 @@ int main(int argc, char** argv) {
 
     const sim::data_type dt = params.dt;
     const size_t timesteps = params.s;
-
-    size_t local_N[size];
-    int local_Nx3[size];
+ 
+    int local_N[size];
     size_t local_N_int = N/size;
     size_t rem = N - local_N_int * size;
     size_t counter = 0;
@@ -207,20 +209,18 @@ int main(int argc, char** argv) {
         if (counter < rem) {
             local_N[i] += 1;
             counter ++;
-        }
-        local_Nx3[i] = local_N[i]*3;
+        } 
     }
     
     sim::data_type (*rx_local) = new sim::data_type[local_N[rank]];
     sim::data_type (*ry_local) = new sim::data_type[local_N[rank]];
     sim::data_type (*rz_local) = new sim::data_type[local_N[rank]];
 
-    size_t offset[size]; offset[0] = 0;
-    int offset_x3[size]; offset_x3[0] = 0;
+    
+    int offset[size]; offset[0] = 0;
 
-    for (size_t i = 1; i < size; i++) {
+    for (size_t i = 1; i < size; i++) { 
         offset[i] = offset[i-1] + local_N[i-1];
-        offset_x3[i] = offset_x3[i-1] + local_Nx3[i-1];
     }
 
     for (size_t i = 0, j = offset[rank], end = local_N[rank]; i < end; i++, j++) {
@@ -249,9 +249,9 @@ int main(int argc, char** argv) {
         comm_start = std::chrono::high_resolution_clock::now();
 
 
-	MPI_Allgatherv( &(rx_local[0]), local_N[rank], MPI_DOUBLE, &(rx[0]), local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
-        MPI_Allgatherv( &(ry_local[0]), local_N[rank], MPI_DOUBLE, &(ry[0]), local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
-        MPI_Allgatherv( &(rz_local[0]), local_N[rank], MPI_DOUBLE, &(rz[0]), local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
+	MPI_Allgatherv( rx_local, local_N[rank], MPI_DOUBLE, rx, local_N, offset, MPI_DOUBLE, MPI_COMM_WORLD);
+        MPI_Allgatherv( ry_local, local_N[rank], MPI_DOUBLE, ry, local_N, offset, MPI_DOUBLE, MPI_COMM_WORLD);
+        MPI_Allgatherv( rz_local, local_N[rank], MPI_DOUBLE, rz, local_N, offset, MPI_DOUBLE, MPI_COMM_WORLD);
         
 	comm_end = std::chrono::high_resolution_clock::now();
         comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
