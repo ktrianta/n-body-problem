@@ -164,7 +164,6 @@ int main(int argc, char** argv) {
     comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
     //Start benchmark
-//  double t1_comp, t2_comp, t_tot_comp, t1_comm, t2_comm, t_tot_comm;
     for (size_t t = 0; t < timesteps; t++) {
         for (size_t j = 0, idx = offset[rank]; j < local_N[rank]; j++, idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
@@ -174,22 +173,16 @@ int main(int argc, char** argv) {
             r_local[j][1] += u[idx][1] * dt;
             r_local[j][2] += u[idx][2] * dt;
         }
-//        t1_comm = MPI_Wtime();
         comm_start = std::chrono::high_resolution_clock::now();
         MPI_Allgatherv(&(r_local[0][0]), local_N[rank]*3, MPI_DOUBLE, &(r[0][0]),
             local_Nx3, offset_x3, MPI_DOUBLE, MPI_COMM_WORLD);
         comm_end = std::chrono::high_resolution_clock::now();
         comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
-//        t2_comm  = MPI_Wtime();
-//        t_tot_comm += (t2_comm-t1_comm);
 
-//        t1_comp = MPI_Wtime();
         comp_start = std::chrono::high_resolution_clock::now();
         computeAcceleration(N, r, a, m, local_N[rank], offset[rank]);
         comp_end = std::chrono::high_resolution_clock::now();
         comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
-//        t2_comp  = MPI_Wtime();
-//        t_tot_comp += (t2_comp-t1_comp);
 
         for (size_t idx = offset[rank], end = offset[rank] + local_N[rank]; idx < end; idx++) {
             u[idx][0] += 0.5 * a[idx][0] * dt;
@@ -208,21 +201,21 @@ int main(int argc, char** argv) {
     }
 
 //Computation of final energy and estimate error
-    if (rank == 0){
-        double energy =0;
-        double kineticEnergy = 0;
-        double potentialEnergy = 0;
-        for (int i = 0; i < N; i++){
-            kineticEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
-            for (int j = 0; j < i; j++){
-                double denominator = sqrt((r[j][0]-r[i][0])*(r[j][0]-r[i][0]) + (r[j][1]-r[i][1])*(r[j][1]-r[i][1]) +
-                                          (r[j][2]-r[i][2])*(r[j][2]-r[i][2]));
-                potentialEnergy -= sim::g*m[i]*m[j]/denominator;
-                }
-            }
-            energy = kineticEnergy + potentialEnergy;
-        std::cout << "initial energy is = " << initialEnergy << "Error in total energy at the end of simulation = " << (energy - initialEnergy)/initialEnergy*100 << "%" <<  std::endl; 
-    }
+//  if (rank == 0){
+//      double energy =0;
+//      double kineticEnergy = 0;
+//      double potentialEnergy = 0;
+//      for (int i = 0; i < N; i++){
+//          kineticEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
+//          for (int j = 0; j < i; j++){
+//              double denominator = sqrt((r[j][0]-r[i][0])*(r[j][0]-r[i][0]) + (r[j][1]-r[i][1])*(r[j][1]-r[i][1]) +
+//                                        (r[j][2]-r[i][2])*(r[j][2]-r[i][2]));
+//              potentialEnergy -= sim::g*m[i]*m[j]/denominator;
+//              }
+//          }
+//          energy = kineticEnergy + potentialEnergy;
+//      std::cout << "initial energy is = " << initialEnergy << "Error in total energy at the end of simulation = " << (energy - initialEnergy)/initialEnergy*100 << "%" <<  std::endl; 
+//  }
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
