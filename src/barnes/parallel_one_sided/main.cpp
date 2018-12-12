@@ -98,18 +98,20 @@ int main(int argc, char** argv) {
     if (rank == 0) {
         r = new sim::data_type[N][7];
 
-        if (readDataFromFile(params.in_filename, N - size + params.n % size, r) == -1) {
+        if (readDataFromFile(params.in_filename, params.n, r) == -1) {
             std::cerr << "File " << params.in_filename << " not found!" << std::endl;
             return -1;
         }
-        for (int i = N - size + params.n % size; i < N; i++){
-            r[i][0]=0;
-            r[i][1]=r[i-1][1]+0.003;
-            r[i][2]=r[i-1][2]+0.003;
-            r[i][3]=r[i-1][3]+0.003;
-            r[i][4]=0;
-            r[i][5]=0;
-            r[i][6]=0;
+        if(params.n %size != 0){
+            for (int i = N - size + params.n % size; i < N; i++){
+                r[i][0]=0;
+                r[i][1]=r[i-1][1]+0.003;
+                r[i][2]=r[i-1][2]+0.003;
+                r[i][3]=r[i-1][3]+0.003;
+                r[i][4]=0;
+                r[i][5]=0;
+                r[i][6]=0;
+            }
         }
 
         params.out_filename = params.in_filename;
