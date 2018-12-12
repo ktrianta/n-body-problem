@@ -13,6 +13,7 @@ sim::data_type z;
 sim::data_type w;
 sim::data_type h;
 sim::data_type t;
+sim::data_type root;
 sim::data_type massCenter[3];
 sim::data_type mass;
 int index;

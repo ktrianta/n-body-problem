@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 
   	Treenode defTree;
   	MPI_Datatype treeNodeStruct;
-  	int blocklength[] = {10,1,1,2};
+  	int blocklength[] = {11,1,1,2};
   	MPI_Datatype old_types[] = {MPI_DOUBLE,MPI_INT,MPI_C_BOOL,MPI_UNSIGNED_LONG};
   	MPI_Aint baseaddr,a1,a2,a3,a4;
   	MPI_Get_address(&defTree,&baseaddr);
