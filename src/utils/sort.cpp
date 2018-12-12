@@ -94,15 +94,17 @@ void sort2(sim::data_type (*ar)[7], const size_t size, const size_t p) {
 }
 
 
-void sort0(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N);
-void sort1(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N);
-void sort2(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N);
+void sort0(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N, long* costs);
+void sort1(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N, long* costs);
+void sort2(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N, long* costs);
 
 void p_sort(sim::data_type (*ar)[8], const size_t size, const size_t p, int* local_N) {
-    sort0(ar, size, p, 0, local_N);
+    long* costs = new long[size];
+    sort0(ar, size, p, 0, local_N, costs);
+    delete[] costs;
 }
 
-void sort0(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N) {
+void sort0(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N, long* costs) {
     if (p == 1) {
         local_N[idx] = size;
         return;
@@ -111,7 +113,7 @@ void sort0(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
     if (p % 2 == 0) {
         std::qsort(ar, size, sizeof(*ar), comp0);
 
-        long* costs = new long[size]; costs[0] = (long) ar[0][7];
+        costs[0] = (long) ar[0][7];
         for (size_t i = 1; i < size; i++) {
             costs[i] = costs[i-1] + ar[i][7];
         }
@@ -120,8 +122,8 @@ void sort0(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
         size_t cut = std::lower_bound(costs, costs+size, w2) - costs;
         if (w2 == 0) cut = size/2;
 
-        sort1(ar, cut, p/2, idx*2, local_N);
-        sort1(ar + cut, size - cut, p/2, idx*2+1, local_N);
+        sort1(ar, cut, p/2, idx*2, local_N, costs);
+        sort1(ar + cut, size - cut, p/2, idx*2+1, local_N, costs+cut);
     }/* else if ( p % 3 ==0){
         std::qsort(ar, size, sizeof(*ar), comp0);
         sort1(ar, size/3, p/3);
@@ -137,16 +139,16 @@ void sort0(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
     }*/
 }
 
-void sort1(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N) {
+void sort1(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N, long* costs) {
     if (p == 1) {
         local_N[idx] = size;
         return;
     }
 
     if (p % 2 == 0) {
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp1);
 
-        double* costs = new double[size]; costs[0] = ar[0][7];
+        costs[0] = ar[0][7];
         for (size_t i = 1; i < size; i++) {
             costs[i] = costs[i-1] + ar[i][7];
         }
@@ -155,8 +157,8 @@ void sort1(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
         size_t cut = std::lower_bound(costs, costs+size, w2) - costs;
         if (w2 == 0) cut = size/2;
 
-        sort2(ar, cut, p/2, idx*2, local_N);
-        sort2(ar + cut, size - cut, p/2, idx*2+1, local_N);
+        sort2(ar, cut, p/2, idx*2, local_N, costs);
+        sort2(ar + cut, size - cut, p/2, idx*2+1, local_N, costs+cut);
     } /*else if ( p % 3 ==0){
         std::qsort(ar, size, sizeof(*ar), comp1);
         sort2(ar, size/3, p/3);
@@ -173,16 +175,16 @@ void sort1(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
     
 }
 
-void sort2(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N) {
+void sort2(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, int* local_N, long* costs) {
     if (p == 1) {
         local_N[idx] = size;
         return;
     }
 
     if (p % 2 == 0) {
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp2);
 
-        long* costs = new long[size]; costs[0] = (long) ar[0][7];
+        costs[0] = (long) ar[0][7];
         for (size_t i = 1; i < size; i++) {
             costs[i] = costs[i-1] + ar[i][7];
         }
@@ -191,8 +193,8 @@ void sort2(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
         size_t cut = std::lower_bound(costs, costs+size, w2) - costs;
         if (w2 == 0) cut = size/2;
 
-        sort0(ar, cut, p/2, idx*2, local_N);
-        sort0(ar + cut, size - cut, p/2, idx*2+1, local_N);
+        sort0(ar, cut, p/2, idx*2, local_N, costs);
+        sort0(ar + cut, size - cut, p/2, idx*2+1, local_N, costs+cut);
     } /*else if ( p % 3 ==0){
         std::qsort(ar, size, sizeof(*ar), comp2);
         p_sort0(ar, size/3, p/3);

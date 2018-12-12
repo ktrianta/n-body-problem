@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
         local_Nb[0] = local_N[0] * 8; offset[0] = 0;
         for (int i = 1; i < size; i++) {
             local_Nb[i] = local_N[i] * 8;
-            offset[i] = offset[i-1] + local_Nb[i];
+            offset[i] = offset[i-1] + local_Nb[i-1];
         }
     }
     MPI_Bcast(local_N, size, MPI_INT, 0, MPI_COMM_WORLD);
@@ -222,7 +222,7 @@ int main(int argc, char** argv) {
             local_Nb[0] = local_N[0] * 8; offset[0] = 0;
             for (int i = 1; i < size; i++) {
                 local_Nb[i] = local_N[i] * 8;
-                offset[i] = offset[i-1] + local_Nb[i];
+                offset[i] = offset[i-1] + local_Nb[i-1];
             }
         }
         MPI_Bcast(local_N, size, MPI_INT, 0, MPI_COMM_WORLD);
@@ -289,6 +289,10 @@ int main(int argc, char** argv) {
             r_local[j][4] += 0.5 * a_local[j][0] * dt;
             r_local[j][5] += 0.5 * a_local[j][1] * dt;
             r_local[j][6] += 0.5 * a_local[j][2] * dt;
+        }
+
+        if (rank == 0 && t % 200 == 0) {
+            writeDataToFile(N, r, out_file);
         }
     }
 
