@@ -7,6 +7,7 @@
 #include "initialization.hpp"
 #include "boxComputation.hpp"
 #include "serialization.hpp"
+#include "energy.hpp"
 #include "sort.hpp"
 #include <unistd.h>
 #include <mpi.h>
@@ -61,25 +62,25 @@ int main(int argc, char** argv)
     sim::data_type (*a)[3] = new sim::data_type[N][3];
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
 
-//  double initialKEnergy = 0;
-//  double initialPEnergy = 0;
-//  double initialEnergy = 0;
+    sim::data_type initialEnergy = 0;
 
     if (rank == 0) {
         io_start = std::chrono::high_resolution_clock::now();
         r = new sim::data_type[N][7];
 
-        if (readDataFromFile(params.in_filename, N - size + params.n % size, r) == -1) {
+        if (readDataFromFile(params.in_filename, params.n , r) == -1) {
             std::cerr << "File " << params.in_filename << " not found!" << std::endl;
             return -1;
-        for (int i = N - size + params.n % size; i < N; i++){
-            r[i][0]=0;
-            r[i][1]=r[i-1][1]+0.003;
-            r[i][2]=r[i-1][2]+0.003;
-            r[i][3]=r[i-1][3]+0.003;
-            r[i][4]=0;
-            r[i][5]=0;
-            r[i][6]=0;
+        if(params.n %size != 0){
+            for (int i = N - size + params.n % size; i < N; i++){
+                r[i][0]=0;
+                r[i][1]=r[i-1][1]+0.003;
+                r[i][2]=r[i-1][2]+0.003;
+                r[i][3]=r[i-1][3]+0.003;
+                r[i][4]=0;
+                r[i][5]=0;
+                r[i][6]=0;
+            }
         }
         io_end = std::chrono::high_resolution_clock::now();
         io_time += std::chrono::duration< double >(io_end - io_start).count();
@@ -87,7 +88,8 @@ int main(int argc, char** argv)
         }
 
         params.out_filename = params.in_filename;
-
+        
+        initialEnergy = energy(N, r);
 //      for (int i = 0; i < N; i++){
 //          initialKEnergy += r[i][0] * (r[i][1]*r[i][1] + r[i][2]*r[i][2] + r[i][3]*r[i][3])/2.;
 //          for (int j = 0; j < i; j++){
@@ -219,7 +221,12 @@ int main(int argc, char** argv)
         io_time += std::chrono::duration< double >(io_end - io_start).count();
 
     }
-    
+    if (rank == 0){
+        sim::data_type finalEnergy;
+        finalEnergy = energy(N, r);
+        printEnergy(finalEnergy, initialEnergy);
+    }
+
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
     double plotData_comp;
