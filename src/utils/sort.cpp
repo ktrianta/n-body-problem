@@ -54,12 +54,12 @@ void sort1(sim::data_type (*ar)[7], const size_t size, const size_t p) {
         sort2(ar, size/2, p/2);
         sort2(ar + size/2, size/2, p/2);
     } else if ( p % 3 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp1);
         sort2(ar, size/3, p/3);
         sort2(ar + size/3, size/3, p/3);
         sort2(ar + 2*size/3, size/3, p/3);
     } else if ( p % 5 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp1);
         sort2(ar, size/5, p/5);
         sort2(ar + size/5, size/5, p/5);
         sort2(ar + 2*size/5, size/5, p/5);
@@ -78,12 +78,12 @@ void sort2(sim::data_type (*ar)[7], const size_t size, const size_t p) {
         p_sort(ar, size/2, p/2);
         p_sort(ar + size/2, size/2, p/2);
     } else if ( p % 3 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp2);
         p_sort(ar, size/3, p/3);
         p_sort(ar + size/3, size/3, p/3);
         p_sort(ar + 2*size/3, size/3, p/3);
     } else if ( p % 5 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp2);
         p_sort(ar, size/5, p/5);
         p_sort(ar + size/5, size/5, p/5);
         p_sort(ar + 2*size/5, size/5, p/5);
@@ -158,12 +158,12 @@ void sort1(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
         sort2(ar, cut, p/2, idx*2, local_N);
         sort2(ar + cut, size - cut, p/2, idx*2+1, local_N);
     } /*else if ( p % 3 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp1);
         sort2(ar, size/3, p/3);
         sort2(ar + size/3, size/3, p/3);
         sort2(ar + 2*size/3, size/3, p/3);
     } else if ( p % 5 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp1);
         sort2(ar, size/5, p/5);
         sort2(ar + size/5, size/5, p/5);
         sort2(ar + 2*size/5, size/5, p/5);
@@ -194,12 +194,12 @@ void sort2(sim::data_type (*ar)[8], const size_t size, const size_t p, int idx, 
         sort0(ar, cut, p/2, idx*2, local_N);
         sort0(ar + cut, size - cut, p/2, idx*2+1, local_N);
     } /*else if ( p % 3 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp2);
         p_sort0(ar, size/3, p/3);
         p_sort0(ar + size/3, size/3, p/3);
         p_sort0(ar + 2*size/3, size/3, p/3);
     } else if ( p % 5 ==0){
-        std::qsort(ar, size, sizeof(*ar), comp0);
+        std::qsort(ar, size, sizeof(*ar), comp2);
         p_sort0(ar, size/5, p/5);
         p_sort0(ar + size/5, size/5, p/5);
         p_sort0(ar + 2*size/5, size/5, p/5);
