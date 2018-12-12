@@ -4,6 +4,7 @@
 #include "io.hpp"
 #include "args.hpp"
 #include "types.hpp"
+#include "energy.hpp"
 #include "octree.hpp"
 #include "initialization.hpp"
 #include "boxComputation.hpp"
@@ -58,6 +59,7 @@ int main(int argc, char** argv) {
                 return -1;
             }
             params.out_filename = params.in_filename;
+//      initialEnergy = energy(N, r, u, m);
         } else {
               initializePositionOnSphere(N, r);
         }
@@ -175,6 +177,11 @@ int main(int argc, char** argv) {
         io_end = std::chrono::high_resolution_clock::now();
         io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
+//  if (rank == 0){
+//      sim::data_type finalEnergy;
+//      finalEnergy = energy(N, r);
+//      printEnergy(finalEnergy, initialEnergy);
+//  }
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();

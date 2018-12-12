@@ -7,6 +7,7 @@
 #include "initialization.hpp"
 #include "boxComputation.hpp"
 #include "serialization.hpp"
+#include "energy.hpp"
 #include "sort.hpp"
 #include <unistd.h>
 #include <mpi.h>
@@ -90,9 +91,7 @@ int main(int argc, char** argv) {
     sim::data_type (*a_local)[3] = new sim::data_type[local_N][3];
     std::fill(&a_local[0][0], &a_local[0][0] + local_N*3, 0);
 
-    double initialKEnergy = 0;
-    double initialPEnergy = 0;
-    double initialEnergy = 0;
+    sim::data_type initialEnergy = 0;
 
     io_start = std::chrono::high_resolution_clock::now();
     if (rank == 0) {
@@ -118,15 +117,7 @@ int main(int argc, char** argv) {
 
         io_end = std::chrono::high_resolution_clock::now();
         io_time += std::chrono::duration< double >(io_end - io_start).count();
-        for (int i = 0; i < N; i++){
-            initialKEnergy += r[i][0] * (r[i][4]*r[i][4] + r[i][5]*r[i][5] + r[i][6]*r[i][6])/2.;
-            for (int j = 0; j < i; j++){
-                double denominator = sqrt((r[j][1]-r[i][1])*(r[j][1]-r[i][1]) + (r[j][2]-r[i][2])*(r[j][2]-r[i][2]) +
-                                          (r[j][3]-r[i][3])*(r[j][3]-r[i][3]));
-                initialPEnergy -= sim::g*r[i][0]*r[j][0]/denominator;
-                }
-            }
-            initialEnergy = initialKEnergy + initialPEnergy;
+//      initialEnergy = energy(N, r);
 
         gath_start = std::chrono::high_resolution_clock::now();
         MPI_Scatter(&r[0][0], local_N*7, MPI_DOUBLE, &r_local[0][0], local_N*7, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -318,22 +309,12 @@ int main(int argc, char** argv) {
 
     }
 
-    if (rank == 0){
-        double energy =0;
-        double kineticEnergy = 0;
-        double potentialEnergy = 0;
-        for (int i = 0; i < N; i++){
-            kineticEnergy += r[i][0] * (r[i][4]*r[i][4] + r[i][5]*r[i][5] + r[i][6]*r[i][6])/2.;
-            for (int j = 0; j < i; j++){
-                double denominator = sqrt((r[j][1]-r[i][1])*(r[j][1]-r[i][1]) + (r[j][2]-r[i][2])*(r[j][2]-r[i][2]) +
-                                          (r[j][3]-r[i][3])*(r[j][3]-r[i][3]));
-                potentialEnergy -= sim::g*r[i][0]*r[j][0]/denominator;
-                }
-            }
-            energy = kineticEnergy + potentialEnergy;
-        std::cout << "initial energy is = " << initialEnergy << "Error in total energy at the end of simulation = " << (energy - initialEnergy)/initialEnergy*100 << "%" <<  endl; 
-    }
 
+//  if (rank == 0){
+//      sim::data_type finalEnergy;
+//      finalEnergy = energy(N, r);
+//      printEnergy(finalEnergy, initialEnergy);
+//  }
 
     MPI_Win_detach(win,tree[rank]->treeArray);
     for (int i = 0; i < size; i++) {
@@ -345,9 +326,9 @@ int main(int argc, char** argv) {
     }
 
 
+
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
-//  printf("%lf,  %lf, %lf, %lf, %lf \n", prog_time, comp_time, io_time, tree_time, comm_time);
     double plotData_comp;
     double plotData_comm;
     double plotData_io;

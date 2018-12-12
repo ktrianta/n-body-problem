@@ -4,6 +4,7 @@
 #include "io.hpp"
 #include "args.hpp"
 #include "types.hpp"
+#include "energy.hpp"
 #include "serialization.hpp"
 #include "initialization.hpp"
 #include "boxComputation.hpp"
@@ -57,6 +58,9 @@ int main(int argc, char** argv) {
 
     io_end = std::chrono::high_resolution_clock::now();
     io_time += std::chrono::duration< double >(io_end - io_start).count();
+
+//    sim::data_type initialEnergy = energy(N, r, u , m);
+
 
     sim::data_type xc, yc, zc, h2, w2, t2;    
     boxComputation(N, r, xc, yc, zc, w2, h2, t2);
@@ -118,6 +122,11 @@ int main(int argc, char** argv) {
         io_end = std::chrono::high_resolution_clock::now();
         io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
+
+//  sim::data_type finalEnergy = energy(N, r, u, m);
+//  printEnergy(finalEnergy, initialEnergy);
+
+
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
     FILE *plotFile;

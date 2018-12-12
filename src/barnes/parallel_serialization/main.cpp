@@ -89,16 +89,7 @@ int main(int argc, char** argv)
 
         params.out_filename = params.in_filename;
         
-        initialEnergy = energy(N, r);
-//      for (int i = 0; i < N; i++){
-//          initialKEnergy += r[i][0] * (r[i][1]*r[i][1] + r[i][2]*r[i][2] + r[i][3]*r[i][3])/2.;
-//          for (int j = 0; j < i; j++){
-//              double denominator = sqrt((r[j][0]*r[j][1]-r[i][0]*r[i][1])*(r[j][0]*r[j][1]-r[i][0]*r[i][1]) + (r[j][0]*r[j][2]-r[i][0]*r[i][2])*(r[j][0]*r[j][2]-r[i][0]*r[i][2]) +
-//                                        (r[j][0]*r[j][3]-r[i][0]*r[i][3])*(r[j][0]*r[j][3]-r[i][0]*r[i][3]));
-//              initialPEnergy -= sim::g*r[i][0]*r[j][0]/denominator;
-//              }
-//          }
-//          initialEnergy = initialKEnergy + initialPEnergy;
+//      initialEnergy = energy(N, r);
 
     }
     // SEND the position vector r from Process 0 to all processes.
@@ -221,11 +212,11 @@ int main(int argc, char** argv)
         io_time += std::chrono::duration< double >(io_end - io_start).count();
 
     }
-    if (rank == 0){
-        sim::data_type finalEnergy;
-        finalEnergy = energy(N, r);
-        printEnergy(finalEnergy, initialEnergy);
-    }
+//  if (rank == 0){
+//      sim::data_type finalEnergy;
+//      finalEnergy = energy(N, r);
+//      printEnergy(finalEnergy, initialEnergy);
+//  }
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
