@@ -85,8 +85,6 @@ int main(int argc, char** argv) {
     std::fill(m, m+N, 1.0/N);
     std::fill(&u[0][0], &u[0][0] + N*3, 0);
     std::fill(&a[0][0], &a[0][0] + N*3, 0);
-    PAPI_stop(EventSet, values);
-    papi_tot += values[0]; 
 
     // PROCESS 0 initialize position vector r.
     std::ofstream out_file;
@@ -103,6 +101,8 @@ int main(int argc, char** argv) {
         openFileToWrite(out_file, params.out_filename, params.out_dirname);
         writeDataToFile(N, r, out_file);
     }
+    PAPI_stop(EventSet, values);
+    papi_tot += values[0]; 
 
 
     // SEND the position vector r from Process 0 to all processes.
