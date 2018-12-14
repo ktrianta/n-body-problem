@@ -123,13 +123,12 @@ int main(int argc, char** argv) {
         MPI_Scatter(&r[0][0], local_N*7, MPI_DOUBLE, &r_local[0][0], local_N*7, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         gath_end = std::chrono::high_resolution_clock::now();
         gath_time += std::chrono::duration< double >(gath_end - gath_start).count();
-    } else{
+    } else {
         gath_start = std::chrono::high_resolution_clock::now();
         MPI_Scatter(NULL, local_N*7, MPI_DOUBLE, &r_local[0][0], local_N*7, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         gath_end = std::chrono::high_resolution_clock::now();
         gath_time += std::chrono::duration< double >(gath_end - gath_start).count();
     }
-
      
 //  io_start = std::chrono::high_resolution_clock::now();
 //  std::ofstream out_file;
@@ -195,10 +194,8 @@ int main(int argc, char** argv) {
     comp_end = std::chrono::high_resolution_clock::now();
     comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
-
     const size_t Ntimesteps = params.s;
     const sim::data_type dt = params.dt;
-
 
     for (int t = 0; t < Ntimesteps; t++) {
         for (int j = 0; j < local_N; j++) {
@@ -270,7 +267,6 @@ int main(int argc, char** argv) {
         aloc_end = std::chrono::high_resolution_clock::now();
         aloc_time += std::chrono::duration< double >(aloc_end - aloc_start).count();
 
-
         comm_start = std::chrono::high_resolution_clock::now();
         MPI_Win_fence(0, win);
         for (int i = 0; i < size; i++) {
@@ -309,7 +305,6 @@ int main(int argc, char** argv) {
 
     }
 
-
 //  if (rank == 0){
 //      sim::data_type finalEnergy;
 //      finalEnergy = energy(N, r);
@@ -324,8 +319,6 @@ int main(int argc, char** argv) {
         }
         delete tree[i];
     }
-
-
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
@@ -353,8 +346,6 @@ int main(int argc, char** argv) {
     delete[] r_local;
     delete[] a_local;
     delete[] target_disp;
-
-
 
     MPI_Win_free(&win);
 	MPI_Finalize();
