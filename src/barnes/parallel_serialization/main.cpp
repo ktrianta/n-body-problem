@@ -93,10 +93,10 @@ int main(int argc, char** argv)
 
     }
     // SEND the position vector r from Process 0 to all processes.
-//    comm_start = std::chrono::high_resolution_clock::now();
+    comm_start = std::chrono::high_resolution_clock::now();
     MPI_Bcast(&r[0][0],N*7, MPI_DOUBLE,0, MPI_COMM_WORLD);
-//    comm_end = std::chrono::high_resolution_clock::now();
-//    comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
+    comm_end = std::chrono::high_resolution_clock::now();
+    comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
 
 //  the center of the parent node and the half width and height
     sim::data_type xc, yc, zc, h2, w2, t2;
