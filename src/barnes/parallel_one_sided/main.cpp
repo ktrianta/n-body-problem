@@ -339,7 +339,7 @@ int main(int argc, char** argv) {
 //    MPI_Reduce(&aloc_time, &plotData_aloc, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     FILE *plotFile;
     std::string fname = "plotData";
-    fname += rank;
+    fname += std::to_string(rank);
     fname += ".txt";
     plotFile = fopen(fname.c_str(), "a");
     fprintf(plotFile, "%lf,  %lf, %lf, %lf, %lf, %lf\n", prog_time, comp_time, io_time, tree_time, comm_time, gath_time);

@@ -121,6 +121,7 @@ int main(int argc, char** argv) {
         }
     }
     
+	MPI_Barrier(MPI_COMM_WORLD);
     gath_start = std::chrono::high_resolution_clock::now();
     MPI_Bcast(local_N, size, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(local_Nb, size, MPI_INT, 0, MPI_COMM_WORLD);
@@ -140,6 +141,7 @@ int main(int argc, char** argv) {
 
     sim::data_type xc, yc, zc, h2, w2, t2;
 
+	MPI_Barrier(MPI_COMM_WORLD);
     tree_start = std::chrono::high_resolution_clock::now();
     boxComputation(local_N[rank], r_local, xc, yc, zc, w2, h2, t2);
     Serialization *tree[size];
@@ -151,7 +153,6 @@ int main(int argc, char** argv) {
     tree_end = std::chrono::high_resolution_clock::now();
     tree_time += std::chrono::duration< double >(tree_end - tree_start).count();
 
-    aloc_start = std::chrono::high_resolution_clock::now();
     int tSize = tree[rank]->position+1;
     int treeSize[size];
     MPI_Allgather(&tSize, 1, MPI_INT, &treeSize, 1, MPI_INT, MPI_COMM_WORLD);
@@ -168,9 +169,8 @@ int main(int argc, char** argv) {
     MPI_Aint *target_disp = new MPI_Aint[size];
     MPI_Get_address(tree[rank]->treeArray, &my_disp);
     MPI_Allgather(&my_disp, 1, MPI_AINT, &target_disp[0], 1, MPI_AINT, MPI_COMM_WORLD);
-    aloc_end = std::chrono::high_resolution_clock::now();
-    aloc_time += std::chrono::duration< double >(aloc_end - aloc_start).count();
 
+	MPI_Barrier(MPI_COMM_WORLD);
     comm_start = std::chrono::high_resolution_clock::now();
     MPI_Win_fence(0,win);
     for (int i = 0; i < size; i++) {
@@ -182,6 +182,7 @@ int main(int argc, char** argv) {
     comm_end = std::chrono::high_resolution_clock::now();
     comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
 
+	MPI_Barrier(MPI_COMM_WORLD);
     comp_start = std::chrono::high_resolution_clock::now();
     for (int j = 0; j < local_N[rank]; j++) {
         r_local[j][7] = 0;
@@ -217,6 +218,7 @@ int main(int argc, char** argv) {
         for (int j = 0; j < local_N[rank]; j++) {
             work += r_local[j][7];
         }
+	MPI_Barrier(MPI_COMM_WORLD);
 
         gath_start = std::chrono::high_resolution_clock::now();
         MPI_Gatherv(r_local, local_Nb[rank], MPI_DOUBLE, r, local_Nb, offset, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -231,6 +233,7 @@ int main(int argc, char** argv) {
                 offset[i] = offset[i-1] + local_Nb[i-1];
             }
         }
+	MPI_Barrier(MPI_COMM_WORLD);
         gath_start = std::chrono::high_resolution_clock::now();
         MPI_Bcast(local_N, size, MPI_INT, 0, MPI_COMM_WORLD);
         MPI_Bcast(local_Nb, size, MPI_INT, 0, MPI_COMM_WORLD);
@@ -239,7 +242,6 @@ int main(int argc, char** argv) {
         gath_end = std::chrono::high_resolution_clock::now();
         gath_time += std::chrono::duration< double >(gath_end - gath_start).count();
 
-        aloc_start = std::chrono::high_resolution_clock::now();
         MPI_Win_detach(win,tree[rank]->treeArray);
         for (int i = 0; i < size; i++) {
             if (i != rank) {
@@ -248,9 +250,8 @@ int main(int argc, char** argv) {
             }
             delete tree[i];
         }
-        aloc_end = std::chrono::high_resolution_clock::now();
-        aloc_time += std::chrono::duration< double >(aloc_end - aloc_start).count();
 
+	MPI_Barrier(MPI_COMM_WORLD);
         tree_start = std::chrono::high_resolution_clock::now();
         boxComputation(local_N[rank], r_local, xc, yc, zc, w2, h2, t2);
         tree[rank] = new Serialization(xc, yc, zc, w2, h2, t2);
@@ -260,7 +261,6 @@ int main(int argc, char** argv) {
         tree_end = std::chrono::high_resolution_clock::now();
         tree_time += std::chrono::duration< double >(tree_end - tree_start).count();
 
-        aloc_start = std::chrono::high_resolution_clock::now();
         tSize = tree[rank]->position+1;
         MPI_Allgather(&tSize, 1, MPI_INT, &treeSize, 1, MPI_INT, MPI_COMM_WORLD);
         for (int i = 0; i < size; i++) {
@@ -273,10 +273,9 @@ int main(int argc, char** argv) {
         MPI_Win_attach(win, tree[rank]->treeArray, treeSize[rank]*sizeof(struct Treenode));
         MPI_Get_address(tree[rank]->treeArray, &my_disp);
         MPI_Allgather(&my_disp, 1, MPI_AINT, target_disp, 1, MPI_AINT, MPI_COMM_WORLD);
-        aloc_end = std::chrono::high_resolution_clock::now();
-        aloc_time += std::chrono::duration< double >(aloc_end - aloc_start).count();
 
 
+	MPI_Barrier(MPI_COMM_WORLD);
         comm_start = std::chrono::high_resolution_clock::now();
         MPI_Win_fence(0, win);
         for (int i = 0; i < size; i++) {
@@ -291,6 +290,7 @@ int main(int argc, char** argv) {
         for (int j = 0; j < local_N[rank]; j++) {
             r_local[j][7] = 0;
         }
+	MPI_Barrier(MPI_COMM_WORLD);
         comp_start = std::chrono::high_resolution_clock::now();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < local_N[rank]; j++) {
@@ -315,7 +315,6 @@ int main(int argc, char** argv) {
     }
 
 
-    aloc_start = std::chrono::high_resolution_clock::now();
     MPI_Win_detach(win,tree[rank]->treeArray);
     for (int i = 0; i < size; i++) {
         if (i != rank) {
@@ -324,35 +323,36 @@ int main(int argc, char** argv) {
         }
         delete tree[i];
     }
-    aloc_end = std::chrono::high_resolution_clock::now();
-    aloc_time += std::chrono::duration< double >(aloc_end - aloc_start).count();
 
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
-    double plotData_comp;
-    double plotData_comm;
-    double plotData_io;
-    double plotData_prog;
-    double plotData_tree;
-    double plotData_gath;
-    double plotData_aloc;
-    MPI_Reduce(&comp_time, &plotData_comp, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&comm_time, &plotData_comm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&io_time, &plotData_io, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&prog_time, &plotData_prog, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&tree_time, &plotData_tree, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&gath_time, &plotData_gath, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&aloc_time, &plotData_aloc, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+//  double plotData_comp;
+//  double plotData_comm;
+//  double plotData_io;
+//  double plotData_prog;
+//  double plotData_tree;
+//  double plotData_gath;
+//  double plotData_aloc;
+//  MPI_Reduce(&comp_time, &plotData_comp, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+//  MPI_Reduce(&comm_time, &plotData_comm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+//  MPI_Reduce(&io_time, &plotData_io, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+//  MPI_Reduce(&prog_time, &plotData_prog, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+//  MPI_Reduce(&tree_time, &plotData_tree, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+//  MPI_Reduce(&gath_time, &plotData_gath, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+//  MPI_Reduce(&aloc_time, &plotData_aloc, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Win_free(&win);
 	MPI_Finalize();
     if (rank == 0) {
         delete[] r;
-        FILE *plotFile;
-        plotFile = fopen("plotData.txt", "a");
-        fprintf(plotFile, "%lf,  %lf, %lf, %lf, %lf, %lf, %lf \n", plotData_prog/size, plotData_comp/size, plotData_io, plotData_tree/size, plotData_comm/size, plotData_gath/size, plotData_aloc/size);
-        fclose(plotFile);
     }
+    FILE *plotFile;
+    std::string fname = "plotData";
+    fname += std::to_string(rank);
+    fname += ".txt";
+    plotFile = fopen(fname.c_str(), "a");
+    fprintf(plotFile, "%lf,  %lf, %lf, %lf, %lf, %lf\n", prog_time, comp_time, io_time, tree_time, comm_time, gath_time);
+    fclose(plotFile);
     delete[] r_local;
     delete[] a_local;
     delete[] target_disp;
