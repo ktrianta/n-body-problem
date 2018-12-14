@@ -131,19 +131,19 @@ int main(int argc, char** argv) {
     }
 
      
-    io_start = std::chrono::high_resolution_clock::now();
-    std::ofstream out_file;
-    if (rank == 0) {
-        openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(N, r, out_file);
-    }
-    io_end = std::chrono::high_resolution_clock::now();
-    io_time += std::chrono::duration< double >(io_end - io_start).count();
+//  io_start = std::chrono::high_resolution_clock::now();
+//  std::ofstream out_file;
+//  if (rank == 0) {
+//      openFileToWrite(out_file, params.out_filename, params.out_dirname);
+//      writeDataToFile(N, r, out_file);
+//  }
+//  io_end = std::chrono::high_resolution_clock::now();
+//  io_time += std::chrono::duration< double >(io_end - io_start).count();
 
     sim::data_type xc, yc, zc, h2, w2, t2;
-    boxComputation(local_N, r_local, xc, yc, zc, w2, h2, t2);
 
     tree_start = std::chrono::high_resolution_clock::now();
+    boxComputation(local_N, r_local, xc, yc, zc, w2, h2, t2);
     Serialization *tree[size];
     tree[rank] = new Serialization(xc, yc, zc, w2, h2, t2);
 
@@ -214,10 +214,10 @@ int main(int argc, char** argv) {
             a_local[j][2] = 0;
         }
 
-        comm_start = std::chrono::high_resolution_clock::now();
+        gath_start = std::chrono::high_resolution_clock::now();
         MPI_Gather(r_local, local_N*7, MPI_DOUBLE, r, local_N*7, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-        comm_end = std::chrono::high_resolution_clock::now();
-        comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
+        gath_end = std::chrono::high_resolution_clock::now();
+        gath_time += std::chrono::duration< double >(gath_end - gath_start).count();
 
         if (rank == 0) {
             p_sort(r, N, size);
@@ -244,8 +244,8 @@ int main(int argc, char** argv) {
         aloc_end = std::chrono::high_resolution_clock::now();
         aloc_time += std::chrono::duration< double >(aloc_end - aloc_start).count();
 
-        boxComputation(local_N, r_local, xc, yc, zc, w2, h2, t2);
         tree_start = std::chrono::high_resolution_clock::now();
+        boxComputation(local_N, r_local, xc, yc, zc, w2, h2, t2);
         tree[rank] = new Serialization(xc, yc, zc, w2, h2, t2);
         for(int j = 0; j < local_N; j++) {
             tree[rank]->insert(rank*local_N+j, r_local[j][1], r_local[j][2], r_local[j][3], r_local[j][0]);
@@ -300,12 +300,12 @@ int main(int argc, char** argv) {
             r_local[j][6] += 0.5 * a_local[j][2] * dt;
         }
 
-        io_start = std::chrono::high_resolution_clock::now();
-        if (rank == 0 && t % 200 == 0) {
-            writeDataToFile(N, r, out_file);
-        }
-        io_end = std::chrono::high_resolution_clock::now();
-        io_time += std::chrono::duration< double >(io_end - io_start).count();
+//      io_start = std::chrono::high_resolution_clock::now();
+//      if (rank == 0 && t % 200 == 0) {
+//          writeDataToFile(N, r, out_file);
+//      }
+//      io_end = std::chrono::high_resolution_clock::now();
+//      io_time += std::chrono::duration< double >(io_end - io_start).count();
 
     }
 

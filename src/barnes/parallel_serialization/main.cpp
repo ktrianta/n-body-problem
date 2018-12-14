@@ -100,18 +100,17 @@ int main(int argc, char** argv)
 
 //  the center of the parent node and the half width and height
     sim::data_type xc, yc, zc, h2, w2, t2;
-    boxComputation(local_N, rank*local_N, (rank+1)*local_N, r, xc, yc, zc, w2, h2, t2);
 
 
 
-    io_start = std::chrono::high_resolution_clock::now();
-    std::ofstream out_file;
-    if (rank == 0) {
-        openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(N, r, out_file);
-    }
-    io_end = std::chrono::high_resolution_clock::now();
-    io_time += std::chrono::duration< double >(io_end - io_start).count();
+//  io_start = std::chrono::high_resolution_clock::now();
+//  std::ofstream out_file;
+//  if (rank == 0) {
+//      openFileToWrite(out_file, params.out_filename, params.out_dirname);
+//      writeDataToFile(N, r, out_file);
+//  }
+//  io_end = std::chrono::high_resolution_clock::now();
+//  io_time += std::chrono::duration< double >(io_end - io_start).count();
    
     sim::data_type (*a_local)[3] = new sim::data_type[N][3];
     std::fill(&a_local[0][0], &a_local[0][0] + N*3, 0);
@@ -119,6 +118,7 @@ int main(int argc, char** argv)
     
  
     tree_start = std::chrono::high_resolution_clock::now();
+    boxComputation(local_N, rank*local_N, (rank+1)*local_N, r, xc, yc, zc, w2, h2, t2);
     Serialization *tree = new Serialization(xc, yc, zc, w2, h2, t2);
     for(int j = rank*local_N; j < (rank+1)*local_N; j++)
     {
@@ -141,9 +141,9 @@ int main(int argc, char** argv)
    
  
     comm_start = std::chrono::high_resolution_clock::now();
-        MPI_Barrier(MPI_COMM_WORLD);
+    //    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Allreduce(a_local,a,3*N, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-        MPI_Barrier(MPI_COMM_WORLD);
+    //    MPI_Barrier(MPI_COMM_WORLD);
     comm_end = std::chrono::high_resolution_clock::now();
     comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
 
@@ -168,9 +168,9 @@ int main(int argc, char** argv)
             a[j][2] = 0;
         }
         p_sort(r, N, size);
-        boxComputation(local_N, rank*local_N, (rank+1)*local_N, r, xc, yc, zc, w2, h2, t2);
 
         tree_start = std::chrono::high_resolution_clock::now();
+        boxComputation(local_N, rank*local_N, (rank+1)*local_N, r, xc, yc, zc, w2, h2, t2);
         delete tree;
         tree= new Serialization(xc, yc, zc, w2, h2, t2);
         for(int j = rank*local_N; j < (rank+1)*local_N; j++)
@@ -188,12 +188,12 @@ int main(int argc, char** argv)
         comp_end = std::chrono::high_resolution_clock::now();
         comp_time += std::chrono::duration< double >(comp_end - comp_start).count();
 
-        MPI_Barrier(MPI_COMM_WORLD);
+      //  MPI_Barrier(MPI_COMM_WORLD);
         comm_start = std::chrono::high_resolution_clock::now();
         MPI_Allreduce(a_local,a,3*N, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
         comm_end = std::chrono::high_resolution_clock::now();
         comm_time += std::chrono::duration< double >(comm_end - comm_start).count();
-        MPI_Barrier(MPI_COMM_WORLD);
+     //   MPI_Barrier(MPI_COMM_WORLD);
         for (int j = 0; j < N; j++)
         {
 
@@ -203,13 +203,13 @@ int main(int argc, char** argv)
         }
 
 
-        io_start = std::chrono::high_resolution_clock::now();
-        if (t % 200 == 0 && rank == 0)
-        {
-            writeDataToFile(N, r, out_file);
-        }
-        io_end = std::chrono::high_resolution_clock::now();
-        io_time += std::chrono::duration< double >(io_end - io_start).count();
+//      io_start = std::chrono::high_resolution_clock::now();
+//      if (t % 200 == 0 && rank == 0)
+//      {
+//          writeDataToFile(N, r, out_file);
+//      }
+//      io_end = std::chrono::high_resolution_clock::now();
+//      io_time += std::chrono::duration< double >(io_end - io_start).count();
 
     }
 //  if (rank == 0){
