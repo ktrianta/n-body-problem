@@ -337,20 +337,20 @@ int main(int argc, char** argv) {
     double plotData_tree;
     double plotData_gath;
     double plotData_aloc;
-    MPI_Reduce(&comp_time, &plotData_comp, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&comm_time, &plotData_comm, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&comp_time, &plotData_comp, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&comm_time, &plotData_comm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&io_time, &plotData_io, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&prog_time, &plotData_prog, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&tree_time, &plotData_tree, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&gath_time, &plotData_gath, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&aloc_time, &plotData_aloc, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&prog_time, &plotData_prog, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&tree_time, &plotData_tree, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&gath_time, &plotData_gath, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&aloc_time, &plotData_aloc, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Win_free(&win);
 	MPI_Finalize();
     if (rank == 0) {
         delete[] r;
         FILE *plotFile;
         plotFile = fopen("plotData.txt", "a");
-        fprintf(plotFile, "%lf,  %lf, %lf, %lf, %lf, %lf, %lf \n", plotData_prog, plotData_comp, plotData_io, plotData_tree, plotData_comm, plotData_gath, plotData_aloc);
+        fprintf(plotFile, "%lf,  %lf, %lf, %lf, %lf, %lf, %lf \n", plotData_prog/size, plotData_comp/size, plotData_io, plotData_tree/size, plotData_comm/size, plotData_gath/size, plotData_aloc/size);
         fclose(plotFile);
     }
     delete[] r_local;
