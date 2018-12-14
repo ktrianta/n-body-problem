@@ -175,14 +175,14 @@ int main(int argc, char** argv) {
             u[j][2] += 0.5 * a[j][2] * dt;
         }
 
-        io_start = std::chrono::high_resolution_clock::now();
-        if (rank == 0) {
-            if (t % 200 == 0) {
-                writeDataToFile(N, r1, out_file);
-            }
-        }
-        io_end = std::chrono::high_resolution_clock::now();
-        io_time += std::chrono::duration< double >(io_end - io_start).count();
+//      io_start = std::chrono::high_resolution_clock::now();
+//      if (rank == 0) {
+//          if (t % 200 == 0) {
+//              writeDataToFile(N, r1, out_file);
+//          }
+//      }
+//      io_end = std::chrono::high_resolution_clock::now();
+//      io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
 
     prog_end = std::chrono::high_resolution_clock::now();
