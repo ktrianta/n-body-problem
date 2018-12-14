@@ -164,20 +164,20 @@ int main(int argc, char** argv) {
     io_time += std::chrono::duration< double >(io_end - io_start).count();
 
 // Computation of Initial Energy    
-    double initialKEnergy = 0;
-    double initialPEnergy = 0;
-    double initialEnergy = 0;
-    if (rank == 0){
-        for (int i = 0; i < N; i++){
-            initialKEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
-            for (int j = 0; j < i; j++){
-                double denominator = sqrt((rx[j]-rx[i])*(rx[j]-rx[i]) + (ry[j]-ry[i])*(ry[j]-ry[i]) +
-                                          (rz[j]-rz[i])*(rz[j]-rz[i]));
-                initialPEnergy -= sim::g*m[i]*m[j]/denominator;
-                }
-            }
-            initialEnergy = initialKEnergy + initialPEnergy;
-    }
+//  double initialKEnergy = 0;
+//  double initialPEnergy = 0;
+//  double initialEnergy = 0;
+//  if (rank == 0){
+//      for (int i = 0; i < N; i++){
+//          initialKEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
+//          for (int j = 0; j < i; j++){
+//              double denominator = sqrt((rx[j]-rx[i])*(rx[j]-rx[i]) + (ry[j]-ry[i])*(ry[j]-ry[i]) +
+//                                        (rz[j]-rz[i])*(rz[j]-rz[i]));
+//              initialPEnergy -= sim::g*m[i]*m[j]/denominator;
+//              }
+//          }
+//          initialEnergy = initialKEnergy + initialPEnergy;
+//  }
 
     comm_start = std::chrono::high_resolution_clock::now();
     // SEND the position vector r from Process 0 to all processes.
@@ -272,32 +272,32 @@ int main(int argc, char** argv) {
             u[idx][2] += 0.5 * az[idx] * dt;
 	    }
 
-        io_start = std::chrono::high_resolution_clock::now();
-        if (rank == 0) {
-            if (t % 200 == 0){
-                writeDataToFile(N, rx,ry,rz, out_file);
-            }   
-        }
-        io_end = std::chrono::high_resolution_clock::now();
-        io_time += std::chrono::duration< double >(io_end - io_start).count();
+//      io_start = std::chrono::high_resolution_clock::now();
+//      if (rank == 0) {
+//          if (t % 200 == 0){
+//              writeDataToFile(N, rx,ry,rz, out_file);
+//          }   
+//      }
+//      io_end = std::chrono::high_resolution_clock::now();
+//      io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
 
 //Computation of final energy and estimate error
-    if (rank == 0){
-        double energy =0;
-        double kineticEnergy = 0;
-        double potentialEnergy = 0;
-        for (int i = 0; i < N; i++){
-            kineticEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
-            for (int j = 0; j < i; j++){
-                double denominator = sqrt((rx[j]-rx[i])*(rx[j]-rx[i]) + (ry[j]-ry[i])*(ry[j]-ry[i]) +
-                                          (rz[j]-rz[i])*(rz[j]-rz[i]));
-                potentialEnergy -= sim::g*m[i]*m[j]/denominator;
-                }
-            }
-            energy = kineticEnergy + potentialEnergy;
-        std::cout << "initial energy is = " << initialEnergy << "Error in total energy at the end of simulation = " << (energy - initialEnergy)/initialEnergy*100 << "%" <<  std::endl; 
-    }
+//  if (rank == 0){
+//      double energy =0;
+//      double kineticEnergy = 0;
+//      double potentialEnergy = 0;
+//      for (int i = 0; i < N; i++){
+//          kineticEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
+//          for (int j = 0; j < i; j++){
+//              double denominator = sqrt((rx[j]-rx[i])*(rx[j]-rx[i]) + (ry[j]-ry[i])*(ry[j]-ry[i]) +
+//                                        (rz[j]-rz[i])*(rz[j]-rz[i]));
+//              potentialEnergy -= sim::g*m[i]*m[j]/denominator;
+//              }
+//          }
+//          energy = kineticEnergy + potentialEnergy;
+//      std::cout << "initial energy is = " << initialEnergy << "Error in total energy at the end of simulation = " << (energy - initialEnergy)/initialEnergy*100 << "%" <<  std::endl; 
+//  }
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();
