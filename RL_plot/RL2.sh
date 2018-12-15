@@ -3,7 +3,7 @@
 ## declare an array variable
 declare -a arr1=("./../bin/naive/parallel_one_sided/prog" "./../bin/barnes/parallel_one_sided/prog" "./../bin/barnes/parallel_balanced/prog")
 
-declare -a arr2=("../est/resources/testsets/galaxy128_ball.txt" "../test/resources/testsets/galaxy256_ball.txt" "../test/resources/testsets/galaxy512_ball.txt" "../test/resources/testsets/galaxy1024_ball.txt" "../test/resources/testsets/galaxy2048_ball.txt" "../test/resources/testsets/galaxy4096_ball.txt" "../test/resources/testsets/galaxy8192_ball.txt" "../test/resources/testsets/galaxy16384_ball.txt" "../test/resources/testsets/galaxy32768_ball.txt")
+declare -a arr2=("../test/resources/testsets/galaxy128_ball.txt" "../test/resources/testsets/galaxy256_ball.txt" "../test/resources/testsets/galaxy512_ball.txt" "../test/resources/testsets/galaxy1024_ball.txt" "../test/resources/testsets/galaxy2048_ball.txt" "../test/resources/testsets/galaxy4096_ball.txt" "../test/resources/testsets/galaxy8192_ball.txt" "../test/resources/testsets/galaxy16384_ball.txt" "../test/resources/testsets/galaxy32768_ball.txt")
 
 declare -a arr3=("128" "256" "512" "1024" "2048" "4096" "8192" "16384" "32768")
 
