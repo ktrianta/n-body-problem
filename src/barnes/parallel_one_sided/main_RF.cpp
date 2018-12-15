@@ -27,25 +27,6 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD,&size);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 
-    Treenode defTree;
-    MPI_Datatype treeNodeStruct;
-    int blocklength[] = {11,1,1,2};
-    MPI_Datatype old_types[] = {MPI_DOUBLE,MPI_INT,MPI_C_BOOL,MPI_UNSIGNED_LONG};
-    MPI_Aint baseaddr,a1,a2,a3,a4;
-    MPI_Get_address(&defTree,&baseaddr);
-    MPI_Get_address(&defTree.x, &a1);
-    MPI_Get_address(&defTree.index,&a2);
-    MPI_Get_address(&defTree.leaf,&a3);
-    MPI_Get_address(&defTree.cum_size,&a4);
-    MPI_Aint indices[] = {a1-baseaddr,a2-baseaddr,a3-baseaddr,a4-baseaddr};
-    MPI_Type_create_struct(4,blocklength,indices,old_types,&treeNodeStruct);
-    MPI_Type_commit(&treeNodeStruct);
-
-
-
-    MPI_Win win;
-    MPI_Win_create_dynamic(MPI_INFO_NULL, MPI_COMM_WORLD, &win);
-
     // *** PAPI *** //
     int EventSet = PAPI_NULL;
     long_long values[1] = {(long_long) 0};
@@ -70,6 +51,26 @@ int main(int argc, char** argv) {
     // *** PAPI *** //
 
     PAPI_start(EventSet);
+
+    Treenode defTree;
+    MPI_Datatype treeNodeStruct;
+    int blocklength[] = {11,1,1,2};
+    MPI_Datatype old_types[] = {MPI_DOUBLE,MPI_INT,MPI_C_BOOL,MPI_UNSIGNED_LONG};
+    MPI_Aint baseaddr,a1,a2,a3,a4;
+    MPI_Get_address(&defTree,&baseaddr);
+    MPI_Get_address(&defTree.x, &a1);
+    MPI_Get_address(&defTree.index,&a2);
+    MPI_Get_address(&defTree.leaf,&a3);
+    MPI_Get_address(&defTree.cum_size,&a4);
+    MPI_Aint indices[] = {a1-baseaddr,a2-baseaddr,a3-baseaddr,a4-baseaddr};
+    MPI_Type_create_struct(4,blocklength,indices,old_types,&treeNodeStruct);
+    MPI_Type_commit(&treeNodeStruct);
+
+
+
+    MPI_Win win;
+    MPI_Win_create_dynamic(MPI_INFO_NULL, MPI_COMM_WORLD, &win);
+
 
     sim::Parameters params;
     readArgs(argc, argv, params);
