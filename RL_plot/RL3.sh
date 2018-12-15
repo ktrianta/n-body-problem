@@ -19,7 +19,7 @@ do
         for k in $(seq 1 1 10)
         do
             echo "$k"
-            mpirun -n 1 ${arr1[$(($i-1))]} -i ${arr2[$(($j-1))]} -n "${arr3[$(($j-1))]}"  >> "${arr4[$(($i-1))]}"       
+            mpirun -n 8 ${arr1[$(($i-1))]} -i ${arr2[$(($j-1))]} -n "${arr3[$(($j-1))]}"  >> "${arr4[$(($i-1))]}"       
         done
    done
 done
