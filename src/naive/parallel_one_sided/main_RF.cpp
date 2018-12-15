@@ -98,9 +98,6 @@ int main(int argc, char** argv) {
             delete[] a;
             return -1;
         }
-        params.out_filename = params.in_filename;
-        openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(N, r, out_file);
     }
 
     MPI_Bcast (&r[0][0], 3*N, MPI_DOUBLE, 0, MPI_COMM_WORLD);

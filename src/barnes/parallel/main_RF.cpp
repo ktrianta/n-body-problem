@@ -73,11 +73,6 @@ int main(int argc, char** argv) {
         }
     }
 
-    std::ofstream out_file;
-    if (rank == 0) {
-        openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(N, r, u, out_file);
-    }
 
     // SEND the position vector r from Process 0 to all processes.
     MPI_Bcast(&r[0][0], N*3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -159,9 +154,6 @@ int main(int argc, char** argv) {
         boxComputation(N, r, xc, yc, zc, w2, h2, t2);
         Octree tree = Octree(r, m, N, xc, yc, zc, w2, h2, t2);
 
-        if (t % 200 == 0 && rank == 0) {
-            writeDataToFile(N, r, u, out_file);
-        }
     }
     PAPI_stop(EventSet, values);
     papi_tot += values[0];

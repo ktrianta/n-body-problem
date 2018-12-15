@@ -90,9 +90,6 @@ int main(int argc, char** argv) {
         return -1;
     }
     params.out_filename = params.in_filename;
-    std::ofstream out_file;
-    openFileToWrite(out_file, params.out_filename, params.out_dirname);
-    writeDataToFile(N, r, out_file);
 
 
 
@@ -120,9 +117,6 @@ int main(int argc, char** argv) {
             u[j][2] += 0.5 * a[j][2] * dt;
         }
 
-        if (t % 200 == 0) {
-            writeDataToFile(N, r, out_file);
-        }
     }
     
     PAPI_stop(EventSet, values);
