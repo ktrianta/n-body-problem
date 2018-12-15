@@ -13,11 +13,10 @@ do
     for i in $(seq 1 1 ${#arr1[@]})
     do
         echo "${arr2[$(($j-1))]}" "${arr3[$(($j-1))]}" "${arr1[$(($i-1))]}" 
-        for k in $(seq 1 1 1)
+        for k in $(seq 1 1 100)
         do
             echo "$k"
-            mpirun -n 1 "${arr1[$(($i-1))]}" -i ${arr2[$(($j-1))]} -n "${arr3[$(($j-1))]}"  
-            # >> "${arr4[$(($i-1))]}"       
+            mpirun -n 1 "${arr1[$(($i-1))]}" -i ${arr2[$(($j-1))]} -n "${arr3[$(($j-1))]}"  >> "${arr4[$(($i-1))]}"       
         done
    done
 done
