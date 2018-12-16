@@ -5,14 +5,13 @@ f =  file.readlines()
 m = len(f)/10
 fp_ops = [0]*m
 
-for n in f:
-    fp_ops[i/10] += int(n)
-    i += 1
-fp_ops = [ x / 10 for x in fp_ops ]
+#for n in f:
+#    fp_ops[i/10] += int(n)
+#    i += 1
+#fp_ops = [ x / 10 for x in fp_ops ]
 
-#for n in range(0,m):
-#    print min([ int(x) for x in f[n*10:(n+1)*10] ])
-#    fp_ops[n] = min([ int(x) for x in f[n*10:(n+1)*10] ])
+for n in range(0,m):
+    fp_ops[n] = min([ int(x) for x in f[n*10:(n+1)*10] ])
 
 file = open('sequential/TOT_CYC/naive-parallel-one-sided.data') 
 
@@ -61,14 +60,13 @@ f =  file.readlines()
 m = len(f)/10
 fp_ops = [0]*m
 
-for n in f:
-    fp_ops[i/10] += int(n)
-    i += 1
-fp_ops = [ x / 10 for x in fp_ops ]
+#for n in f:
+#    fp_ops[i/10] += int(n)
+#    i += 1
+#fp_ops = [ x / 10 for x in fp_ops ]
 
-#for n in range(0,m):
-#    print min([ int(x) for x in f[n*10:(n+1)*10] ])
-#    fp_ops[n] = min([ int(x) for x in f[n*10:(n+1)*10] ])
+for n in range(0,m):
+    fp_ops[n] = min([ int(x) for x in f[n*10:(n+1)*10] ])
 
 file = open('sequential/TOT_CYC/barnes-parallel-one-sided.data') 
 
@@ -117,14 +115,13 @@ f =  file.readlines()
 m = len(f)/10
 fp_ops = [0]*m
 
-for n in f:
-    fp_ops[i/10] += int(n)
-    i += 1
-fp_ops = [ x / 10 for x in fp_ops ]
+#for n in f:
+#    fp_ops[i/10] += int(n)
+#    i += 1
+#fp_ops = [ x / 10 for x in fp_ops ]
 
-#for n in range(0,m):
-#    print min([ int(x) for x in f[n*10:(n+1)*10] ])
-#    fp_ops[n] = min([ int(x) for x in f[n*10:(n+1)*10] ])
+for n in range(0,m):
+    fp_ops[n] = min([ int(x) for x in f[n*10:(n+1)*10] ])
 
 file = open('sequential/TOT_CYC/barnes-parallel-balanced.data') 
 
