@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
             params.out_filename = params.in_filename;
 //      initialEnergy = energy(N, r, u, m);
         } else {
-              initializePositionOnSphere(N, r);
+              initializePositionOnSphere(N, r, m, u);
         }
     }
     std::ofstream out_file;

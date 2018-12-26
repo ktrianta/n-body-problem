@@ -92,10 +92,11 @@ int main(int argc, char** argv) {
     if (rank == 0) {
         r = new sim::data_type[N][8];
 
-        if (readDataFromFile(params.in_filename, params.n, r) == -1) {
-            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
-            return -1;
-        }
+        initializePositionOnSphere( N, r);
+//      if (readDataFromFile(params.in_filename, params.n, r) == -1) {
+//          std::cerr << "File " << params.in_filename << " not found!" << std::endl;
+//          return -1;
+//      }
         if(params.n %size != 0){
             for (int i = N - size + params.n % size; i < N; i++){
                 r[i][0]=0;

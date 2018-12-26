@@ -96,11 +96,12 @@ int main(int argc, char** argv) {
     io_start = std::chrono::high_resolution_clock::now();
     if (rank == 0) {
         r = new sim::data_type[N][7];
+        initializePositionOnSphere( N, r);
 
-        if (readDataFromFile(params.in_filename, params.n, r) == -1) {
-            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
-            return -1;
-        }
+//      if (readDataFromFile(params.in_filename, params.n, r) == -1) {
+//          std::cerr << "File " << params.in_filename << " not found!" << std::endl;
+//          return -1;
+//      }
         if(params.n %size != 0){
             for (int i = N - size + params.n % size; i < N; i++){
                 r[i][0]=0;
