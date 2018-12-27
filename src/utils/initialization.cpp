@@ -58,6 +58,7 @@ void initializePositionOnSphere(int N, sim::data_type (*r)[7])
         r[i][6] = 0.0;
     }
 }
+
 void initializePositionOnSphere(int N, sim::data_type (*r)[3], sim::data_type *m, sim::data_type (*u)[3])
 {
     std::srand(std::time(NULL));
@@ -71,8 +72,28 @@ void initializePositionOnSphere(int N, sim::data_type (*r)[3], sim::data_type *m
         r[i][0] = p * sin(theta) * cos(phi);
         r[i][1] = p * sin(theta) * sin(phi);
         r[i][2] = p * cos(theta);
-        r[i][0] = 0.0;
-        r[i][1] = 0.0;
-        r[i][2] = 0.0;
+        u[i][0] = 0.0;
+        u[i][1] = 0.0;
+        u[i][2] = 0.0;
+    }
+}
+
+
+void initializePositionOnSphere(int N, sim::data_type *rx, sim::data_type *ry, sim::data_type *rz, sim::data_type *m, sim::data_type (*u)[3])
+{
+    std::srand(std::time(NULL));
+
+    for (int i = 0; i < N ; i++)
+    {
+        sim::data_type p = pow(randomNum(0, 1), 1.0 / 3.0);
+        sim::data_type theta = randomNum(0, M_PI);
+        sim::data_type phi = randomNum(0, 2 * M_PI);
+        m[i] = 1.0 / N ;
+        rx[i] = p * sin(theta) * cos(phi);
+        ry[i] = p * sin(theta) * sin(phi);
+        rz[i] = p * cos(theta);
+        u[i][0] = 0.0;
+        u[i][1] = 0.0;
+        u[i][2] = 0.0;
     }
 }

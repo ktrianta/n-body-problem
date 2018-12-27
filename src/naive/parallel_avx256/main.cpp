@@ -144,21 +144,25 @@ int main(int argc, char** argv) {
     io_start = std::chrono::high_resolution_clock::now();
     std::ofstream out_file;
     if (rank == 0) {
-        if (readDataFromFile(params.in_filename, N, m, rx, ry, rz, u) == -1) {
-            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
-            delete[] m;
-            delete[] rx;
-            delete[] ry;
-            delete[] rz;
-            delete[] u;
-            delete[] ax;
-            delete[] ay;
-            delete[] az;
-            return -1;
+        if (!params.in_filename.empty()) {
+            if (readDataFromFile(params.in_filename, N, m, rx, ry, rz, u) == -1) {
+                std::cerr << "File " << params.in_filename << " not found!" << std::endl;
+                delete[] m;
+                delete[] rx;
+                delete[] ry;
+                delete[] rz;
+                delete[] u;
+                delete[] ax;
+                delete[] ay;
+                delete[] az;
+                return -1;
+            }
+            params.out_filename = params.in_filename;
+        } else {
+            initializePositionOnSphere(N, rx, ry, rz, m, u);
         }
-        params.out_filename = params.in_filename;
-        openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(N, rx, ry, rz, out_file);
+//        openFileToWrite(out_file, params.out_filename, params.out_dirname);
+//        writeDataToFile(N, rx, ry, rz, out_file);
     }
     io_end = std::chrono::high_resolution_clock::now();
     io_time += std::chrono::duration< double >(io_end - io_start).count();
