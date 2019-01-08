@@ -79,36 +79,40 @@ int main(int argc, char** argv) {
     io_start = std::chrono::high_resolution_clock::now();
     std::ofstream out_file;
     if (rank == 0) {
-        if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
-            std::cerr << "File " << params.in_filename << " not found!" << std::endl;
-            delete[] m;
-            delete[] r;
-            delete[] u;
-            delete[] a;
-            return -1;
+        if (!params.in_filename.empty()) {
+            if (readDataFromFile(params.in_filename, N, m, r, u) == -1) {
+                std::cerr << "File " << params.in_filename << " not found!" << std::endl;
+                delete[] m;
+                delete[] r;
+                delete[] u;
+                delete[] a;
+                return -1;
+            }
+            params.out_filename = params.in_filename;
+        } else {
+            initializePositionOnSphere(N, r, m, u);
         }
-        params.out_filename = params.in_filename;
-        openFileToWrite(out_file, params.out_filename, params.out_dirname);
-        writeDataToFile(N, r, out_file);
+//        openFileToWrite(out_file, params.out_filename, params.out_dirname);
+//        writeDataToFile(N, r, out_file);
     }
     io_end = std::chrono::high_resolution_clock::now();
     io_time += std::chrono::duration< double >(io_end - io_start).count();
 
 // Computation of Initial Energy    
-    double initialKEnergy = 0;
-    double initialPEnergy = 0;
-    double initialEnergy = 0;
-    if (rank == 0){
-        for (int i = 0; i < N; i++){
-            initialKEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
-            for (int j = 0; j < i; j++){
-                double denominator = sqrt((r[j][0]-r[i][0])*(r[j][0]-r[i][0]) + (r[j][1]-r[i][1])*(r[j][1]-r[i][1]) +
-                                          (r[j][2]-r[i][2])*(r[j][2]-r[i][2]));
-                initialPEnergy -= sim::g*m[i]*m[j]/denominator;
-                }
-            }
-            initialEnergy = initialKEnergy + initialPEnergy;
-    }
+//    double initialKEnergy = 0;
+//    double initialPEnergy = 0;
+//    double initialEnergy = 0;
+//    if (rank == 0){
+//        for (int i = 0; i < N; i++){
+//            initialKEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
+//            for (int j = 0; j < i; j++){
+//                double denominator = sqrt((r[j][0]-r[i][0])*(r[j][0]-r[i][0]) + (r[j][1]-r[i][1])*(r[j][1]-r[i][1]) +
+//                                          (r[j][2]-r[i][2])*(r[j][2]-r[i][2]));
+//                initialPEnergy -= sim::g*m[i]*m[j]/denominator;
+//                }
+//            }
+//            initialEnergy = initialKEnergy + initialPEnergy;
+//    }
 
     comm_start = std::chrono::high_resolution_clock::now();
     // SEND the position vector r from Process 0 to all processes.
@@ -190,14 +194,14 @@ int main(int argc, char** argv) {
             u[idx][2] += 0.5 * a[idx][2] * dt;
 	    }
 
-        io_start = std::chrono::high_resolution_clock::now();
-        if (rank == 0) {
-            if (t % 200 == 0){
-                writeDataToFile(N, r, out_file);
-            }   
-        }
-        io_end = std::chrono::high_resolution_clock::now();
-        io_time += std::chrono::duration< double >(io_end - io_start).count();
+//        io_start = std::chrono::high_resolution_clock::now();
+//        if (rank == 0) {
+//            if (t % 200 == 0){
+//                writeDataToFile(N, r, out_file);
+//            }   
+//        }
+//        io_end = std::chrono::high_resolution_clock::now();
+//        io_time += std::chrono::duration< double >(io_end - io_start).count();
     }
 
 //Computation of final energy and estimate error
