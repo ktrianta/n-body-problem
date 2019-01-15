@@ -4,6 +4,7 @@
 #include "io.hpp"
 #include "args.hpp"
 #include "types.hpp"
+#include "energy.hpp"
 #include "initialization.hpp"
 #include <immintrin.h>
 #include <chrono>
@@ -129,26 +130,12 @@ int main(int argc, char** argv) {
         return -1;
     }
     params.out_filename = params.in_filename;
+    std::ofstream out_file;
+    openFileToWrite(out_file, params.out_filename, params.out_dirname);
 
-//  std::ofstream out_file;
-//  openFileToWrite(out_file, params.out_filename, params.out_dirname);
-//  writeDataToFile(N, rx, ry, rz, out_file);
-//  io_end = std::chrono::high_resolution_clock::now();
-//  io_time += std::chrono::duration< double >(io_end - io_start).count();
-
-//Computation of Initial Energy
-//  double initialKEnergy = 0;
-//  double initialPEnergy = 0;
-//  double initialEnergy = 0;
-//  for (int i = 0; i < N; i++){
-//      initialKEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
-//      for (int j = 0; j < i; j++){
-//          double denominator = sqrt((rx[j]-rx[i])*(rx[j]-rx[i]) + (ry[j]-ry[i])*(ry[j]-ry[i]) +
-//                                    (rz[j]-rz[i])*(rz[j]-rz[i]));
-//          initialPEnergy -= sim::g*m[i]*m[j]/denominator;
-//          }
-//      }
-//      initialEnergy = initialKEnergy + initialPEnergy;
+    sim::data_type initialEnergy;
+    if (params.en_comp == true)
+       initialEnergy = energy(N, rx, ry, rz, u , m);
 
     comp_start = std::chrono::high_resolution_clock::now();
     computeAcceleration(params.n, rx, ry, rz, ax, ay, az,  m);
@@ -178,27 +165,22 @@ int main(int argc, char** argv) {
             u[j][2] += 0.5 * az[j] * dt;
         }
 
-//      io_start = std::chrono::high_resolution_clock::now();
-//      if (t % 200 == 0) {
-//          writeDataToFile(N, rx, ry, rz, out_file);
-//      }
-//      io_end = std::chrono::high_resolution_clock::now();
-//      io_time += std::chrono::duration< double >(io_end - io_start).count();
+        if (params.wr_data == true)
+        {
+            io_start = std::chrono::high_resolution_clock::now();
+            if (t % 200 == 0) {
+                writeDataToFile(N, rx, ry, rz, out_file);
+            }
+            io_end = std::chrono::high_resolution_clock::now();
+            io_time += std::chrono::duration< double >(io_end - io_start).count();
+        }
     }
 
-//  double energy =0;
-//  double kineticEnergy = 0;
-//  double potentialEnergy = 0;
-//  for (int i = 0; i < N; i++){
-//      kineticEnergy += m[i] * (u[i][0]*u[i][0] + u[i][1]*u[i][1] + u[i][2]*u[i][2])/2.;
-//      for (int j = 0; j < i; j++){
-//          double denominator = sqrt((rx[j]-rx[i])*(rx[j]-rx[i]) + (ry[j]-ry[i])*(ry[j]-ry[i]) +
-//                                    (rz[j]-rz[i])*(rz[j]-rz[i]));
-//          potentialEnergy -= sim::g*m[i]*m[j]/denominator;
-//          }
-//      }
-//      energy = kineticEnergy + potentialEnergy;
-//  std::cout << "initial energy is = " << initialEnergy << "Error in total energy at the end of simulation = " << (energy - initialEnergy)/initialEnergy*100 << "%" <<  std::endl; 
+    if (params.en_comp == true)
+    {
+        sim::data_type finalEnergy = energy(N, rx, ry, rz, u, m);
+        printEnergy(finalEnergy, initialEnergy);
+    }
 
     prog_end = std::chrono::high_resolution_clock::now();
     prog_time += std::chrono::duration< double >(prog_end - prog_start).count();

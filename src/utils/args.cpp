@@ -5,7 +5,7 @@
 void readArgs(int argc, char** argv, sim::Parameters& params) {
     int c;
 
-    while ((c = getopt (argc, argv, "n:t:s:i:d:h:")) != -1) {
+    while ((c = getopt (argc, argv, "n:t:s:i:d:h:ew")) != -1) {
         switch (c) {
             case 'n':
                 params.n = atoi(optarg);
@@ -25,6 +25,10 @@ void readArgs(int argc, char** argv, sim::Parameters& params) {
             case 'd':
                 params.out_dirname = optarg;
                 break;
+             case 'e':
+                 params.en_comp = true;
+             case 'w':
+                 params.wr_data = false;
             default:
                 break;
         }

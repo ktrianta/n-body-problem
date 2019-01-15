@@ -2,7 +2,7 @@
 add_definitions(-DOMPI_SKIP_MPICXX)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
-set(SOURCE_FILES main.cpp serialization.cpp serialization.hpp)
+set(SOURCE_FILES main.cpp octree.cpp octree.hpp)
 add_executable(barnes-sequential ${SOURCE_FILES} ${UTILS_SOURCES})
 target_link_libraries(barnes-sequential ${MPI_LIBRARIES})
 set_target_properties(barnes-sequential PROPERTIES OUTPUT_NAME prog)

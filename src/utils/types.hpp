@@ -31,6 +31,8 @@ namespace sim {
         const data_type def_theta = 1;                  // default barnes hut theta
         const std::string def_out_filename = "output";
         const std::string def_out_dirname = ".";
+        const bool def_en_comp = false;
+        const bool def_wr_data = true;
 
         size_t n;                                       // number of particles
         size_t s;                                       // number of time steps
@@ -41,9 +43,14 @@ namespace sim {
         std::string out_filename;
         std::string out_dirname;
 
+        bool en_comp;
+        bool wr_data;
+
+
         Parameters()
             : n(def_n), s(def_s), dt(def_dt), theta(def_theta),
-              out_filename(def_out_filename), out_dirname(def_out_dirname)
+              out_filename(def_out_filename), out_dirname(def_out_dirname), en_comp(def_en_comp),
+              wr_data(def_wr_data)
         {}
 
     };
