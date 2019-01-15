@@ -29,11 +29,9 @@ rm -rf bin
 * -t: duration of the simulation
 * -s: duration of the simulation's timestep
 * -i: input file containing the initial configuration of the particles
+* -w: if data every 200 timesteps is desired to be writen in a file
+* -e: if the error on initial and final energy is desired to be printed 
 
-## Plotting Options
-
-Run plot.text as 'gnuplot -e "n=#P" plot.text'
-where #P should be the same as the -n execution option
 
 ## Setting up the Environment on the Cluster
 ```bash
