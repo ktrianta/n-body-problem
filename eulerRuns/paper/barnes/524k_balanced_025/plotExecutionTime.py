@@ -25,8 +25,8 @@ SQNUM_MEAS = np.sqrt(NUM_MEAS)
 z_alpha0verTwo = 3
 index_low = int(math.floor( (NUM_MEAS - z_alpha0verTwo*SQNUM_MEAS)/2.0 ))
 index_up = int( math.ceil( 1.0 + (NUM_MEAS + z_alpha0verTwo*SQNUM_MEAS)/2.0 ) )
-NUM_PR = np.zeros(6)
-NUM_PR = [2,4,8,16,32,48]
+NUM_PR = np.zeros(7)
+NUM_PR = [1,2,4,8,16,32,48]
 
 med = np.zeros(NUM_MEAS)
 global_median_total = np.zeros( len(NUM_PR) )
@@ -35,11 +35,11 @@ global_median_comp = np.zeros( len(NUM_PR) )
 global_median_gather = np.zeros( len(NUM_PR) )
 global_median_tree = np.zeros( len(NUM_PR) )
 
-errorCI_total = np.zeros((2,6))
-errorCI_comm = np.zeros((2,6))
-errorCI_comp = np.zeros((2,6))
-errorCI_gather = np.zeros((2,6))
-errorCI_tree= np.zeros((2,6))
+errorCI_total = np.zeros((2,7))
+errorCI_comm = np.zeros((2,7))
+errorCI_comp = np.zeros((2,7))
+errorCI_gather = np.zeros((2,7))
+errorCI_tree= np.zeros((2,7))
 
 j = 0
 for p in NUM_PR:
@@ -121,6 +121,19 @@ ax.errorbar(NUM_PR,global_median_comm,errorCI_comm,capsize = 4, ecolor = "Black"
 ax.errorbar(NUM_PR,global_median_comp,errorCI_comp,capsize = 4, ecolor = "Black", marker='None',linestyle="None")
 ax.errorbar(NUM_PR,global_median_gather,errorCI_gather,capsize = 4, ecolor = "Black", marker='None',linestyle="None")
 ax.errorbar(NUM_PR,global_median_tree,errorCI_tree,capsize = 4, ecolor = "Black", marker='None',linestyle="None")
+
+print(global_median_total)
+#print(global_median_total+errorCI_total[0][:])
+#print(global_median_total-errorCI_total[1][:])
+print(global_median_comm)
+#print(global_median_comm+errorCI_comm[0][:])
+#print(global_median_comm-errorCI_comm[1][:])
+print(global_median_comp)
+#print(global_median_comp+errorCI_comp[0][:])
+#print(global_median_comp-errorCI_comp[1][:])
+print(global_median_tree)
+#print(global_median_gather+errorCI_gather[0][:])
+#print(global_median_gather-errorCI_gather[1][:])
 
 ax.set_xscale('log')
 ax.set_yscale('log')

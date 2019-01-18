@@ -2,6 +2,12 @@
 
 ## Building the Project
 
+
+ # codes
+src/naive baseline implementation
+src/barnes barnes-hut implementation
+
+
 ```bash
 # Build out of source in build dir
 mkdir build && cd build
