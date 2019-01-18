@@ -1,6 +1,8 @@
 # N Body Problem
 
-Final project [report](https://github.com/ktrianta/n-body-problem/blob/master/report/report.pdf).
+This repository holds the code and results of our project on parallelizing the
+Barnes-Hut algorithm using MPI One-Sided and much more..
+The final project report can be found [here](https://github.com/ktrianta/n-body-problem/blob/master/report/report.pdf).
 ## Repository Structure
 
 src/naive baseline implementation
