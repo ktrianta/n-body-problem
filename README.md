@@ -3,10 +3,16 @@
 This repository holds the code and results of our project on parallelizing the
 Barnes-Hut algorithm using MPI One-Sided and much more..
 The final project report can be found [here](https://github.com/ktrianta/n-body-problem/blob/master/report/report.pdf).
+
 ## Repository Structure
 
-src/naive baseline implementation
-src/barnes barnes-hut implementation
+* report: report code, figures, etc.
+* results: report measurements and roofline benchmark results
+* scripts: various python scripts
+* src: main source directory
+    * naive: naive baseline implementations
+    * barnes: Barnes-Hut algorithm implementations
+* test: test code and test resources
 
 ## Building the Project
 
