@@ -1,12 +1,12 @@
 # N Body Problem
 
-## Building the Project
+Final project [report](https://github.com/ktrianta/n-body-problem/blob/master/report/report.pdf).
+## Repository Structure
 
-
-# codes
 src/naive baseline implementation
 src/barnes barnes-hut implementation
 
+## Building the Project
 
 ```bash
 # Build out of source in build dir
@@ -16,9 +16,6 @@ cmake ..
 # Run makefiles and install binaries in bin dir
 make && make install
 cd ..
-
-# Run the tests:
-!TODO
 
 # Run some binary (e.g. naive sequential):
 cd bin/naive-sequential
