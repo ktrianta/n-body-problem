@@ -3,7 +3,7 @@
 ## Building the Project
 
 
- # codes
+# codes
 src/naive baseline implementation
 src/barnes barnes-hut implementation
 
@@ -31,12 +31,12 @@ rm -rf bin
 
 ## Execution Options
 
-* -n: number of particles
-* -t: duration of the simulation
-* -s: duration of the simulation's timestep
-* -i: input file containing the initial configuration of the particles
-* -w: if data every 200 timesteps is desired to be writen in a file
-* -e: if the error on initial and final energy is desired to be printed 
+* -n [#particles] : number of particles
+* -s [#steps] : number of simulation timesteps
+* -t [time] : duration of a timestep (default 0.0001)
+* -i [file] : input file containing the initial configuration of the particles
+* -w : write particle position in output file every 200 timesteps
+* -e : print the error between initial and final energy 
 
 
 ## Setting up the Environment on the Cluster
